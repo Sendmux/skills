@@ -89,7 +89,7 @@ Batch when there is more than one target.
 
 ```bash
 sendmux sending:send:batch \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body-file ./messages.json \
   --json
 

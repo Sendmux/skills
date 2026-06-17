@@ -99,7 +99,7 @@ One email:
 
 ```bash
 SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux sending:send \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{
     "from": { "email": "sender@example.com", "name": "Sender Name" },
     "to": { "email": "recipient@example.com", "name": "Recipient Name" },
@@ -114,7 +114,7 @@ Batch:
 
 ```bash
 SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux sending:send:batch \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body-file ./sendmux-batch.json \
   --json
 ```
@@ -173,7 +173,7 @@ Use direct HTTP only when MCP, CLI, or SDK is unavailable:
 curl -X POST https://smtp.sendmux.ai/api/v1/emails/send \
   -H "Authorization: Bearer $SENDMUX_MBX_KEY" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: $SENDMUX_IDEMPOTENCY_KEY" \
+  -H "Idempotency-Key: $IDEMPOTENCY_KEY" \
   -d @sendmux-email.json
 ```
 

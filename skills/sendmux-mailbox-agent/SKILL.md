@@ -153,7 +153,7 @@ Then send from the authenticated mailbox. Use `Idempotency-Key` for retries.
 
 ```bash
 SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux mailbox:send-message \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{
     "to": [{ "email": "user@example.com", "name": null }],
     "subject": "Re: Your message",

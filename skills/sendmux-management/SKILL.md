@@ -61,7 +61,7 @@ CLI:
 
 ```bash
 SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux management:create-domain \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{"domain":"example.com","mode":"send_receive"}' \
   --json
 
@@ -88,7 +88,7 @@ const client = createManagementClient({ apiKey: process.env.SENDMUX_API_KEY! });
 
 await managementCreateDomain({
   client,
-  headers: { "Idempotency-Key": process.env.SENDMUX_IDEMPOTENCY_KEY! },
+  headers: { "Idempotency-Key": process.env.IDEMPOTENCY_KEY! },
   body: { domain: "example.com", mode: "send_receive" },
 });
 
@@ -103,7 +103,7 @@ await managementVerifyDomain({
 });
 ```
 
-Use `management_update_domain` / `managementUpdateDomain` with `If-Match` for mode upgrades. Confirm before delete.
+Use CLI `management:update-domain` or SDK `managementUpdateDomain` with `If-Match` for mode upgrades. Confirm before delete.
 
 ## Mailboxes and keys
 
@@ -126,7 +126,7 @@ CLI:
 
 ```bash
 SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux management:create-mailbox \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{
     "email": "agent@example.com",
     "display_name": "Agent Inbox",
@@ -136,7 +136,7 @@ SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux management:create-mailbox \
 
 SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux management:create-mailbox-key \
   --path public_id=mbx_abc \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{"name":"agent-runtime"}' \
   --json
 ```

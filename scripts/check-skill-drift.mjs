@@ -70,6 +70,9 @@ const requiredMcpEnv = [
   "SENDMUX_MCP_HTTP_BEARER_TOKEN",
 ];
 
+const allowedSkillOnlyEnv = new Set(["SENDMUX_ROOT_KEY", "SENDMUX_MBX_KEY"]);
+const allowedUnderscoreIdentifiers = new Set(["mailbox_id"]);
+
 const tsPackages = {
   "packages/ts/sdk/package.json": "@sendmux/sdk",
   "packages/ts/sending/package.json": "@sendmux/sending",
@@ -328,6 +331,58 @@ function assertMcpSources() {
   }
 }
 
+function allMcpToolNames() {
+  const curationPath = fullPath(
+    sdkRoot,
+    "packages/python/mcp/sendmux_mcp/curation.py",
+  );
+  const curation = readText(curationPath);
+  return new Set(
+    [...curation.matchAll(/name\s*=\s*["']([a-z]+_[a-z_]+)["']/g)].map(
+      (match) => match[1],
+    ),
+  );
+}
+
+function assertClaimedMcpToolsExist() {
+  const toolNames = allMcpToolNames();
+  const corpusFiles = walkCorpusFiles(fullPath(skillsRoot, "skills"));
+
+  for (const filePath of corpusFiles) {
+    const text = readText(filePath);
+    for (const match of text.matchAll(/`((?:mailbox|management|sending)_[a-z_]+)`/g)) {
+      const name = match[1];
+      if (allowedUnderscoreIdentifiers.has(name)) continue;
+      if (!toolNames.has(name)) {
+        fail(`${path.relative(skillsRoot, filePath)} claims missing MCP tool ${name}`);
+      }
+    }
+  }
+}
+
+function assertOfficialSendmuxEnvOnly() {
+  const sourceText = [
+    readText(fullPath(sdkRoot, "packages/python/mcp/sendmux_mcp/config.py")),
+    readText(fullPath(sdkRoot, "packages/python/mcp/sendmux_mcp/hosted.py")),
+    readText(fullPath(sdkRoot, "packages/python/mcp/README.md")),
+    readText(fullPath(sdkRoot, "packages/ts/cli/src/base-command.ts")),
+    readText(fullPath(sdkRoot, "packages/ts/cli/src/profiles.ts")),
+    readText(fullPath(sdkRoot, "packages/ts/cli/README.md")),
+  ].join("\n");
+  const corpusFiles = walkCorpusFiles(fullPath(skillsRoot, "skills"));
+
+  for (const filePath of corpusFiles) {
+    const text = readText(filePath);
+    for (const match of text.matchAll(/\bSENDMUX_[A-Z0-9_]+\b/g)) {
+      const envName = match[0];
+      if (allowedSkillOnlyEnv.has(envName)) continue;
+      if (!sourceText.includes(envName)) {
+        fail(`${path.relative(skillsRoot, filePath)} uses undocumented env var ${envName}`);
+      }
+    }
+  }
+}
+
 function assertSdkPackages() {
   assertPackageNames(sdkRoot, tsPackages, jsonPackageName);
   assertPackageNames(sdkRoot, phpPackages, jsonPackageName);
@@ -347,6 +402,8 @@ assertOpenApiPaths("Sending OpenAPI", sendingOpenApi, requiredSendingPaths);
 assertOpenApiPaths("App OpenAPI mailbox surface", appOpenApi, requiredMailboxPaths);
 assertCliPackage();
 assertMcpSources();
+assertClaimedMcpToolsExist();
+assertOfficialSendmuxEnvOnly();
 assertSdkPackages();
 assertSkillsCatalogue();
 assertSkillCorpusTokens();

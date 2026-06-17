@@ -115,7 +115,7 @@ Create a domain:
 ```bash
 sendmux management:create-domain \
   --profile default \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body '{"domain":"example.com","mode":"send_receive"}' \
   --json
 ```
@@ -158,7 +158,7 @@ Send a batch:
 ```bash
 sendmux sending:send:batch \
   --profile sending \
-  --idempotency-key "$SENDMUX_IDEMPOTENCY_KEY" \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
   --body-file ./messages.json \
   --json
 ```
