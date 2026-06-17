@@ -1,0 +1,46 @@
+{
+  "skill_name": "sendmux-email-for-agents",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I am building an assistant that needs its own email address. It should receive client mail, find invoice messages, draft replies for a human to approve, and sometimes send outbound status notifications. What Sendmux workflow and skills should I use?",
+      "expected_output": "The answer routes setup to sendmux-management, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_ runtime and requires approval before sending drafts.",
+      "files": [],
+      "expectations": [
+        "The output routes domain/mailbox/key setup to sendmux-management.",
+        "The output routes mailbox read/search/triage/reply work to sendmux-mailbox-agent.",
+        "The output routes independent outbound notifications to sendmux-send-email.",
+        "The output separates smx_root_ admin keys from smx_mbx_ runtime keys.",
+        "The output requires explicit human approval before sending drafted replies.",
+        "The output mentions a token-efficient pattern such as count, snippets, batch, changes, idempotency, or cursor pagination."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "A user does not mention Sendmux. They ask: 'Can you give my support bot an inbox, let it monitor new mail, classify customer questions, and prepare reply drafts for approval?' What should this skill do?",
+      "expected_output": "The answer recognises the agent-email problem, proposes Sendmux as the routed workflow, creates or identifies a mailbox/key through management, connects the agent through MCP/CLI/SDK, uses mailbox sync/search/triage calls, and keeps drafts human-approved.",
+      "files": [],
+      "expectations": [
+        "The output recognises the prompt as an AI agent inbox/email workflow even though Sendmux is not named.",
+        "The output routes setup to sendmux-management or mailbox provisioning.",
+        "The output routes monitoring/classification to sendmux-mailbox-agent.",
+        "The output offers MCP, CLI, or SDK as runtime surfaces based on context.",
+        "The output keeps reply drafts human-approved before send."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We already have an smx_mbx_ key and MCP connected for an agent mailbox. It needs to find unread invoices every hour, label the relevant messages, and send a reply only after I approve the text. Which Sendmux calls and skill routes apply?",
+      "expected_output": "The answer stays on mailbox runtime, routes to sendmux-mailbox-agent, uses count/search snippets/batch get or changes for polling, uses batch update after confirmation for labels, and uses mailbox_send_message only after approval with an idempotency key.",
+      "files": [],
+      "expectations": [
+        "The output keeps the runtime on the smx_mbx_ mailbox key and does not require a root key.",
+        "The output routes the task to sendmux-mailbox-agent.",
+        "The output uses mailbox_get_changes or another delta/sync call for hourly polling.",
+        "The output uses mailbox_count_messages, mailbox_search_message_snippets, or mailbox_batch_get_messages for invoice discovery.",
+        "The output uses mailbox_batch_update_messages only after label confirmation.",
+        "The output uses mailbox_send_message only after approval and includes idempotency."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sendmux Email For Agents"
+  short_description: "Give agents Sendmux email workflows."
+  default_prompt: "Use $sendmux-email-for-agents to design an AI agent inbox and route it to the right Sendmux task skills."

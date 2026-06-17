@@ -1,0 +1,41 @@
+{
+  "skill_name": "sendmux-send-email",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need to send welcome emails to Alice and Bob through Sendmux. Which API call should my agent use and what JSON shape should it send?",
+      "expected_output": "The answer chooses batch send, uses smx_mbx_ credentials, names /emails/send/batch or sending_send_email_batch, includes messages[], and tells the user to inspect per-message results.",
+      "files": [],
+      "expectations": [
+        "The output chooses batch send for more than one message.",
+        "The output names /emails/send/batch, sending_send_email_batch, sending:send:batch, or sendingSendEmailBatch.",
+        "The output uses a JSON body with messages[].",
+        "The output says to inspect per-message batch results."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Show a Sendmux CLI example for sending one email with an attachment and safe retry behaviour.",
+      "expected_output": "The answer uses sendmux sending:send, an smx_mbx_ key, Idempotency-Key, --body or --body-file, and attachment fields filename/content with base64 content.",
+      "files": [],
+      "expectations": [
+        "The output uses the CLI command sendmux sending:send.",
+        "The output includes an Idempotency-Key or --idempotency-key.",
+        "The output uses attachment fields filename and content.",
+        "The output states attachment content is base64."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "For a new Sendmux integration, should I use HTTP or SMTP to send email?",
+      "expected_output": "The answer recommends the HTTP Sending API for new integrations, batch sending, structured JSON, and retry-safe requests; SMTP is only for existing SMTP-only tools.",
+      "files": [],
+      "expectations": [
+        "The output recommends HTTP Sending API for new integrations.",
+        "The output says HTTP supports batch sending.",
+        "The output mentions idempotency or retry-safe requests.",
+        "The output limits SMTP to existing SMTP-only tools or explicit user choice."
+      ]
+    }
+  ]
+}

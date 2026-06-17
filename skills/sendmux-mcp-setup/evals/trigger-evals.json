@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Connect Sendmux MCP to Claude Code.",
+    "should_trigger": true
+  },
+  {
+    "query": "Show the Cursor mcp.json for Sendmux mailbox and management tools.",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I configure Codex for the hosted Sendmux MCP endpoint?",
+    "should_trigger": true
+  },
+  {
+    "query": "My Sendmux MCP local HTTP server returns 401 with a bearer token.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use MCP to send a Sendmux email.",
+    "should_trigger": false
+  },
+  {
+    "query": "Give me Sendmux CLI commands for mailbox search.",
+    "should_trigger": false
+  }
+]

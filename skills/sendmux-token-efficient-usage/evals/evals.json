@@ -1,0 +1,44 @@
+{
+  "skill_name": "sendmux-token-efficient-usage",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need my Sendmux agent to send 12 outbound emails and be safe if the process retries. Which surface and call should it choose?",
+      "expected_output": "The answer chooses batch sending, names an MCP/CLI/SDK batch call, uses an smx_mbx_ key, includes Idempotency-Key, and says to inspect per-message batch results.",
+      "files": [],
+      "expectations": [
+        "The output chooses a batch send rather than repeated single sends.",
+        "The output names sending_send_email_batch, sending:send:batch, sendingSendEmailBatch, or /emails/send/batch.",
+        "The output uses or mentions an smx_mbx_ key.",
+        "The output includes Idempotency-Key or --idempotency-key for retry safety.",
+        "The output says batch results can have per-message outcomes or must be inspected per message."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I need to find unread invoice-related mail in one Sendmux mailbox, count matches, and read only the two most relevant messages. What calls should I use?",
+      "expected_output": "The answer counts first, searches snippets with a small limit, then batch-gets selected message IDs with clean content options instead of listing or reading every message.",
+      "files": [],
+      "expectations": [
+        "The output uses mailbox_count_messages, mailbox:count-messages, mailboxCountMessages, or /mailbox/messages/count.",
+        "The output uses mailbox_search_message_snippets, mailbox:search-message-snippets, mailboxSearchMessageSnippets, or /mailbox/messages/search-snippets.",
+        "The output uses a small limit for search/list calls.",
+        "The output uses mailbox_batch_get_messages, mailbox:batch-get-messages, mailboxBatchGetMessages, or /mailbox/messages:batch-get for selected IDs.",
+        "The output avoids fetching all message bodies or every mailbox message."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Design a low-token Sendmux polling loop for a mailbox sync plus one outbound delivery log that I may read repeatedly.",
+      "expected_output": "The answer uses mailbox delta sync/state tokens, mentions query-message-changes or mailbox_get_changes, follows cursor pagination only when needed, and uses ETag/If-None-Match for the repeated log read.",
+      "files": [],
+      "expectations": [
+        "The output uses mailbox_get_changes, mailbox:get-changes, mailboxGetChanges, or /mailbox/changes for broad sync.",
+        "The output mentions query-message-changes or mailboxQueryMessageChanges for filtered message sync.",
+        "The output stores and reuses a state token such as since_state or since_query_state.",
+        "The output uses cursor pagination with next_cursor only while more data is needed.",
+        "The output uses ETag with If-None-Match or --if-none-match for the repeated delivery log read."
+      ]
+    }
+  ]
+}

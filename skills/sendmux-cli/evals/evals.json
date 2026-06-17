@@ -1,0 +1,45 @@
+{
+  "skill_name": "sendmux-cli",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Show me how to install the Sendmux CLI, configure separate root/mailbox profiles, and explain what happens if I use the wrong key type.",
+      "expected_output": "The answer installs @sendmux/cli, creates root and mailbox profiles with profiles:set, uses --json, explains smx_root_ versus smx_mbx_, and says mismatched command/key prefixes fail before the request.",
+      "files": [],
+      "expectations": [
+        "The output installs @sendmux/cli or exposes the sendmux binary.",
+        "The output creates a root profile with profiles:set and an smx_root_ key.",
+        "The output creates a mailbox or sending profile with profiles:set and an smx_mbx_ key.",
+        "The output uses --json for machine-readable output.",
+        "The output says wrong key types are rejected before a network request."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Give Sendmux CLI examples for creating a domain, fetching its DNS records, and searching unread invoice snippets in a mailbox.",
+      "expected_output": "The answer uses management:create-domain with root profile and Idempotency-Key, management:get-domain-zone-file with --path public_id=..., and mailbox:search-message-snippets with mailbox profile plus repeatable --query filters.",
+      "files": [],
+      "expectations": [
+        "The output uses management:create-domain.",
+        "The output includes --idempotency-key for domain creation.",
+        "The output uses management:get-domain-zone-file with --path public_id=...",
+        "The output uses mailbox:search-message-snippets.",
+        "The output uses repeatable --query filters such as q, is_unread, or limit."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "For an automation script, which Sendmux CLI commands and flags should I use to send a batch, batch-read known mailbox messages, and poll one delivery log with caching?",
+      "expected_output": "The answer uses sending:send:batch with --body-file and Idempotency-Key, mailbox:batch-get-messages with --body, and management:get-email-log with --path plus --if-none-match; all commands use --json.",
+      "files": [],
+      "expectations": [
+        "The output uses sending:send:batch.",
+        "The output includes --body-file and --idempotency-key for batch send.",
+        "The output uses mailbox:batch-get-messages with a JSON body.",
+        "The output uses management:get-email-log with --path public_id=...",
+        "The output includes --if-none-match or If-None-Match for caching.",
+        "The output uses --json on commands."
+      ]
+    }
+  ]
+}

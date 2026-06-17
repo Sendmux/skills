@@ -1,0 +1,43 @@
+{
+  "skill_name": "sendmux-management",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need to add a Sendmux domain for hosted mailboxes, get the DNS records, verify it after DNS is set, then create a mailbox and key for an agent. Which calls should I use?",
+      "expected_output": "The answer uses smx_root_ management calls, creates the domain with idempotency, gets zone-file records, verifies the domain, creates the mailbox, creates a mailbox key, and routes mailbox reading to sendmux-mailbox-agent.",
+      "files": [],
+      "expectations": [
+        "The output uses an smx_root_ key for management calls.",
+        "The output includes management_create_domain or management:create-domain with Idempotency-Key.",
+        "The output includes management_get_domain_zone_file and management_verify_domain.",
+        "The output includes management_create_mailbox and management_create_mailbox_key.",
+        "The output routes mailbox read or reply work to sendmux-mailbox-agent."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I want my agent to administer Sendmux sending accounts and webhooks. Which MCP tools exist, and when should it use CLI or SDK instead?",
+      "expected_output": "The answer says sending accounts use CLI/SDK because MCP does not curate provider tools; webhook list/create/test have MCP tools; get/update/delete/rotate/delivery payloads use CLI/SDK.",
+      "files": [],
+      "expectations": [
+        "The output says sending-account provider work uses CLI or SDK rather than MCP.",
+        "The output names management_list_webhooks, management_create_webhook, or management_test_webhook.",
+        "The output says webhook inspect, update, delete, rotate-secret, deliveries, or payload retrieval use CLI or SDK.",
+        "The output includes Idempotency-Key for webhook create, rotate, or test."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The user asks for Sendmux spend over the last 30 days, failed outbound delivery logs, and one log detail without re-downloading unchanged data. What should my agent call?",
+      "expected_output": "The answer uses spend summary, list email logs with filters and limit, then get one email log with If-None-Match/ETag; it avoids broad log reads first.",
+      "files": [],
+      "expectations": [
+        "The output uses management_get_spend_summary or management:get-spend-summary.",
+        "The output uses management_list_email_logs or management:list-email-logs with failed status and a small limit.",
+        "The output uses management_get_email_log or management:get-email-log for the selected log.",
+        "The output mentions If-None-Match or ETag for unchanged detail reads.",
+        "The output avoids broad unfiltered log reads."
+      ]
+    }
+  ]
+}

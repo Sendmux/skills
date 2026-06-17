@@ -1,0 +1,41 @@
+{
+  "skill_name": "sendmux-getting-started",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I have an smx_mbx_ Sendmux key and want my coding agent to make a harmless first mailbox call. What should it do?",
+      "expected_output": "The answer chooses the mailbox surface, refuses to request the raw key in chat, and recommends mailbox_get_me or sendmux mailbox:me:get --json as the first call.",
+      "files": [],
+      "expectations": [
+        "The output says smx_mbx_ is the key prefix for mailbox work.",
+        "The output does not ask the user to paste the API key.",
+        "The output names mailbox_get_me or sendmux mailbox:me:get --json.",
+        "The output does not recommend a root key for mailbox work."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I have an smx_root_ key and need to check that Sendmux management access works without creating anything.",
+      "expected_output": "The answer chooses the management surface and recommends a small read-only list call such as management_list_mailboxes or sendmux management:mailboxes:list --query limit=1 --json.",
+      "files": [],
+      "expectations": [
+        "The output says smx_root_ is the key prefix for management work.",
+        "The output recommends a read-only management first call.",
+        "The output includes management_list_mailboxes or sendmux management:mailboxes:list --query limit=1 --json.",
+        "The output avoids create, update, delete, or send operations."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "When should I use Sendmux MCP, the sendmux CLI, or a Sendmux SDK for setup?",
+      "expected_output": "The answer prioritises MCP for connected agents with curated tools, CLI for one-shot terminal work, and SDKs for application code.",
+      "files": [],
+      "expectations": [
+        "The output recommends MCP first when a relevant server is connected and the tool is curated.",
+        "The output recommends the sendmux CLI with --json for one-shot terminal work.",
+        "The output recommends SDKs for application code.",
+        "The output does not claim MCP covers every Sendmux operation."
+      ]
+    }
+  ]
+}

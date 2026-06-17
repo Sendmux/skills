@@ -1,0 +1,22 @@
+[
+  {
+    "query": "Find unread invoices in my Sendmux mailbox without reading every message.",
+    "should_trigger": true
+  },
+  {
+    "query": "Mark these Sendmux message IDs as read and label them agent_triaged.",
+    "should_trigger": true
+  },
+  {
+    "query": "Resume my Sendmux mailbox sync from the previous state token.",
+    "should_trigger": true
+  },
+  {
+    "query": "Create a new Sendmux mailbox and API key.",
+    "should_trigger": false
+  },
+  {
+    "query": "Send a marketing campaign to 500 recipients.",
+    "should_trigger": false
+  }
+]

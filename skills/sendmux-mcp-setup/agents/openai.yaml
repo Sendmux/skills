@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sendmux MCP Setup"
+  short_description: "Connect Sendmux MCP servers."
+  default_prompt: "Use $sendmux-mcp-setup to configure Sendmux MCP servers for my agent client."

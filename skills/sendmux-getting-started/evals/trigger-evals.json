@@ -1,0 +1,22 @@
+[
+  {
+    "query": "Set up Sendmux for my coding agent and make a first API call.",
+    "should_trigger": true
+  },
+  {
+    "query": "Which Sendmux key do I use for mailbox work versus management work?",
+    "should_trigger": true
+  },
+  {
+    "query": "Use the sendmux CLI to check whether my root key works.",
+    "should_trigger": true
+  },
+  {
+    "query": "Write a reusable table component for a dashboard.",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain SPF records in general without using any Sendmux product.",
+    "should_trigger": false
+  }
+]

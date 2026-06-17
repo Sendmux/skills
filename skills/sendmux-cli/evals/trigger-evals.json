@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Install the Sendmux CLI and set up root and mailbox profiles.",
+    "should_trigger": true
+  },
+  {
+    "query": "What exact sendmux command should I run to create a domain with an idempotency key?",
+    "should_trigger": true
+  },
+  {
+    "query": "Show me the CLI flags for passing path, query, body, and ETag headers to Sendmux.",
+    "should_trigger": true
+  },
+  {
+    "query": "My sendmux command says it requires a mailbox key but I used smx_root_. Explain.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use MCP to create a Sendmux webhook.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write TypeScript code using createManagementClient.",
+    "should_trigger": false
+  }
+]

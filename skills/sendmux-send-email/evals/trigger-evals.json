@@ -1,0 +1,22 @@
+[
+  {
+    "query": "Send a Sendmux email to one recipient with an idempotency key.",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to email 40 users through Sendmux. Should I batch it?",
+    "should_trigger": true
+  },
+  {
+    "query": "Add a PDF attachment to a Sendmux Sending API request.",
+    "should_trigger": true
+  },
+  {
+    "query": "Set up my first Sendmux API key without sending anything.",
+    "should_trigger": false
+  },
+  {
+    "query": "Triage unread messages in a Sendmux inbox.",
+    "should_trigger": false
+  }
+]

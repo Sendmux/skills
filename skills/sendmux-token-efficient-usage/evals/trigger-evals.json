@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Which Sendmux call should my agent use so it does not read an entire mailbox to find unread invoices?",
+    "should_trigger": true
+  },
+  {
+    "query": "I need the lowest-token Sendmux path for sending 20 emails safely with retries.",
+    "should_trigger": true
+  },
+  {
+    "query": "For Sendmux, should I use MCP, the CLI, or the SDK for a mailbox sync loop?",
+    "should_trigger": true
+  },
+  {
+    "query": "Show me how to avoid re-fetching unchanged Sendmux logs with ETags.",
+    "should_trigger": true
+  },
+  {
+    "query": "Make this Sendmux management polling script cheaper by using limits and cursors.",
+    "should_trigger": true
+  },
+  {
+    "query": "Configure Sendmux MCP in Cursor.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a Sendmux domain and mailbox key.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write the JSON body for a single Sendmux transactional email with an attachment.",
+    "should_trigger": false
+  }
+]

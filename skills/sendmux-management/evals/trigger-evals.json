@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Create a Sendmux domain, show me the DNS records, then verify it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Provision a Sendmux mailbox and mailbox API key for an agent.",
+    "should_trigger": true
+  },
+  {
+    "query": "List Sendmux webhooks and send a test event to one of them.",
+    "should_trigger": true
+  },
+  {
+    "query": "Show Sendmux spend and failed delivery logs for this week.",
+    "should_trigger": true
+  },
+  {
+    "query": "Search unread invoice emails inside one mailbox.",
+    "should_trigger": false
+  },
+  {
+    "query": "Send a batch of transactional emails through Sendmux.",
+    "should_trigger": false
+  }
+]

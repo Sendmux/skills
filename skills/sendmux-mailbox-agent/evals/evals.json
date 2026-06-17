@@ -1,0 +1,41 @@
+{
+  "skill_name": "sendmux-mailbox-agent",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need my agent to find unread invoice emails in a Sendmux mailbox and only read the likely matches. What should it call?",
+      "expected_output": "The answer counts or searches snippets first, uses smx_mbx_ mailbox tools, then batch-gets selected message IDs with clean_json instead of listing or reading every message.",
+      "files": [],
+      "expectations": [
+        "The output uses mailbox_count_messages or mailbox_search_message_snippets before reading full messages.",
+        "The output names mailbox_batch_get_messages or mailbox:batch-get-messages for selected IDs.",
+        "The output avoids full mailbox listing as the first step.",
+        "The output uses an smx_mbx_ mailbox key."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I have 12 message IDs the user confirmed should be marked read and labelled agent_triaged. What Sendmux mailbox call should I use?",
+      "expected_output": "The answer uses batch update with ids, seen true, keywords agent_triaged true, and mentions stale-state protection where available.",
+      "files": [],
+      "expectations": [
+        "The output uses mailbox_batch_update_messages or mailbox:batch-update-messages.",
+        "The output includes ids.",
+        "The output sets seen true.",
+        "The output sets keyword agent_triaged true."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "My mailbox agent has a previous state token and needs to resume sync for unread invoices, then reply from the mailbox if needed.",
+      "expected_output": "The answer uses changes or query-message-changes with state tokens and filters, stores the new state, and uses mailbox_send_message with Idempotency-Key for replies.",
+      "files": [],
+      "expectations": [
+        "The output uses mailbox_get_changes, mailboxQueryMessageChanges, or mailbox:query-message-changes.",
+        "The output preserves and updates state tokens.",
+        "The output includes unread invoice filters.",
+        "The output uses mailbox_send_message or mailbox:send-message with Idempotency-Key for replies."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "query": "Can you give my AI assistant its own inbox so it can receive customer emails and draft replies?",
+    "should_trigger": true
+  },
+  {
+    "query": "I need an agent email address that can monitor invoices, classify messages, and ask me before replying.",
+    "should_trigger": true
+  },
+  {
+    "query": "Build a workflow where a bot receives mail, searches for support tickets, labels them, and sends approved responses.",
+    "should_trigger": true
+  },
+  {
+    "query": "Our automation should send outbound status notifications and also read inbound replies in one agent mailbox.",
+    "should_trigger": true
+  },
+  {
+    "query": "How should I connect an AI agent to Sendmux email without exposing a root key at runtime?",
+    "should_trigger": true
+  },
+  {
+    "query": "Install the Sendmux CLI and create profiles.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a Sendmux domain and mailbox key from the terminal.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write the JSON body for one Sendmux email attachment.",
+    "should_trigger": false
+  },
+  {
+    "query": "Search unread invoices in an existing Sendmux mailbox using snippets.",
+    "should_trigger": false
+  }
+]

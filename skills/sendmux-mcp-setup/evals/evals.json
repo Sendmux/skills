@@ -1,0 +1,46 @@
+{
+  "skill_name": "sendmux-mcp-setup",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Set up Sendmux MCP in Claude Code for a mailbox-only local stdio server, then tell me how to confirm the right tools loaded.",
+      "expected_output": "The answer installs sendmux-mcp, uses claude mcp add with sendmux-mcp-mailbox and a mailbox key env var, avoids pasted secrets, and verifies mailbox tools without management/sending tools.",
+      "files": [],
+      "expectations": [
+        "The output installs sendmux-mcp or mentions the sendmux-mcp package.",
+        "The output uses Claude Code MCP setup for a stdio server.",
+        "The output uses sendmux-mcp-mailbox.",
+        "The output uses an smx_mbx_ mailbox key placeholder or environment variable.",
+        "The output says mailbox-only should not expose management_* or sending_* tools."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I need Cursor or Cline config for a local Sendmux MCP server with mailbox, management, and sending enabled. Show the JSON and key scopes.",
+      "expected_output": "The answer uses an mcpServers JSON entry running sendmux-mcp with --surfaces mailbox,management,sending, supplies SENDMUX_MAILBOX_API_KEY, SENDMUX_MANAGEMENT_API_KEY, and SENDMUX_SENDING_API_KEY, and assigns smx_mbx_ to mailbox/sending plus smx_root_ to management.",
+      "files": [],
+      "expectations": [
+        "The output includes an mcpServers JSON configuration.",
+        "The output runs sendmux-mcp with mailbox, management, and sending surfaces.",
+        "The output includes SENDMUX_MAILBOX_API_KEY.",
+        "The output includes SENDMUX_MANAGEMENT_API_KEY.",
+        "The output includes SENDMUX_SENDING_API_KEY.",
+        "The output maps management to smx_root_ and mailbox/sending to smx_mbx_."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Configure Sendmux MCP as a remote/HTTP server for Codex and VS Code. Include the hosted endpoint and the local bearer-token option.",
+      "expected_output": "The answer gives Codex config.toml and VS Code mcp.json examples, uses https://mcp.sendmux.ai/mcp for hosted remote OAuth, uses http://127.0.0.1:8765/mcp for local HTTP, and passes Authorization: Bearer from a token env/input rather than a Sendmux API key.",
+      "files": [],
+      "expectations": [
+        "The output includes Codex config.toml syntax under mcp_servers.",
+        "The output includes VS Code mcp.json syntax under servers.",
+        "The output uses the hosted endpoint https://mcp.sendmux.ai/mcp.",
+        "The output includes the local HTTP URL http://127.0.0.1:8765/mcp.",
+        "The output uses Authorization: Bearer for local HTTP bearer.",
+        "The output distinguishes the MCP bearer token from Sendmux API keys."
+      ]
+    }
+  ]
+}

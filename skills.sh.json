@@ -1,0 +1,32 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Start and connect",
+      "description": "Skills for choosing a Sendmux surface, authenticating, and connecting agent clients.",
+      "skills": [
+        "sendmux-getting-started",
+        "sendmux-cli",
+        "sendmux-mcp-setup"
+      ]
+    },
+    {
+      "title": "Send and mailbox workflows",
+      "description": "Skills for sending email, reading mailboxes, and giving agents email workflows.",
+      "skills": [
+        "sendmux-send-email",
+        "sendmux-mailbox-agent",
+        "sendmux-email-for-agents"
+      ]
+    },
+    {
+      "title": "Administration and efficiency",
+      "description": "Skills for account-level management and low-token Sendmux usage.",
+      "skills": [
+        "sendmux-management",
+        "sendmux-token-efficient-usage"
+      ]
+    }
+  ]
+}
