@@ -4,13 +4,13 @@
     {
       "id": 0,
       "prompt": "I need my agent to find unread invoice emails in a Sendmux mailbox and only read the likely matches. What should it call?",
-      "expected_output": "The answer counts or searches snippets first, uses smx_mbx_ mailbox tools, then batch-gets selected message IDs with clean_json instead of listing or reading every message.",
+      "expected_output": "The answer counts or searches snippets first, uses smx_mbx_ or scoped smx_agent_ mailbox tools, then batch-gets selected message IDs with clean_json instead of listing or reading every message.",
       "files": [],
       "expectations": [
         "The output uses mailbox_count_messages or mailbox_search_message_snippets before reading full messages.",
         "The output names mailbox_batch_get_messages or mailbox:batch-get-messages for selected IDs.",
         "The output avoids full mailbox listing as the first step.",
-        "The output uses an smx_mbx_ mailbox key."
+        "The output uses an smx_mbx_ mailbox key or scoped smx_agent_ token."
       ]
     },
     {

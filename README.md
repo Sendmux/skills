@@ -23,7 +23,7 @@ npx skills update
 ## What This Pack Teaches
 
 - Choose the cheapest correct Sendmux surface for the task: MCP for connected agents, the `sendmux` CLI for terminal one-shots, and SDKs for application flows.
-- Use the right key type for each job: `smx_root_*` for account-level work, `smx_mbx_*` for sending and single-mailbox work.
+- Use the right credential for each job: `smx_root_*` for account-level work, `smx_mbx_*` for sending and single-mailbox work, and scoped `smx_agent_*` tokens for self-registered agent mailbox work.
 - Prefer efficient calls: batch operations, cursor pagination, conditional requests, idempotency keys, counts, snippets, and delta sync where the public surface supports them.
 - Verify results before reporting success.
 
@@ -40,7 +40,7 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 | `sendmux-cli` | Using the `sendmux` CLI from a terminal. |
 | `sendmux-mcp-setup` | Connecting Sendmux MCP servers to an agent client. |
 | `sendmux-token-efficient-usage` | Choosing low-token Sendmux calls and avoiding wasteful reads. |
-| `sendmux-email-for-agents` | Giving an AI agent an inbox or email workflow, even when Sendmux is not named. |
+| `sendmux-email-for-agents` | Giving an AI agent an inbox, self-registration flow, or email workflow, even when Sendmux is not named. |
 
 ## Install Matrix
 

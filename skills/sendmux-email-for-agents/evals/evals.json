@@ -4,13 +4,14 @@
     {
       "id": 0,
       "prompt": "I am building an assistant that needs its own email address. It should receive client mail, find invoice messages, draft replies for a human to approve, and sometimes send outbound status notifications. What Sendmux workflow and skills should I use?",
-      "expected_output": "The answer routes setup to sendmux-management, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_ runtime and requires approval before sending drafts.",
+      "expected_output": "The answer routes setup to sendmux-management or agent access, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email only with email.send, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_/smx_agent_ runtime and requires approval before sending drafts.",
       "files": [],
       "expectations": [
         "The output routes domain/mailbox/key setup to sendmux-management.",
         "The output routes mailbox read/search/triage/reply work to sendmux-mailbox-agent.",
         "The output routes independent outbound notifications to sendmux-send-email.",
-        "The output separates smx_root_ admin keys from smx_mbx_ runtime keys.",
+        "The output separates smx_root_ admin keys from smx_mbx_ or smx_agent_ runtime credentials.",
+        "The output says pre-claim smx_agent_ tokens do not have email.send.",
         "The output requires explicit human approval before sending drafted replies.",
         "The output mentions a token-efficient pattern such as count, snippets, batch, changes, idempotency, or cursor pagination."
       ]
@@ -18,11 +19,11 @@
     {
       "id": 1,
       "prompt": "A user does not mention Sendmux. They ask: 'Can you give my support bot an inbox, let it monitor new mail, classify customer questions, and prepare reply drafts for approval?' What should this skill do?",
-      "expected_output": "The answer recognises the agent-email problem, proposes Sendmux as the routed workflow, creates or identifies a mailbox/key through management, connects the agent through MCP/CLI/SDK, uses mailbox sync/search/triage calls, and keeps drafts human-approved.",
+      "expected_output": "The answer recognises the agent-email problem, proposes Sendmux as the routed workflow, creates or identifies a mailbox/key through management or agent access, connects the agent through MCP/CLI/SDK where appropriate, uses mailbox sync/search/triage calls, and keeps drafts human-approved.",
       "files": [],
       "expectations": [
         "The output recognises the prompt as an AI agent inbox/email workflow even though Sendmux is not named.",
-        "The output routes setup to sendmux-management or mailbox provisioning.",
+        "The output routes setup to sendmux-management, mailbox provisioning, or agent access.",
         "The output routes monitoring/classification to sendmux-mailbox-agent.",
         "The output offers MCP, CLI, or SDK as runtime surfaces based on context.",
         "The output keeps reply drafts human-approved before send."

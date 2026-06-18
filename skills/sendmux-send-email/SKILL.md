@@ -17,7 +17,8 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - Do not invent recipients, sender addresses, subject lines, or body content.
 - Send only after the user supplies or confirms every recipient and message.
 - For batch sends, confirm the full recipient/message set before calling a send tool.
-- Use `smx_mbx_` keys for the Sending API. The key needs `email.send`.
+- Use a credential with `email.send` for the Sending API. Normal sends use `smx_mbx_` keys.
+- Do not use a pre-claim `smx_agent_` token for sending. It has `mailbox.read` and `email.receive`, not `email.send`.
 
 ## Choose the send path
 

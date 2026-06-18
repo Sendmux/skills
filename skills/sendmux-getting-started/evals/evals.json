@@ -3,11 +3,11 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "I have an smx_mbx_ Sendmux key and want my coding agent to make a harmless first mailbox call. What should it do?",
-      "expected_output": "The answer chooses the mailbox surface, refuses to request the raw key in chat, and recommends mailbox_get_me or sendmux mailbox:me:get --json as the first call.",
+      "prompt": "I have an smx_mbx_ Sendmux key or smx_agent_ token and want my coding agent to make a harmless first mailbox call. What should it do?",
+      "expected_output": "The answer chooses the mailbox surface, refuses to request the raw key in chat, explains smx_agent_ is scope-limited, and recommends mailbox_get_me or sendmux mailbox:me:get --json as the first call.",
       "files": [],
       "expectations": [
-        "The output says smx_mbx_ is the key prefix for mailbox work.",
+        "The output says smx_mbx_ or scoped smx_agent_ works for mailbox work.",
         "The output does not ask the user to paste the API key.",
         "The output names mailbox_get_me or sendmux mailbox:me:get --json.",
         "The output does not recommend a root key for mailbox work."

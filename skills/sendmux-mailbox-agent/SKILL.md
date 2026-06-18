@@ -1,6 +1,6 @@
 ---
 name: sendmux-mailbox-agent
-description: Work efficiently with one Sendmux mailbox from an AI agent. Use for reading, searching, counting, syncing, triaging, filing, deleting, threading, or replying from a mailbox with an smx_mbx_ key, especially when the user asks an agent to inspect an inbox, find relevant messages, mark messages, or continue from a prior mailbox sync state.
+description: Work efficiently with one Sendmux mailbox from an AI agent. Use for reading, searching, counting, syncing, triaging, filing, deleting, threading, or replying from a mailbox with an smx_mbx_ key or scoped smx_agent_ token, especially when the user asks an agent to inspect an inbox, find relevant messages, mark messages, or continue from a prior mailbox sync state.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -9,7 +9,7 @@ metadata:
 
 # Sendmux mailbox agent
 
-Use this skill for mailbox-scoped workflows with an `smx_mbx_` key: read, search, triage, reply, and sync one mailbox.
+Use this skill for mailbox-scoped workflows with an `smx_mbx_` key or scoped `smx_agent_` token: read, search, triage, reply when allowed, and sync one mailbox.
 
 ## Boundaries
 
@@ -17,6 +17,7 @@ Use this skill for mailbox-scoped workflows with an `smx_mbx_` key: read, search
 - Do not use a root key for mailbox work.
 - Do not create mailboxes or mailbox keys here; route those tasks to `sendmux-management`.
 - Do not delete or mutate messages without explicit user confirmation.
+- Treat pre-claim `smx_agent_` tokens as read/receive only. They do not have `email.send`.
 - If a credential grants more than one mailbox, include `mailbox_id` on mailbox calls; otherwise omit it.
 
 ## Efficient defaults
@@ -70,6 +71,8 @@ SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux mailbox:batch-get-messages \
   }' \
   --json
 ```
+
+Use the same commands by putting a scoped `smx_agent_` token in `SENDMUX_API_KEY` when the operation is within its scopes.
 
 SDK:
 
