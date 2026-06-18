@@ -26,4 +26,6 @@ skills/
 
 ## Publish Boundary
 
-Work locally on `agent/sendmux-skills`. Do not push, register on skills.sh, or publish docs without explicit approval.
+Canonical GitHub repo: `Sendmux/skills`, with `main` as the default branch. Keep public examples on `npx skills add Sendmux/skills`.
+
+Do not publish a new release, register/update skills.sh metadata, or publish docs without explicit approval.

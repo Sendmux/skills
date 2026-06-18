@@ -2,16 +2,16 @@
 
 Official Sendmux skills for AI coding agents.
 
-Install the pack once it is published:
+Install the pack:
 
 ```bash
-npx skills add Sendmux/sendmux-skills
+npx skills add Sendmux/skills
 ```
 
 Install one skill from the pack:
 
 ```bash
-npx skills add Sendmux/sendmux-skills --skill sendmux-send-email
+npx skills add Sendmux/skills --skill sendmux-send-email
 ```
 
 Update an installed pack:
