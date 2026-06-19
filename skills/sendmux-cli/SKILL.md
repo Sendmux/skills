@@ -29,6 +29,7 @@ sendmux --help
 ```
 
 The package exposes the `sendmux` binary.
+Use the latest CLI before using `smx_agent_` tokens; older installs may reject that prefix before sending a request.
 
 ## Profiles
 
