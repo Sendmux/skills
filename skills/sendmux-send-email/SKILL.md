@@ -17,17 +17,17 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - Do not invent recipients, sender addresses, subject lines, or body content.
 - Send only after the user supplies or confirms every recipient and message.
 - For batch sends, confirm the full recipient/message set before calling a send tool.
-- Use a send-capable `smx_mbx_` key for the Sending API.
-- Do not use an `smx_agent_` token for sending. Self-registered agent tokens have `mailbox.read` and `email.receive`, not `email.send`.
+- Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for the Sending API.
+- Do not use a pre-claim `smx_agent_` token for sending. Pre-claim self-registered agent tokens have `mailbox.read` and `email.receive`, not `email.send`.
 
 ## Choose the send path
 
-| User task | Efficient default |
-| --- | --- |
-| One outbound email | `POST /emails/send`, MCP `sending_send_email`, CLI `sending:send`, or SDK `sendingSendEmail`. |
-| More than one independent outbound email | Batch by default: `POST /emails/send/batch`, MCP `sending_send_email_batch`, CLI `sending:send:batch`, or SDK `sendingSendEmailBatch`. |
-| Replying while working inside one mailbox | Use mailbox send from `sendmux-mailbox-agent` when the workflow is mailbox-centred. |
-| Existing app only supports SMTP | Use SMTP only because the existing tool requires it. For new agent or app integrations, prefer the HTTP Sending API. |
+| User task                                 | Efficient default                                                                                                                      |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| One outbound email                        | `POST /emails/send`, MCP `sending_send_email`, CLI `sending:send`, or SDK `sendingSendEmail`.                                          |
+| More than one independent outbound email  | Batch by default: `POST /emails/send/batch`, MCP `sending_send_email_batch`, CLI `sending:send:batch`, or SDK `sendingSendEmailBatch`. |
+| Replying while working inside one mailbox | Use mailbox send from `sendmux-mailbox-agent` when the workflow is mailbox-centred.                                                    |
+| Existing app only supports SMTP           | Use SMTP only because the existing tool requires it. For new agent or app integrations, prefer the HTTP Sending API.                   |
 
 Batch sends accept up to 100 messages. A batch response can partially succeed, so inspect every result item.
 

@@ -16,7 +16,7 @@ Use this skill when the terminal is the right Sendmux surface.
 - Do not ask the user to paste API keys.
 - Use `smx_root_` keys only for `management:*` commands.
 - Use `smx_mbx_` keys or scoped `smx_agent_` tokens for `mailbox:*` commands.
-- Use a send-capable `smx_mbx_` key for `sending:*` commands. `smx_agent_` tokens cannot send.
+- Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for `sending:*` commands. Pre-claim `smx_agent_` tokens cannot send.
 - Do not run destructive commands without explicit confirmation.
 - Use `--json` for agent-readable output.
 - Prefer task-specific Sendmux skills when the user needs strategy; use this skill for exact CLI mechanics.
@@ -55,29 +55,29 @@ Authentication resolution:
 
 The CLI infers key kind from the prefix before sending a request.
 
-| Command surface | Required key |
-| --- | --- |
-| `management:*` | `smx_root_` |
-| `mailbox:*` | `smx_mbx_` or scoped `smx_agent_` |
-| `sending:*` | Send-capable `smx_mbx_` key |
+| Command surface | Required key                                                                      |
+| --------------- | --------------------------------------------------------------------------------- |
+| `management:*`  | `smx_root_`                                                                       |
+| `mailbox:*`     | `smx_mbx_` or scoped `smx_agent_`                                                 |
+| `sending:*`     | Send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token |
 
 Wrong-key examples fail before network:
 
 ```text
 Command requires a root API key, but --api-key contains a mailbox API key.
-Command requires a send-capable `smx_mbx_` key, but --api-key contains a root API key.
+Command requires a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token, but --api-key contains a root API key.
 ```
 
 ## Command catalogue
 
 The CLI exposes generated operation commands:
 
-| Surface | Count | Examples |
-| --- | ---: | --- |
-| Management | 52 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook` |
-| Mailbox | 40 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
-| Sending | 3 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch` |
-| Profiles | 3 | `profiles:list`, `profiles:set`, `profiles:show` |
+| Surface    | Count | Examples                                                                                                                                                   |
+| ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Management |    52 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
+| Mailbox    |    40 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
+| Sending    |     3 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`                                                                                          |
+| Profiles   |     3 | `profiles:list`, `profiles:set`, `profiles:show`                                                                                                           |
 
 Use command-level help to discover accepted path, query, header, and body fields:
 
@@ -91,20 +91,20 @@ sendmux sending:send:batch --help
 
 Operation commands share these flags:
 
-| Flag | Use |
-| --- | --- |
-| `--api-key` | Direct key; overrides profile/env profile lookup. |
-| `--base-url` | Override API base URL. |
-| `--profile`, `-p` | Select a local profile. |
-| `--body` | Inline JSON request body, or text bytes for byte-oriented operations. |
-| `--body-file` | Read a JSON request body or byte payload from a file. |
-| `--path name=value` | Path parameters. Repeat for multiple path params. |
-| `--query name=value` | Query parameters. Repeat for filters and pagination. |
-| `--header name=value` | Headers accepted by the operation. Repeat for multiple headers. |
-| `--idempotency-key` | Shortcut for `Idempotency-Key`. Works only when the operation supports it. |
-| `--if-match` | Shortcut for `If-Match`. Works only when the operation supports it. |
-| `--if-none-match` | Shortcut for `If-None-Match`. Works only when the operation supports it. |
-| `--json` | Machine-readable output. |
+| Flag                  | Use                                                                        |
+| --------------------- | -------------------------------------------------------------------------- |
+| `--api-key`           | Direct key; overrides profile/env profile lookup.                          |
+| `--base-url`          | Override API base URL.                                                     |
+| `--profile`, `-p`     | Select a local profile.                                                    |
+| `--body`              | Inline JSON request body, or text bytes for byte-oriented operations.      |
+| `--body-file`         | Read a JSON request body or byte payload from a file.                      |
+| `--path name=value`   | Path parameters. Repeat for multiple path params.                          |
+| `--query name=value`  | Query parameters. Repeat for filters and pagination.                       |
+| `--header name=value` | Headers accepted by the operation. Repeat for multiple headers.            |
+| `--idempotency-key`   | Shortcut for `Idempotency-Key`. Works only when the operation supports it. |
+| `--if-match`          | Shortcut for `If-Match`. Works only when the operation supports it.        |
+| `--if-none-match`     | Shortcut for `If-None-Match`. Works only when the operation supports it.   |
+| `--json`              | Machine-readable output.                                                   |
 
 `--path`, `--query`, and `--header` require `name=value`. Booleans use `true` or `false`. Repeat an array-valued parameter rather than comma-joining it.
 

@@ -14,40 +14,40 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 ## Boundaries
 
 - Do not ask the user to paste an API key.
-- Use send-capable `smx_mbx_*` keys for Sending calls and `smx_mbx_*` keys for normal Mailbox calls.
-- Use scoped `smx_agent_*` only for the Mailbox calls its scopes allow. Pre-claim agent tokens cannot send.
+- Use send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending calls, and `smx_mbx_*` keys for normal Mailbox calls.
+- Use scoped `smx_agent_*` only for the calls its scopes and resource allow. Pre-claim agent tokens cannot send.
 - Use `smx_root_*` for Management calls.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.
 - Do not read full mailbox bodies, every message, or every log row unless the user asks for full content and narrower calls cannot answer.
 
 ## Surface choice
 
-| Situation | Use | Why |
-| --- | --- | --- |
-| Connected agent and curated tool exists | MCP tool | Small schema and no SDK boilerplate. |
-| One-off terminal task | `sendmux` CLI with `--json` | Direct, scriptable, exposes the full generated operation set. |
-| Application code or repeated workflow | SDK for the project already in use | Reuses client setup, pagination, headers, and retry helpers. |
-| MCP lacks the needed operation | CLI for terminal work, SDK for code | Do not invent uncurated MCP tools. |
-| No package/tooling available | Direct HTTP | Keep request bodies and headers aligned to OpenAPI. |
+| Situation                               | Use                                 | Why                                                           |
+| --------------------------------------- | ----------------------------------- | ------------------------------------------------------------- |
+| Connected agent and curated tool exists | MCP tool                            | Small schema and no SDK boilerplate.                          |
+| One-off terminal task                   | `sendmux` CLI with `--json`         | Direct, scriptable, exposes the full generated operation set. |
+| Application code or repeated workflow   | SDK for the project already in use  | Reuses client setup, pagination, headers, and retry helpers.  |
+| MCP lacks the needed operation          | CLI for terminal work, SDK for code | Do not invent uncurated MCP tools.                            |
+| No package/tooling available            | Direct HTTP                         | Keep request bodies and headers aligned to OpenAPI.           |
 
 ## Cheapest-call map
 
-| Task | Cheapest correct default |
-| --- | --- |
-| Send one outbound email | `sending_send_email`, CLI `sending:send`, SDK `sendingSendEmail`; include `Idempotency-Key`. |
-| Send multiple outbound emails | `sending_send_email_batch`, CLI `sending:send:batch`, SDK `sendingSendEmailBatch`; do not loop single sends. |
-| Count matching mailbox messages | `mailbox_count_messages`, CLI `mailbox:count-messages`, SDK `mailboxCountMessages`. |
-| Search mailbox text | `mailbox_search_message_snippets`, CLI `mailbox:search-message-snippets`, SDK `mailboxSearchMessageSnippets`; then fetch selected IDs. |
-| Read several known messages | `mailbox_batch_get_messages`, CLI `mailbox:batch-get-messages`, SDK `mailboxBatchGetMessages`. |
-| Update/delete several messages | Batch update/delete after explicit confirmation. |
-| Resume broad mailbox sync | `mailbox_get_changes`, CLI `mailbox:get-changes`, SDK `mailboxGetChanges`. |
-| Resume filtered mailbox sync | CLI/SDK `mailbox:query-message-changes` / `mailboxQueryMessageChanges`; MCP does not curate it yet. |
-| Watch live mailbox events | CLI/SDK `mailbox:stream-events` / `mailboxStreamEvents`; MCP does not curate it yet. |
-| Scan threads | List threads, then fetch one thread or its messages. |
-| Manage domains/mailboxes/keys | Management MCP for curated create/list/get/update/suspend/resume/key tools; CLI/SDK for uncovered lifecycle work. |
-| Manage sending accounts | CLI/SDK; MCP does not curate provider tools yet. |
-| Manage webhooks | MCP for list/create/test; CLI/SDK for get/update/delete/rotate/delivery payloads. |
-| Inspect spend, logs, metrics | Summary/metrics first; filter log lists with small `limit`, then fetch one selected row. |
+| Task                            | Cheapest correct default                                                                                                               |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Send one outbound email         | `sending_send_email`, CLI `sending:send`, SDK `sendingSendEmail`; include `Idempotency-Key`.                                           |
+| Send multiple outbound emails   | `sending_send_email_batch`, CLI `sending:send:batch`, SDK `sendingSendEmailBatch`; do not loop single sends.                           |
+| Count matching mailbox messages | `mailbox_count_messages`, CLI `mailbox:count-messages`, SDK `mailboxCountMessages`.                                                    |
+| Search mailbox text             | `mailbox_search_message_snippets`, CLI `mailbox:search-message-snippets`, SDK `mailboxSearchMessageSnippets`; then fetch selected IDs. |
+| Read several known messages     | `mailbox_batch_get_messages`, CLI `mailbox:batch-get-messages`, SDK `mailboxBatchGetMessages`.                                         |
+| Update/delete several messages  | Batch update/delete after explicit confirmation.                                                                                       |
+| Resume broad mailbox sync       | `mailbox_get_changes`, CLI `mailbox:get-changes`, SDK `mailboxGetChanges`.                                                             |
+| Resume filtered mailbox sync    | CLI/SDK `mailbox:query-message-changes` / `mailboxQueryMessageChanges`; MCP does not curate it yet.                                    |
+| Watch live mailbox events       | CLI/SDK `mailbox:stream-events` / `mailboxStreamEvents`; MCP does not curate it yet.                                                   |
+| Scan threads                    | List threads, then fetch one thread or its messages.                                                                                   |
+| Manage domains/mailboxes/keys   | Management MCP for curated create/list/get/update/suspend/resume/key tools; CLI/SDK for uncovered lifecycle work.                      |
+| Manage sending accounts         | CLI/SDK; MCP does not curate provider tools yet.                                                                                       |
+| Manage webhooks                 | MCP for list/create/test; CLI/SDK for get/update/delete/rotate/delivery payloads.                                                      |
+| Inspect spend, logs, metrics    | Summary/metrics first; filter log lists with small `limit`, then fetch one selected row.                                               |
 
 ## Read less
 

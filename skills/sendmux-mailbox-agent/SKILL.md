@@ -17,25 +17,25 @@ Use this skill for mailbox-scoped workflows with an `smx_mbx_` key or scoped `sm
 - Do not use a root key for mailbox work.
 - Do not create mailboxes or mailbox keys here; route those tasks to `sendmux-management`.
 - Do not delete or mutate messages without explicit user confirmation.
-- Treat pre-claim `smx_agent_` tokens as read/receive only. They do not have `email.send`.
+- Treat pre-claim `smx_agent_` tokens as read/receive only. They do not have `email.send`; owner-approved app-resource `smx_agent_` tokens may send from their assigned mailbox when the token includes `email.send`.
 - If a credential grants more than one mailbox, include `mailbox_id` on mailbox calls; otherwise omit it.
 
 ## Efficient defaults
 
-| Task | Preferred call |
-| --- | --- |
-| Identify the mailbox | `mailbox_get_me`, CLI `mailbox:me:get`, SDK `mailboxGetMe`. |
-| Count matching messages | `mailbox_count_messages`, CLI `mailbox:count-messages`, SDK `mailboxCountMessages`. |
-| Search text | `mailbox_search_message_snippets`, CLI `mailbox:search-message-snippets`, SDK `mailboxSearchMessageSnippets`. |
-| Read known IDs | `mailbox_batch_get_messages`, CLI `mailbox:batch-get-messages`, SDK `mailboxBatchGetMessages`. |
-| Mark, flag, or label many messages | `mailbox_batch_update_messages`, CLI `mailbox:batch-update-messages`, SDK `mailboxBatchUpdateMessages`. |
-| Delete many messages | `mailbox_batch_delete_messages`, CLI `mailbox:batch-delete-messages`, SDK `mailboxBatchDeleteMessages`. |
-| Reply/send from this mailbox | `mailbox_send_message`, CLI `mailbox:send-message`, SDK `mailboxSendMessage`. |
-| Threads | `mailbox_list_threads`, `mailbox_get_thread`, `mailbox_list_thread_messages`. |
-| Folders | `mailbox_list_folders`; inspect folders before filing or moving messages. |
-| Broad sync | `mailbox_get_changes`, CLI `mailbox:get-changes`, SDK `mailboxGetChanges`. |
-| Filtered message sync | CLI/SDK `mailbox:query-message-changes` / `mailboxQueryMessageChanges`. MCP does not curate this yet. |
-| Live mailbox events | CLI/SDK `mailbox:stream-events` / `mailboxStreamEvents`. MCP does not curate this yet. |
+| Task                               | Preferred call                                                                                                |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Identify the mailbox               | `mailbox_get_me`, CLI `mailbox:me:get`, SDK `mailboxGetMe`.                                                   |
+| Count matching messages            | `mailbox_count_messages`, CLI `mailbox:count-messages`, SDK `mailboxCountMessages`.                           |
+| Search text                        | `mailbox_search_message_snippets`, CLI `mailbox:search-message-snippets`, SDK `mailboxSearchMessageSnippets`. |
+| Read known IDs                     | `mailbox_batch_get_messages`, CLI `mailbox:batch-get-messages`, SDK `mailboxBatchGetMessages`.                |
+| Mark, flag, or label many messages | `mailbox_batch_update_messages`, CLI `mailbox:batch-update-messages`, SDK `mailboxBatchUpdateMessages`.       |
+| Delete many messages               | `mailbox_batch_delete_messages`, CLI `mailbox:batch-delete-messages`, SDK `mailboxBatchDeleteMessages`.       |
+| Reply/send from this mailbox       | `mailbox_send_message`, CLI `mailbox:send-message`, SDK `mailboxSendMessage`.                                 |
+| Threads                            | `mailbox_list_threads`, `mailbox_get_thread`, `mailbox_list_thread_messages`.                                 |
+| Folders                            | `mailbox_list_folders`; inspect folders before filing or moving messages.                                     |
+| Broad sync                         | `mailbox_get_changes`, CLI `mailbox:get-changes`, SDK `mailboxGetChanges`.                                    |
+| Filtered message sync              | CLI/SDK `mailbox:query-message-changes` / `mailboxQueryMessageChanges`. MCP does not curate this yet.         |
+| Live mailbox events                | CLI/SDK `mailbox:stream-events` / `mailboxStreamEvents`. MCP does not curate this yet.                        |
 
 ## Search before reading
 

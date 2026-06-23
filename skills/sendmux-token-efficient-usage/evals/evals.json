@@ -4,12 +4,12 @@
     {
       "id": 0,
       "prompt": "I need my Sendmux agent to send 12 outbound emails and be safe if the process retries. Which surface and call should it choose?",
-      "expected_output": "The answer chooses batch sending, names an MCP/CLI/SDK batch call, uses a send-capable smx_mbx_ key, includes Idempotency-Key, and says to inspect per-message batch results.",
+      "expected_output": "The answer chooses batch sending, names an MCP/CLI/SDK batch call, uses a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, includes Idempotency-Key, and says to inspect per-message batch results.",
       "files": [],
       "expectations": [
         "The output chooses a batch send rather than repeated single sends.",
         "The output names sending_send_email_batch, sending:send:batch, sendingSendEmailBatch, or /emails/send/batch.",
-        "The output uses or mentions a send-capable smx_mbx_ key.",
+        "The output uses or mentions a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token.",
         "The output includes Idempotency-Key or --idempotency-key for retry safety.",
         "The output says batch results can have per-message outcomes or must be inspected per message."
       ]

@@ -17,7 +17,7 @@
     {
       "id": 1,
       "prompt": "I need Cursor or Cline config for a local Sendmux MCP server with mailbox, management, and sending enabled. Show the JSON and key scopes.",
-      "expected_output": "The answer uses an mcpServers JSON entry running sendmux-mcp with --surfaces mailbox,management,sending, supplies SENDMUX_MAILBOX_API_KEY, SENDMUX_MANAGEMENT_API_KEY, and SENDMUX_SENDING_API_KEY, and assigns smx_mbx_ to mailbox/sending plus smx_root_ to management.",
+      "expected_output": "The answer uses an mcpServers JSON entry running sendmux-mcp with --surfaces mailbox,management,sending, supplies SENDMUX_MAILBOX_API_KEY, SENDMUX_MANAGEMENT_API_KEY, and SENDMUX_SENDING_API_KEY, and assigns smx_mbx_ to mailbox/sending or owner-approved Sending-resource smx_agent_ to sending plus smx_root_ to management.",
       "files": [],
       "expectations": [
         "The output includes an mcpServers JSON configuration.",
@@ -25,7 +25,7 @@
         "The output includes SENDMUX_MAILBOX_API_KEY.",
         "The output includes SENDMUX_MANAGEMENT_API_KEY.",
         "The output includes SENDMUX_SENDING_API_KEY.",
-        "The output maps management to smx_root_ and mailbox/sending to smx_mbx_."
+        "The output maps management to smx_root_, mailbox to smx_mbx_ or scoped smx_agent_, and sending to smx_mbx_ or owner-approved Sending-resource smx_agent_."
       ]
     },
     {
