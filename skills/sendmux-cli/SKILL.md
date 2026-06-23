@@ -16,7 +16,7 @@ Use this skill when the terminal is the right Sendmux surface.
 - Do not ask the user to paste API keys.
 - Use `smx_root_` keys only for `management:*` commands.
 - Use `smx_mbx_` keys or scoped `smx_agent_` tokens for `mailbox:*` commands.
-- Use a mailbox-compatible credential with `email.send` for `sending:*` commands. Pre-claim `smx_agent_` tokens cannot send.
+- Use a send-capable `smx_mbx_` key for `sending:*` commands. `smx_agent_` tokens cannot send.
 - Do not run destructive commands without explicit confirmation.
 - Use `--json` for agent-readable output.
 - Prefer task-specific Sendmux skills when the user needs strategy; use this skill for exact CLI mechanics.
@@ -59,13 +59,13 @@ The CLI infers key kind from the prefix before sending a request.
 | --- | --- |
 | `management:*` | `smx_root_` |
 | `mailbox:*` | `smx_mbx_` or scoped `smx_agent_` |
-| `sending:*` | Mailbox-compatible credential with `email.send` |
+| `sending:*` | Send-capable `smx_mbx_` key |
 
 Wrong-key examples fail before network:
 
 ```text
 Command requires a root API key, but --api-key contains a mailbox API key.
-Command requires a mailbox-compatible API key, but --api-key contains a root API key.
+Command requires a send-capable `smx_mbx_` key, but --api-key contains a root API key.
 ```
 
 ## Command catalogue

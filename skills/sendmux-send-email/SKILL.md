@@ -17,8 +17,8 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - Do not invent recipients, sender addresses, subject lines, or body content.
 - Send only after the user supplies or confirms every recipient and message.
 - For batch sends, confirm the full recipient/message set before calling a send tool.
-- Use a credential with `email.send` for the Sending API. Normal sends use `smx_mbx_` keys.
-- Do not use a pre-claim `smx_agent_` token for sending. It has `mailbox.read` and `email.receive`, not `email.send`.
+- Use a send-capable `smx_mbx_` key for the Sending API.
+- Do not use an `smx_agent_` token for sending. Self-registered agent tokens have `mailbox.read` and `email.receive`, not `email.send`.
 
 ## Choose the send path
 
@@ -196,7 +196,7 @@ Handle these errors deliberately:
 
 - `401`: missing, invalid, or revoked key.
 - `402`: insufficient credits.
-- `403`: key lacks `email.send` or wrong surface.
+- `403`: key lacks `email.send`, is not allowed for the sender, or uses the wrong surface.
 - `409`: idempotency conflict.
 - `413`: request body exceeds 25 MB.
 - `422`: validation failed; read `error.errors`.

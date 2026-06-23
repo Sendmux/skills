@@ -14,7 +14,8 @@ Use this skill to connect an agent client to Sendmux through MCP.
 ## Boundaries
 
 - Do not ask the user to paste API keys or bearer tokens.
-- Use `smx_mbx_` keys for Mailbox and Sending MCP tools.
+- Use `smx_mbx_` keys or scoped `smx_agent_` tokens for Mailbox MCP tools.
+- Use send-capable `smx_mbx_` keys for Sending MCP tools.
 - Use `smx_root_` keys for Management MCP tools.
 - Use hosted OAuth at `https://mcp.sendmux.ai/mcp` when the client supports remote MCP OAuth.
 - Use local stdio when the client cannot use hosted OAuth or local HTTP.
@@ -47,9 +48,9 @@ Console scripts:
 
 | Surface | Key | Tool count | Example tools |
 | --- | --- | ---: | --- |
-| Mailbox | `smx_mbx_` | 21 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_batch_get_messages`, `mailbox_get_changes`, `mailbox_send_message` |
+| Mailbox | `smx_mbx_` or scoped `smx_agent_` | 21 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_batch_get_messages`, `mailbox_get_changes`, `mailbox_send_message` |
 | Management | `smx_root_` | 20 | `management_create_domain`, `management_create_mailbox`, `management_create_mailbox_key`, `management_get_spend_summary`, `management_create_webhook` |
-| Sending | `smx_mbx_` | 2 | `sending_send_email`, `sending_send_email_batch` |
+| Sending | Send-capable `smx_mbx_` | 2 | `sending_send_email`, `sending_send_email_batch` |
 
 For multi-mailbox grants, call `mailbox_list_granted_mailboxes` first and pass the returned `mailbox_id` to mailbox tools when targeting a mailbox.
 

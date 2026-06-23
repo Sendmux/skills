@@ -14,7 +14,7 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 ## Boundaries
 
 - Do not ask the user to paste an API key.
-- Use `smx_mbx_*` for normal Sending and Mailbox calls.
+- Use send-capable `smx_mbx_*` keys for Sending calls and `smx_mbx_*` keys for normal Mailbox calls.
 - Use scoped `smx_agent_*` only for the Mailbox calls its scopes allow. Pre-claim agent tokens cannot send.
 - Use `smx_root_*` for Management calls.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.

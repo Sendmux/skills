@@ -19,7 +19,7 @@ Use this skill when the user describes the agent-email problem: an AI agent need
 | "Let my agent register itself" | Agent access: `POST /agent-auth/agent/identity`, token exchange, then owner invite through `POST /agent-auth/agent/identity/invite`. |
 | "Connect my agent to its inbox" | `sendmux-mcp-setup` for agent MCP, or `sendmux-getting-started` for first auth checks. |
 | "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an `smx_mbx_*` key or scoped `smx_agent_*` token. |
-| "Send independent outbound notifications" | `sendmux-send-email` with a credential that has `email.send`; batch when there is more than one message. |
+| "Send independent outbound notifications" | `sendmux-send-email` with a send-capable `smx_mbx_*` key; batch when there is more than one message. |
 | "Build this into an app or worker" | SDK path from the task skill; use `sendmux-token-efficient-usage` for call minimisation. |
 | "Show terminal commands" | `sendmux-cli`. |
 
@@ -43,7 +43,7 @@ For self-registration without a human-created key, use agent access instead:
 - Do not ask the user to paste API keys, mailbox keys, OAuth tokens, or one-time secrets.
 - Do not send email until the user has supplied or confirmed the recipient, subject, body, and attachments.
 - Treat "draft for approval" as a draft. Ask for explicit approval before calling `mailbox_send_message`, `sending_send_email`, or `sending_send_email_batch`.
-- Use separate scopes: `smx_root_*` for provisioning/admin, `smx_mbx_*` for normal runtime, and `smx_agent_*` only for the scopes it was issued with.
+- Use separate scopes: `smx_root_*` for provisioning/admin, send-capable `smx_mbx_*` keys for Sending, `smx_mbx_*` keys for normal Mailbox runtime, and `smx_agent_*` only for the scopes it was issued with.
 - Do not use a root key inside an agent that only needs mailbox read/send work.
 - Pre-claim `smx_agent_*` tokens include `mailbox.read` and `email.receive`, not `email.send`.
 - Owner invites are sent by Sendmux through the invite endpoint. Do not route them through the Sending API.
