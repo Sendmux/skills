@@ -40,7 +40,7 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 | `sendmux-cli`                   | Using the `sendmux` CLI from a terminal.                                                                |
 | `sendmux-mcp-setup`             | Connecting Sendmux MCP servers to an agent client.                                                      |
 | `sendmux-token-efficient-usage` | Choosing low-token Sendmux calls and avoiding wasteful reads.                                           |
-| `sendmux-email-for-agents`      | Giving an AI agent an inbox, self-registration flow, or email workflow, even when Sendmux is not named. |
+| `sendmux-email-for-agents`      | Giving an AI agent an inbox, challenge-first self-registration flow, or email workflow, even when Sendmux is not named. |
 
 ## Install Matrix
 

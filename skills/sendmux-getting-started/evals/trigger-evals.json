@@ -12,6 +12,10 @@
     "should_trigger": true
   },
   {
+    "query": "Let my agent register itself with Sendmux and invite me as the owner.",
+    "should_trigger": true
+  },
+  {
     "query": "Write a reusable table component for a dashboard.",
     "should_trigger": false
   },

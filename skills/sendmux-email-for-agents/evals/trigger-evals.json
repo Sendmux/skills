@@ -20,6 +20,10 @@
     "should_trigger": true
   },
   {
+    "query": "Let my AI agent self-register an inbox and invite me as the owner.",
+    "should_trigger": true
+  },
+  {
     "query": "Install the Sendmux CLI and create profiles.",
     "should_trigger": false
   },
