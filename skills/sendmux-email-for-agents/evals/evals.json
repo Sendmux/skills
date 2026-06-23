@@ -4,7 +4,7 @@
     {
       "id": 0,
       "prompt": "I am building an assistant that needs its own email address. It should receive client mail, find invoice messages, draft replies for a human to approve, and sometimes send outbound status notifications. What Sendmux workflow and skills should I use?",
-      "expected_output": "The answer routes setup to sendmux-management or agent access, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email only with email.send, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_/smx_agent_ runtime and requires approval before sending drafts.",
+      "expected_output": "The answer routes setup to sendmux-management or agent access, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email with a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_/smx_agent_ mailbox runtime and requires approval before sending drafts.",
       "files": [],
       "expectations": [
         "The output routes domain/mailbox/key setup to sendmux-management.",

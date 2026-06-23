@@ -4,12 +4,12 @@
     {
       "id": 0,
       "prompt": "Show me how to install the Sendmux CLI, configure separate root/mailbox profiles, and explain what happens if I use the wrong key type.",
-      "expected_output": "The answer installs @sendmux/cli, creates root and mailbox profiles with profiles:set, uses --json, explains smx_root_ versus mailbox-compatible smx_mbx_/smx_agent_, and says mismatched command/key prefixes fail before the request.",
+      "expected_output": "The answer installs @sendmux/cli, creates root and mailbox or sending profiles with profiles:set, uses --json, explains smx_root_ for Management, smx_mbx_ or owner-approved Sending-resource smx_agent_ for Sending, smx_mbx_/scoped smx_agent_ for Mailbox, and says mismatched command/key prefixes fail before the request.",
       "files": [],
       "expectations": [
         "The output installs @sendmux/cli or exposes the sendmux binary.",
         "The output creates a root profile with profiles:set and an smx_root_ key.",
-        "The output creates a mailbox or sending profile with profiles:set and an smx_mbx_ key, or explains smx_agent_ is mailbox-compatible when scoped.",
+        "The output creates a sending profile with a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, and creates a mailbox profile with smx_mbx_ or explains scoped smx_agent_ is mailbox-compatible.",
         "The output uses --json for machine-readable output.",
         "The output says wrong key types are rejected before a network request."
       ]

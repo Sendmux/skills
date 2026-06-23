@@ -20,12 +20,12 @@ Use this skill to get a user from "I have a Sendmux task" to the correct surface
 
 ## Pick the key
 
-| Task | Key prefix | Start here |
-| --- | --- | --- |
-| Send email through the Sending API | `smx_mbx_` | `sendmux-send-email` for real sends; this skill can verify package/API discovery first. |
-| Read, search, sync, triage, or reply from one mailbox | `smx_mbx_` or scoped `smx_agent_` | Mailbox MCP, CLI, or SDK. |
-| Manage domains, mailboxes, mailbox keys, providers, webhooks, logs, billing, or metrics | `smx_root_` | Management MCP, CLI, or SDK. |
-| Let an agent register itself and invite its owner | No existing key, then `smx_agent_` | Agent access: `/auth.md`, `/agent-auth/agent/identity`, `/agent-auth/oauth2/token`, `/agent-auth/agent/identity/invite`. |
+| Task                                                                                    | Key prefix                                                              | Start here                                                                                                               |
+| --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Send email through the Sending API                                                      | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` | `sendmux-send-email` for real sends; this skill can verify package/API discovery first.                                  |
+| Read, search, sync, triage, or reply from one mailbox                                   | `smx_mbx_` or scoped `smx_agent_`                                       | Mailbox MCP, CLI, or SDK.                                                                                                |
+| Manage domains, mailboxes, mailbox keys, providers, webhooks, logs, billing, or metrics | `smx_root_`                                                             | Management MCP, CLI, or SDK.                                                                                             |
+| Let an agent register itself and invite its owner                                       | No existing key, then `smx_agent_`                                      | Agent access: `/auth.md`, `/agent-auth/agent/identity`, `/agent-auth/oauth2/token`, `/agent-auth/agent/identity/invite`. |
 
 If the task mixes management and mailbox work, use separate keys and separate clients or profiles. Do not use a root key for mailbox-scoped examples.
 
@@ -95,11 +95,12 @@ Use this when the agent has no human-created key yet.
 
 1. Read `https://app.sendmux.ai/auth.md`.
 2. Create an anonymous identity with `POST /agent-auth/agent/identity`.
-3. Exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
+3. Save the returned `claim_token`, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
 4. Call `GET /mailbox/me` with the returned `smx_agent_` token.
 5. Request the owner invite with `POST /agent-auth/agent/identity/invite`.
+6. After the owner accepts and approves sending in Sendmux, exchange `claim_token` with the claim grant; request `resource=https://smtp.sendmux.ai/api/v1` before Sending API calls.
 
-Pre-claim `smx_agent_` tokens have `mailbox.read` and `email.receive`. They do not have `email.send`; Sendmux sends the owner invite through the invite endpoint. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key.
+Pre-claim `smx_agent_` tokens have `mailbox.read` and `email.receive`. They do not have `email.send`; owner-approved Sending-resource `smx_agent_` tokens can send from the assigned mailbox. Sendmux sends the owner invite through the invite endpoint. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key.
 
 ### Root key, management work
 
@@ -119,7 +120,10 @@ sendmux management:mailboxes:list --query limit=1 --json
 SDK:
 
 ```ts
-import { createManagementClient, managementListMailboxes } from "@sendmux/management";
+import {
+  createManagementClient,
+  managementListMailboxes,
+} from "@sendmux/management";
 
 const client = createManagementClient({ apiKey: process.env.SENDMUX_API_KEY! });
 const response = await managementListMailboxes({
@@ -133,7 +137,7 @@ Use a small list call as the first management check. It verifies the root key an
 
 ### Sending work
 
-The Sending surface needs `email.send`. Normal sending uses `smx_mbx_` keys. Do not send a real email as a health check unless the user explicitly asks to send one and provides the message details.
+The Sending surface needs a send-capable `smx_mbx_` key with `email.send` or an owner-approved Sending-resource `smx_agent_` token. Do not send a real email as a health check unless the user explicitly asks to send one and provides the message details.
 
 CLI package/API discovery:
 
@@ -155,7 +159,7 @@ For a real send, route to `sendmux-send-email` and include an `Idempotency-Key`.
 
 ## Interpret failures
 
-- Prefix error: the selected surface and credential do not match. Switch to `smx_mbx_` or scoped `smx_agent_` for Mailbox, `smx_mbx_` with `email.send` for Sending, or `smx_root_` for Management.
+- Prefix error: the selected surface and credential do not match. Switch to `smx_mbx_` or scoped `smx_agent_` for Mailbox, a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for Sending, or `smx_root_` for Management.
 - `401`: key missing, invalid, or revoked.
 - `403`: key is valid but lacks the permission or surface required by the call.
 - `429` or `503`: retry according to the response headers; do not loop manually.

@@ -13,15 +13,15 @@ Use this skill when the user describes the agent-email problem: an AI agent need
 
 ## First route
 
-| User problem | Route |
-| --- | --- |
-| "Give my agent an email address" | `sendmux-management` to create/inspect domain, mailbox, and mailbox key. |
-| "Let my agent register itself" | Agent access: `POST /agent-auth/agent/identity`, token exchange, then owner invite through `POST /agent-auth/agent/identity/invite`. |
-| "Connect my agent to its inbox" | `sendmux-mcp-setup` for agent MCP, or `sendmux-getting-started` for first auth checks. |
-| "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an `smx_mbx_*` key or scoped `smx_agent_*` token. |
-| "Send independent outbound notifications" | `sendmux-send-email` with a credential that has `email.send`; batch when there is more than one message. |
-| "Build this into an app or worker" | SDK path from the task skill; use `sendmux-token-efficient-usage` for call minimisation. |
-| "Show terminal commands" | `sendmux-cli`. |
+| User problem                               | Route                                                                                                                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Give my agent an email address"           | `sendmux-management` to create/inspect domain, mailbox, and mailbox key.                                                                                    |
+| "Let my agent register itself"             | Agent access: `POST /agent-auth/agent/identity`, token exchange, then owner invite through `POST /agent-auth/agent/identity/invite`.                        |
+| "Connect my agent to its inbox"            | `sendmux-mcp-setup` for agent MCP, or `sendmux-getting-started` for first auth checks.                                                                      |
+| "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an `smx_mbx_*` key or scoped `smx_agent_*` token.                                                                              |
+| "Send independent outbound notifications"  | `sendmux-send-email` with a send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token; batch when there is more than one message. |
+| "Build this into an app or worker"         | SDK path from the task skill; use `sendmux-token-efficient-usage` for call minimisation.                                                                    |
+| "Show terminal commands"                   | `sendmux-cli`.                                                                                                                                              |
 
 If the task crosses setup and runtime, split it:
 
@@ -33,17 +33,17 @@ If the task crosses setup and runtime, split it:
 For self-registration without a human-created key, use agent access instead:
 
 1. Create an anonymous identity with `POST /agent-auth/agent/identity`.
-2. Exchange the returned `identity_assertion` at `POST /agent-auth/oauth2/token`.
-3. Use the returned `smx_agent_*` token for allowed Mailbox API work.
+2. Save the returned `claim_token`, then exchange the returned `identity_assertion` at `POST /agent-auth/oauth2/token`.
+3. Use the returned pre-claim `smx_agent_*` token for allowed Mailbox API work.
 4. Request the owner invite with `POST /agent-auth/agent/identity/invite`.
-5. After the owner accepts, use normal Sendmux credentials and limits.
+5. After the owner accepts and approves sending in Sendmux, exchange `claim_token` with the claim grant for an app-resource or Sending-resource `smx_agent_*` token.
 
 ## Safety boundaries
 
 - Do not ask the user to paste API keys, mailbox keys, OAuth tokens, or one-time secrets.
 - Do not send email until the user has supplied or confirmed the recipient, subject, body, and attachments.
 - Treat "draft for approval" as a draft. Ask for explicit approval before calling `mailbox_send_message`, `sending_send_email`, or `sending_send_email_batch`.
-- Use separate scopes: `smx_root_*` for provisioning/admin, `smx_mbx_*` for normal runtime, and `smx_agent_*` only for the scopes it was issued with.
+- Use separate scopes: `smx_root_*` for provisioning/admin, send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending, `smx_mbx_*` keys for normal Mailbox runtime, and `smx_agent_*` only for the scopes it was issued with.
 - Do not use a root key inside an agent that only needs mailbox read/send work.
 - Pre-claim `smx_agent_*` tokens include `mailbox.read` and `email.receive`, not `email.send`.
 - Owner invites are sent by Sendmux through the invite endpoint. Do not route them through the Sending API.
@@ -74,11 +74,12 @@ Plan:
 
 1. Read discovery from `https://app.sendmux.ai/auth.md`.
 2. Create an anonymous identity at `/agent-auth/agent/identity`.
-3. Exchange `identity_assertion` at `/agent-auth/oauth2/token`.
-4. Use `smx_agent_*` for allowed Mailbox API read/receive work.
+3. Save the returned `claim_token`, then exchange `identity_assertion` at `/agent-auth/oauth2/token`.
+4. Use the pre-claim `smx_agent_*` token for allowed Mailbox API read/receive work.
 5. Request an owner invite at `/agent-auth/agent/identity/invite`.
+6. After owner approval, exchange `claim_token` at `/agent-auth/oauth2/token` with Sendmux's documented claim grant; request `resource=https://smtp.sendmux.ai/api/v1` before Sending API calls.
 
-Do not say the pre-claim agent can send email. It cannot. Sendmux sends the owner invite email separately. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key.
+Do not say the pre-claim agent can send email. It cannot. After owner approval, a Sending-resource claim-grant `smx_agent_*` token can send from the assigned mailbox. Sendmux sends the owner invite email separately. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key.
 
 ### Agent triage loop
 
@@ -117,7 +118,7 @@ Use `sendmux-send-email` when the email is not a reply inside an active mailbox 
 When designing a workflow, answer in this order:
 
 1. **Recommended route:** name the Sendmux skill(s) to use next.
-2. **Key scope:** `smx_root_*` for admin, `smx_mbx_*` for normal runtime, `smx_agent_*` for scoped self-registered agent runtime.
+2. **Key scope:** `smx_root_*` for admin, `smx_mbx_*` for normal runtime, `smx_agent_*` for scoped self-registered agent runtime, and owner-approved Sending-resource `smx_agent_*` for agent sending.
 3. **Runtime surface:** MCP when curated and connected, CLI for terminal work, SDK for application code.
 4. **Core calls:** list the smallest Sendmux calls needed.
 5. **Human approval:** state what must be confirmed before sending or mutating mail.
