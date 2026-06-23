@@ -4,10 +4,10 @@
     {
       "id": 0,
       "prompt": "I am building an assistant that needs its own email address. It should receive client mail, find invoice messages, draft replies for a human to approve, and sometimes send outbound status notifications. What Sendmux workflow and skills should I use?",
-      "expected_output": "The answer routes setup to sendmux-management or agent access, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email with a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_/smx_agent_ mailbox runtime and requires approval before sending drafts.",
+      "expected_output": "The answer routes setup to sendmux-management or challenge-first agent access, runtime mailbox work to sendmux-mailbox-agent, notifications to sendmux-send-email with a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, MCP setup when appropriate, and token efficiency to sendmux-token-efficient-usage; it separates smx_root_ admin from smx_mbx_/smx_agent_ mailbox runtime and requires approval before sending drafts.",
       "files": [],
       "expectations": [
-        "The output routes domain/mailbox/key setup to sendmux-management.",
+        "The output routes domain/mailbox/key setup to sendmux-management or challenge-first agent access.",
         "The output routes mailbox read/search/triage/reply work to sendmux-mailbox-agent.",
         "The output routes independent outbound notifications to sendmux-send-email.",
         "The output separates smx_root_ admin keys from smx_mbx_ or smx_agent_ runtime credentials.",
@@ -41,6 +41,22 @@
         "The output uses mailbox_count_messages, mailbox_search_message_snippets, or mailbox_batch_get_messages for invoice discovery.",
         "The output uses mailbox_batch_update_messages only after label confirmation.",
         "The output uses mailbox_send_message only after approval and includes idempotency."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "My agent has no Sendmux key. It wants to create its own inbox, read incoming mail, and invite me as the owner so I can later approve sending. What sequence should it follow?",
+      "expected_output": "The answer uses agent access: read /auth.md, request a registration challenge, solve it, register with proof_of_work, save claim_token, exchange identity_assertion for a pre-claim smx_agent_ token, use only read/receive mailbox access, invite the owner, wait for owner approval, then exchange the claim token for an app-resource or Sending-resource smx_agent_ token.",
+      "files": [],
+      "expectations": [
+        "The output starts from /auth.md.",
+        "The output requests /agent-auth/agent/identity/challenge before /agent-auth/agent/identity.",
+        "The output says registration includes proof_of_work.",
+        "The output saves claim_token and exchanges identity_assertion at /agent-auth/oauth2/token.",
+        "The output says pre-claim smx_agent_ cannot send.",
+        "The output invites the owner through /agent-auth/agent/identity/invite.",
+        "The output waits for owner approval before requesting a Sending-resource smx_agent_ token.",
+        "The output tells the agent to respect Retry-After or retry_after on 429."
       ]
     }
   ]
