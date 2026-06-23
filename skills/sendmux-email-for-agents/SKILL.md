@@ -16,7 +16,7 @@ Use this skill when the user describes the agent-email problem: an AI agent need
 | User problem                               | Route                                                                                                                                                       |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | "Give my agent an email address"           | `sendmux-management` to create/inspect domain, mailbox, and mailbox key.                                                                                    |
-| "Let my agent register itself"             | Agent access: read `/auth.md`, request a registration challenge, register with `proof_of_work`, exchange the assertion, then invite the owner.               |
+| "Let my agent register itself"             | Agent access: read `/auth.md`, request a registration challenge, register at the identity endpoint with `proof_of_work`, exchange the assertion, then invite the owner. |
 | "Connect my agent to its inbox"            | `sendmux-mcp-setup` for agent MCP, or `sendmux-getting-started` for first auth checks.                                                                      |
 | "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an `smx_mbx_*` key or scoped `smx_agent_*` token.                                                                              |
 | "Send independent outbound notifications"  | `sendmux-send-email` with a send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token; batch when there is more than one message. |
@@ -35,7 +35,7 @@ For self-registration without a human-created key, use agent access instead:
 1. Read `https://app.sendmux.ai/auth.md`.
 2. Send the intended anonymous registration body to `POST /agent-auth/agent/identity/challenge`.
 3. Solve the returned proof-of-work challenge.
-4. Create the anonymous identity with the same body plus `proof_of_work` at `POST /agent-auth/agent/identity`.
+4. Create the anonymous identity with the same body plus `proof_of_work` at the auth.md identity endpoint, `POST /agent-auth/agent/identity`.
 5. Save the returned `claim_token`, then exchange the returned `identity_assertion` at `POST /agent-auth/oauth2/token`.
 6. Use the returned pre-claim `smx_agent_*` token for allowed Mailbox API work.
 7. Request the owner invite with `POST /agent-auth/agent/identity/invite`.
@@ -78,7 +78,7 @@ Plan:
 
 1. Read discovery from `https://app.sendmux.ai/auth.md`.
 2. Request a registration challenge at `/agent-auth/agent/identity/challenge` with the intended anonymous registration body.
-3. Solve the returned challenge and create the anonymous identity at `/agent-auth/agent/identity` with the same body plus `proof_of_work`.
+3. Solve the returned challenge and create the anonymous identity at the auth.md identity endpoint, `/agent-auth/agent/identity`, with the same body plus `proof_of_work`.
 4. Save the returned `claim_token`, then exchange `identity_assertion` at `/agent-auth/oauth2/token`.
 5. Use the pre-claim `smx_agent_*` token for allowed Mailbox API read/receive work.
 6. Request an owner invite at `/agent-auth/agent/identity/invite`.

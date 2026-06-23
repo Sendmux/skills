@@ -46,12 +46,12 @@
     {
       "id": 3,
       "prompt": "My agent has no Sendmux key. It wants to create its own inbox, read incoming mail, and invite me as the owner so I can later approve sending. What sequence should it follow?",
-      "expected_output": "The answer uses agent access: read /auth.md, request a registration challenge, solve it, register with proof_of_work, save claim_token, exchange identity_assertion for a pre-claim smx_agent_ token, use only read/receive mailbox access, invite the owner, wait for owner approval, then exchange the claim token for an app-resource or Sending-resource smx_agent_ token.",
+      "expected_output": "The answer uses agent access: read /auth.md, request a registration challenge, solve it, register with proof_of_work at the auth.md identity endpoint, save claim_token, exchange identity_assertion for a pre-claim smx_agent_ token, use only read/receive mailbox access, invite the owner, wait for owner approval, then exchange the claim token for an app-resource or Sending-resource smx_agent_ token.",
       "files": [],
       "expectations": [
         "The output starts from /auth.md.",
         "The output requests /agent-auth/agent/identity/challenge before /agent-auth/agent/identity.",
-        "The output says registration includes proof_of_work.",
+        "The output says registration includes proof_of_work at the identity endpoint.",
         "The output saves claim_token and exchanges identity_assertion at /agent-auth/oauth2/token.",
         "The output says pre-claim smx_agent_ cannot send.",
         "The output invites the owner through /agent-auth/agent/identity/invite.",
