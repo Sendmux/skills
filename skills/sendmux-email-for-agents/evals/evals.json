@@ -46,7 +46,7 @@
     {
       "id": 3,
       "prompt": "My agent has no Sendmux key. It wants to create its own inbox, read incoming mail, and invite me as the owner so I can later approve sending. What sequence should it follow?",
-      "expected_output": "The answer uses agent access: read /auth.md, request a registration challenge, solve it, encode proof_of_work as base64 UTF-8 JSON with challenge and solution objects, register with proof_of_work at identity_endpoint, save claim_token, exchange identity_assertion for a pre-claim smx_agent_ token, use only read/receive mailbox access, invite the owner, wait for owner approval, then exchange the claim token for an app-resource or Sending-resource smx_agent_ token.",
+      "expected_output": "The answer uses agent access: read /auth.md, use the copy-paste proof helper when needed, request a registration challenge, solve it, encode proof_of_work as base64 UTF-8 JSON with challenge and solution objects, register with proof_of_work at identity_endpoint, save claim_token, exchange identity_assertion for a pre-claim smx_agent_ token, call /api/v1/mailbox/me, use only read/receive mailbox access, invite the owner or ask for the owner email, wait for owner approval, then exchange the claim token for an app-resource or Sending-resource smx_agent_ token.",
       "files": [],
       "expectations": [
         "The output starts from /auth.md.",
@@ -54,9 +54,12 @@
         "The output says proof_of_work is base64 UTF-8 JSON containing the exact challenge and solution.",
         "The output says registration includes proof_of_work at identity_endpoint.",
         "The output saves claim_token and exchanges identity_assertion at /agent-auth/oauth2/token.",
+        "The output calls /api/v1/mailbox/me before the owner invite.",
         "The output says pre-claim smx_agent_ cannot send.",
-        "The output invites the owner through /agent-auth/agent/identity/invite.",
+        "The output invites the owner through /agent-auth/agent/identity/invite or asks: What owner email should I invite for approval?",
         "The output waits for owner approval before requesting a Sending-resource smx_agent_ token.",
+        "The output stops and reports registration 503 server_error instead of retrying repeatedly.",
+        "The output uses Retry-After or retry_after for token-exchange 503 retries.",
         "The output tells the agent to respect Retry-After or retry_after on 429."
       ]
     }

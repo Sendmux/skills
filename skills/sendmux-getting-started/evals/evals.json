@@ -40,7 +40,7 @@
     {
       "id": 3,
       "prompt": "My coding agent has no Sendmux key. How does it register itself and invite me as the owner?",
-      "expected_output": "The answer starts from /auth.md, requests /agent-auth/agent/identity/challenge with the intended anonymous registration body, solves the challenge, encodes proof_of_work as base64 UTF-8 JSON with challenge and solution objects, registers with proof_of_work at identity_endpoint, exchanges identity_assertion at /agent-auth/oauth2/token, uses the pre-claim smx_agent_ token for mailbox read/receive only, sends the owner invite, and waits for owner approval before requesting a send-capable claim-grant token.",
+      "expected_output": "The answer starts from /auth.md, uses the copy-paste proof helper when needed, requests /agent-auth/agent/identity/challenge with the intended anonymous registration body, solves the challenge, encodes proof_of_work as base64 UTF-8 JSON with challenge and solution objects, registers with proof_of_work at identity_endpoint, exchanges identity_assertion at /agent-auth/oauth2/token, calls /api/v1/mailbox/me, uses the pre-claim smx_agent_ token for mailbox read/receive only, sends the owner invite or asks for the owner email, and waits for owner approval before requesting a send-capable claim-grant token.",
       "files": [],
       "expectations": [
         "The output starts from /auth.md.",
@@ -48,9 +48,12 @@
         "The output says proof_of_work is base64 UTF-8 JSON containing the exact challenge and solution.",
         "The output says to register with proof_of_work at identity_endpoint.",
         "The output exchanges identity_assertion at /agent-auth/oauth2/token.",
+        "The output calls /api/v1/mailbox/me before the owner invite.",
         "The output says pre-claim smx_agent_ tokens do not have email.send.",
-        "The output invites the owner with /agent-auth/agent/identity/invite.",
+        "The output invites the owner with /agent-auth/agent/identity/invite or asks: What owner email should I invite for approval?",
         "The output waits for owner approval before sending access.",
+        "The output stops and reports registration 503 server_error instead of retrying repeatedly.",
+        "The output uses Retry-After or retry_after for token-exchange 503 retries.",
         "The output uses Retry-After or retry_after for 429 retries."
       ]
     }
