@@ -40,12 +40,13 @@
     {
       "id": 3,
       "prompt": "My coding agent has no Sendmux key. How does it register itself and invite me as the owner?",
-      "expected_output": "The answer starts from /auth.md, requests /agent-auth/agent/identity/challenge with the intended anonymous registration body, solves the challenge, registers with proof_of_work at the auth.md identity endpoint, exchanges identity_assertion at /agent-auth/oauth2/token, uses the pre-claim smx_agent_ token for mailbox read/receive only, sends the owner invite, and waits for owner approval before requesting a send-capable claim-grant token.",
+      "expected_output": "The answer starts from /auth.md, requests /agent-auth/agent/identity/challenge with the intended anonymous registration body, solves the challenge, encodes proof_of_work as base64 UTF-8 JSON with challenge and solution objects, registers with proof_of_work at identity_endpoint, exchanges identity_assertion at /agent-auth/oauth2/token, uses the pre-claim smx_agent_ token for mailbox read/receive only, sends the owner invite, and waits for owner approval before requesting a send-capable claim-grant token.",
       "files": [],
       "expectations": [
         "The output starts from /auth.md.",
         "The output requests /agent-auth/agent/identity/challenge before registration.",
-        "The output says to register with proof_of_work at the identity endpoint.",
+        "The output says proof_of_work is base64 UTF-8 JSON containing the exact challenge and solution.",
+        "The output says to register with proof_of_work at identity_endpoint.",
         "The output exchanges identity_assertion at /agent-auth/oauth2/token.",
         "The output says pre-claim smx_agent_ tokens do not have email.send.",
         "The output invites the owner with /agent-auth/agent/identity/invite.",

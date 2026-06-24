@@ -25,7 +25,7 @@ Use this skill to get a user from "I have a Sendmux task" to the correct surface
 | Send email through the Sending API                                                      | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` | `sendmux-send-email` for real sends; this skill can verify package/API discovery first.                                  |
 | Read, search, sync, triage, or reply from one mailbox                                   | `smx_mbx_` or scoped `smx_agent_`                                       | Mailbox MCP, CLI, or SDK.                                                                                                |
 | Manage domains, mailboxes, mailbox keys, providers, webhooks, logs, billing, or metrics | `smx_root_`                                                             | Management MCP, CLI, or SDK.                                                                                             |
-| Let an agent register itself and invite its owner                                       | No existing key, then `smx_agent_`                                      | Agent access: `/auth.md`, challenge endpoint, identity endpoint, token endpoint, and invite endpoint. |
+| Let an agent register itself and invite its owner                                       | No existing key, then `smx_agent_`                                      | Agent access: `/auth.md`, challenge endpoint, `identity_endpoint`, token endpoint, and invite endpoint. |
 
 If the task mixes management and mailbox work, use separate keys and separate clients or profiles. Do not use a root key for mailbox-scoped examples.
 
@@ -96,11 +96,12 @@ Use this when the agent has no human-created key yet.
 1. Read `https://app.sendmux.ai/auth.md`.
 2. Request a registration challenge with the intended anonymous registration body at `POST /agent-auth/agent/identity/challenge`.
 3. Solve the returned proof-of-work challenge.
-4. Create an anonymous identity with the same body plus `proof_of_work` at the auth.md identity endpoint, `POST /agent-auth/agent/identity`.
-5. Save the returned `claim_token`, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
-6. Call `GET /mailbox/me` with the returned `smx_agent_` token.
-7. Request the owner invite with `POST /agent-auth/agent/identity/invite`.
-8. After the owner accepts and approves sending in Sendmux, exchange `claim_token` with the claim grant; request `resource=https://smtp.sendmux.ai/api/v1` before Sending API calls.
+4. Encode `proof_of_work` as base64 UTF-8 JSON with `{ "challenge": <exact challenge>, "solution": { "counter": <integer>, "derivedKey": <hex> } }`.
+5. Create an anonymous identity with the same body plus `proof_of_work` at `identity_endpoint`, `POST /agent-auth/agent/identity`.
+6. Save the returned `claim_token`, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
+7. Call `GET /mailbox/me` with the returned `smx_agent_` token.
+8. Request the owner invite with `POST /agent-auth/agent/identity/invite`.
+9. After the owner accepts and approves sending in Sendmux, exchange `claim_token` with the claim grant; request `resource=https://smtp.sendmux.ai/api/v1` before Sending API calls.
 
 Pre-claim `smx_agent_` tokens have `mailbox.read` and `email.receive`. They do not have `email.send`; owner-approved Sending-resource `smx_agent_` tokens can send from the assigned mailbox. Sendmux sends the owner invite through the invite endpoint. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key. If agent auth returns `429`, wait for `Retry-After` or `retry_after` before retrying.
 
