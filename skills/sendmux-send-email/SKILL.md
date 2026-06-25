@@ -1,6 +1,6 @@
 ---
 name: sendmux-send-email
-description: Send email with Sendmux. Use when the user wants to send one email, send multiple emails, choose single vs batch sending, add idempotency keys, include attachments, compare HTTP Sending API vs SMTP, or use Sendmux MCP, CLI, SDK, or direct HTTP for outbound email.
+description: Send email with Sendmux, including owner-approved Sending-resource smx_agent_ tokens from claim-token exchange. Use when the user wants to send one email, send multiple emails, choose single vs batch sending, add idempotency keys, include attachments, compare HTTP Sending API vs SMTP, or use Sendmux MCP, CLI, SDK, or direct HTTP for outbound email.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -19,6 +19,7 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - For batch sends, confirm the full recipient/message set before calling a send tool.
 - Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for the Sending API.
 - Do not use a pre-claim `smx_agent_` token for sending. Pre-claim self-registered agent tokens have `mailbox.read` and `email.receive`, not `email.send`.
+- If using a self-registered agent, obtain the Sending-resource `smx_agent_` token by exchanging the saved `claim_token` after owner approval with `resource=https://smtp.sendmux.ai/api/v1`.
 
 ## Choose the send path
 

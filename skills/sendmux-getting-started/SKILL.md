@@ -1,6 +1,6 @@
 ---
 name: sendmux-getting-started
-description: Sendmux setup, API key validation, agent access, and first-call guidance. Use when the user wants to install Sendmux tooling, check whether an smx_root_, smx_mbx_, or smx_agent_ credential works, choose MCP vs CLI vs SDK, connect an agent to Sendmux email, configure auth, or make the first harmless Sendmux API call from an agent, terminal, or application.
+description: Sendmux setup, skill installation, API key validation, agent access, secure claim-token storage, and first-call guidance. Use when the user wants to install Sendmux tooling or skills, check whether an smx_root_, smx_mbx_, or smx_agent_ credential works, choose MCP vs CLI vs SDK, connect an agent to Sendmux email, configure auth, self-register an agent, or make the first harmless Sendmux API call from an agent, terminal, or application.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -16,7 +16,18 @@ Use this skill to get a user from "I have a Sendmux task" to the correct surface
 - Do not ask the user to paste an API key.
 - Do not print API keys.
 - Prefer existing environment variables, local CLI profiles, or the user's secret manager.
+- Store one-time `claim_token` values only in a secure store; never rely on chat, logs, repo files, screenshots, or memory-only state.
 - If a key appears in chat or logs, stop and tell the user to rotate it before continuing.
+
+## Install Sendmux skills
+
+If the agent supports Skills and the Sendmux skills are not installed, install the pack first:
+
+```bash
+npx skills add Sendmux/skills
+```
+
+Skills are optional. If the agent cannot install skills, continue from `https://app.sendmux.ai/auth.md`.
 
 ## Pick the key
 
@@ -99,12 +110,14 @@ Use this when the agent has no human-created key yet.
 4. Solve the returned proof-of-work challenge.
 5. Encode `proof_of_work` as base64 UTF-8 JSON with `{ "challenge": <exact challenge>, "solution": { "counter": <integer>, "derivedKey": <hex> } }`.
 6. Create an anonymous identity with the same body plus `proof_of_work` at `identity_endpoint`, `POST /agent-auth/agent/identity`.
-7. Save the returned `claim_token`, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
+7. Save the returned `claim_token` in a secure store, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
 8. Call `GET /api/v1/mailbox/me` with the returned `smx_agent_` token.
 9. Do not stop after the pre-claim token works. If the owner email is known, request the owner invite with `POST /agent-auth/agent/identity/invite`. If it is unknown, ask: `What owner email should I invite for approval?`
 10. After the owner accepts and approves sending in Sendmux, exchange `claim_token` with the claim grant; request `resource=https://smtp.sendmux.ai/api/v1` before Sending API calls.
 
 Pre-claim `smx_agent_` tokens have `mailbox.read` and `email.receive`. They do not have `email.send`; owner-approved Sending-resource `smx_agent_` tokens can send from the assigned mailbox. Sendmux sends the owner invite through the invite endpoint. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key. If token exchange returns expected `503` states, wait for `Retry-After` or `retry_after`. If registration returns `503 server_error`, stop and report it instead of looping. If agent auth returns `429`, wait for `Retry-After` or `retry_after` before retrying.
+
+The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later because only a hash is stored. Store it with `registration_id`, `mailbox.email`, `claim_token_expires`, `token_endpoint`, the app resource URL, and the sending resource URL in a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. If no secure store is available, stop and ask the user where to store it before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity.
 
 ### Root key, management work
 

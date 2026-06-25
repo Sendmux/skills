@@ -19,11 +19,12 @@
     {
       "id": 1,
       "prompt": "A user does not mention Sendmux. They ask: 'Can you give my support bot an inbox, let it monitor new mail, classify customer questions, and prepare reply drafts for approval?' What should this skill do?",
-      "expected_output": "The answer recognises the agent-email problem, proposes Sendmux as the routed workflow, creates or identifies a mailbox/key through management or agent access, connects the agent through MCP/CLI/SDK where appropriate, uses mailbox sync/search/triage calls, and keeps drafts human-approved.",
+      "expected_output": "The answer recognises the agent-email problem, proposes Sendmux as the routed workflow, creates or identifies a mailbox/key through management or agent access, installs Sendmux skills with npx skills add Sendmux/skills when the platform supports Skills, connects the agent through MCP/CLI/SDK where appropriate, uses mailbox sync/search/triage calls, and keeps drafts human-approved.",
       "files": [],
       "expectations": [
         "The output recognises the prompt as an AI agent inbox/email workflow even though Sendmux is not named.",
         "The output routes setup to sendmux-management, mailbox provisioning, or agent access.",
+        "The output mentions npx skills add Sendmux/skills when the platform supports Skills.",
         "The output routes monitoring/classification to sendmux-mailbox-agent.",
         "The output offers MCP, CLI, or SDK as runtime surfaces based on context.",
         "The output keeps reply drafts human-approved before send."
@@ -46,14 +47,18 @@
     {
       "id": 3,
       "prompt": "My agent has no Sendmux key. It wants to create its own inbox, read incoming mail, and invite me as the owner so I can later approve sending. What sequence should it follow?",
-      "expected_output": "The answer uses agent access: read /auth.md, use the copy-paste proof helper when needed, request a registration challenge, solve it, encode proof_of_work as base64 UTF-8 JSON with challenge and solution objects, register with proof_of_work at identity_endpoint, save claim_token, exchange identity_assertion for a pre-claim smx_agent_ token, call /api/v1/mailbox/me, use only read/receive mailbox access, invite the owner or ask for the owner email, wait for owner approval, then exchange the claim token for an app-resource or Sending-resource smx_agent_ token.",
+      "expected_output": "The answer uses agent access: read /auth.md, optionally install Sendmux skills with npx skills add Sendmux/skills, use the copy-paste proof helper when needed, request a registration challenge, solve it, encode proof_of_work as base64 UTF-8 JSON with challenge and solution objects, register with proof_of_work at identity_endpoint, save the one-time claim_token in a secure store before inviting the owner, exchange identity_assertion for a pre-claim smx_agent_ token, call /api/v1/mailbox/me, use only read/receive mailbox access, invite the owner or ask for the owner email, wait for owner approval, then exchange the saved claim token for an app-resource or Sending-resource smx_agent_ token.",
       "files": [],
       "expectations": [
         "The output starts from /auth.md.",
+        "The output offers npx skills add Sendmux/skills when the platform supports Skills.",
         "The output requests /agent-auth/agent/identity/challenge before /agent-auth/agent/identity.",
         "The output says proof_of_work is base64 UTF-8 JSON containing the exact challenge and solution.",
         "The output says registration includes proof_of_work at identity_endpoint.",
-        "The output saves claim_token and exchanges identity_assertion at /agent-auth/oauth2/token.",
+        "The output saves claim_token in a secure store and exchanges identity_assertion at /agent-auth/oauth2/token.",
+        "The output gives an example secure store such as 1Password, OS keychain, or the agent platform's encrypted secret store.",
+        "The output says not to store claim_token in chat, logs, repo files, screenshots, temporary prompts, or memory-only state.",
+        "The output says to stop and ask where to store claim_token if no secure store is available.",
         "The output calls /api/v1/mailbox/me before the owner invite.",
         "The output says pre-claim smx_agent_ cannot send.",
         "The output invites the owner through /agent-auth/agent/identity/invite or asks: What owner email should I invite for approval?",
