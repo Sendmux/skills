@@ -9,6 +9,7 @@
       "expectations": [
         "The output chooses batch send for more than one message.",
         "The output names /emails/send/batch, sending_send_email_batch, sending:send:batch, or sendingSendEmailBatch.",
+        "The output uses smx_mbx_ credentials or an owner-approved Sending-resource smx_agent_ token.",
         "The output uses a JSON body with messages[].",
         "The output says to inspect per-message batch results."
       ]
@@ -20,6 +21,7 @@
       "files": [],
       "expectations": [
         "The output uses the CLI command sendmux sending:send.",
+        "The output uses a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token.",
         "The output includes an Idempotency-Key or --idempotency-key.",
         "The output uses attachment fields filename and content.",
         "The output states attachment content is base64."

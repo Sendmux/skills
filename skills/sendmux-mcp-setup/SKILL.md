@@ -1,6 +1,6 @@
 ---
 name: sendmux-mcp-setup
-description: Configure Sendmux Model Context Protocol servers for AI agent clients. Use when the user wants to install sendmux-mcp, connect the hosted Sendmux MCP endpoint, run local stdio or HTTP MCP servers, set mailbox/management/sending key scopes, add bearer headers, or write MCP config for Claude Code, Cursor, Codex, VS Code/Copilot, Copilot CLI, Gemini CLI, Cline, or Windsurf/Cascade.
+description: Configure Sendmux Model Context Protocol servers for AI agent clients, using hosted OAuth first when supported and secret-backed local env config otherwise. Use when the user wants to install sendmux-mcp, connect the hosted Sendmux MCP endpoint, run local stdio or HTTP MCP servers, set mailbox/management/sending key scopes, add bearer headers, or write MCP config for Claude Code, Cursor, Codex, VS Code/Copilot, Copilot CLI, Gemini CLI, Cline, or Windsurf/Cascade.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -19,6 +19,7 @@ Use this skill to connect an agent client to Sendmux through MCP.
 - Use `smx_root_` keys for Management MCP tools.
 - Use hosted OAuth at `https://mcp.sendmux.ai/mcp` when the client supports remote MCP OAuth.
 - Use local stdio when the client cannot use hosted OAuth or local HTTP.
+- For local stdio or HTTP, pass Sendmux keys and owner-approved agent tokens through environment variables backed by the user's secret store; do not write raw tokens into checked-in MCP config.
 - Use local HTTP bearer only for local/private MCP servers; the bearer token protects the MCP endpoint and is separate from the Sendmux API key used upstream.
 - Use server-qualified names such as `sendmux-mailbox:mailbox_search_message_snippets` when a client needs fully-qualified tool names.
 
