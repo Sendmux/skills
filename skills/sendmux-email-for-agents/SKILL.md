@@ -49,7 +49,7 @@ For self-registration without a human-created key, use agent access instead:
 - Do not ask the user to paste API keys, mailbox keys, OAuth tokens, or one-time secrets.
 - Store one-time `claim_token` values only in a secure store; never rely on chat, logs, repo files, screenshots, or memory-only state.
 - Keep the `identity_assertion` or pre-claim `smx_agent_*` token available until the owner invite returns `202`. If both are lost before the invite succeeds, register a fresh identity and invite immediately.
-- Do not poll the claim-token grant before the owner invite has been sent and the owner has approved sending. `claim_token` is for post-approval exchange, not owner invite creation.
+- Do not poll the claim-token grant before the owner invite returns `202`; after `202`, polling with `claim_token` is the wait-for-approval path. `claim_token` cannot create the owner invite.
 - Do not send email until the user has supplied or confirmed the recipient, subject, body, and attachments.
 - Treat "draft for approval" as a draft. Ask for explicit approval before calling `mailbox_send_message`, `sending_send_email`, or `sending_send_email_batch`.
 - Use separate scopes: `smx_root_*` for provisioning/admin, send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending, `smx_mbx_*` keys for normal Mailbox runtime, and `smx_agent_*` only for the scopes it was issued with.

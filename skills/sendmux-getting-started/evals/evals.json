@@ -51,7 +51,7 @@
         "The output says the one-time claim_token must be saved in a secure store.",
         "The output keeps identity_assertion or the pre-claim smx_agent_ token available until the owner invite returns 202.",
         "The output says claim_token cannot create the owner invite and is only for post-approval exchange.",
-        "The output does not poll the claim-token grant before the owner invite has been sent and owner-approved sending is available.",
+        "The output does not poll the claim-token grant before the owner invite returns 202, then uses claim_token polling as the wait-for-approval path.",
         "The output gives an example secure store such as 1Password, OS keychain, or the agent platform's encrypted secret store.",
         "The output says not to store claim_token in chat, logs, repo files, screenshots, temporary prompts, or memory-only state.",
         "The output says to stop and ask where to store claim_token if no secure store is available.",
