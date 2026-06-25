@@ -1,6 +1,6 @@
 ---
 name: sendmux-getting-started
-description: Sendmux setup, skill installation, API key validation, agent access, secure claim-token storage, and first-call guidance. Use when the user wants to install Sendmux tooling or skills, check whether an smx_root_, smx_mbx_, or smx_agent_ credential works, choose MCP vs CLI vs SDK, connect an agent to Sendmux email, configure auth, self-register an agent, or make the first harmless Sendmux API call from an agent, terminal, or application.
+description: Sendmux setup, skill installation, API key validation, agent access, secure agent credential-bundle storage, and first-call guidance. Use when the user wants to install Sendmux tooling or skills, check whether an smx_root_, smx_mbx_, or smx_agent_ credential works, choose MCP vs CLI vs SDK, connect an agent to Sendmux email, configure auth, self-register an agent, or make the first harmless Sendmux API call from an agent, terminal, or application.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -16,7 +16,8 @@ Use this skill to get a user from "I have a Sendmux task" to the correct surface
 - Do not ask the user to paste an API key.
 - Do not print API keys.
 - Prefer existing environment variables, local CLI profiles, or the user's secret manager.
-- Store one-time `claim_token` values only in a secure store; never rely on chat, logs, repo files, screenshots, or memory-only state.
+- Store the self-registration credential bundle in a secure store immediately after registration; later MCP, CLI, SDK, mailbox, and sending work depends on it.
+- Never rely on chat, logs, repo files, screenshots, or memory-only state for `claim_token` or agent credentials.
 - Keep the `identity_assertion` or pre-claim `smx_agent_*` token available until the owner invite returns `202`; `claim_token` is only for post-approval exchange.
 - If a key appears in chat or logs, stop and tell the user to rotate it before continuing.
 
@@ -111,7 +112,7 @@ Use this when the agent has no human-created key yet.
 4. Solve the returned proof-of-work challenge.
 5. Encode `proof_of_work` as base64 UTF-8 JSON with `{ "challenge": <exact challenge>, "solution": { "counter": <integer>, "derivedKey": <hex> } }`.
 6. Create an anonymous identity with the same body plus `proof_of_work` at `identity_endpoint`, `POST /agent-auth/agent/identity`.
-7. Save the returned `claim_token` in a secure store, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
+7. Immediately save the returned `claim_token` and agent credential bundle in a secure store before token exchange, then exchange the returned `identity_assertion` with `POST /agent-auth/oauth2/token`.
 8. Call `GET /api/v1/mailbox/me` with the returned `smx_agent_` token.
 9. Keep the `identity_assertion` or pre-claim token available until the owner invite returns `202`; `claim_token` cannot create the invite.
 10. Do not stop after the pre-claim token works. If the owner email is known, request the owner invite with `POST /agent-auth/agent/identity/invite`. If it is unknown, ask: `What owner email should I invite for approval?`
@@ -119,7 +120,7 @@ Use this when the agent has no human-created key yet.
 
 Pre-claim `smx_agent_` tokens have `mailbox.read` and `email.receive`. They do not have `email.send`; owner-approved Sending-resource `smx_agent_` tokens can send from the assigned mailbox. Sendmux sends the owner invite through the invite endpoint. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key. If token exchange returns expected `503` states, wait for `Retry-After` or `retry_after`. If registration returns `503 server_error`, stop and report it instead of looping. If agent auth returns `429`, wait for `Retry-After` or `retry_after` before retrying.
 
-The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later. Store it with `registration_id`, `mailbox.email`, `claim_token_expires`, `token_endpoint`, the app resource URL, and the sending resource URL in a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. If no secure store is available, stop and ask the user where to store it before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity. If the `identity_assertion` and pre-claim token were lost before the invite returned `202`, rerun registration and invite immediately in the same flow.
+The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later. Immediately after registration, store the agent credential bundle: `claim_token`, `registration_id`, `mailbox.email`, `claim_token_expires`, `identity_assertion`, `token_endpoint`, the app resource URL, and the sending resource URL. Use a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. After token exchange, add the pre-claim token or keep `identity_assertion` available until invite `202`. If no secure store is available, stop and ask the user where to store the bundle before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity. If the `identity_assertion` and pre-claim token were lost before the invite returned `202`, rerun registration and invite immediately in the same flow.
 
 ### Root key, management work
 
