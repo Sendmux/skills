@@ -93,7 +93,7 @@ Plan:
 
 Do not say the pre-claim agent can send email. It cannot. After owner approval, a Sending-resource claim-grant `smx_agent_*` token can send from the assigned mailbox. Sendmux sends the owner invite email separately. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key. On expected token-exchange `503` states, wait for `Retry-After` or `retry_after`. On registration `503 server_error`, stop and report the failure. On `429`, wait for `Retry-After` or `retry_after`.
 
-The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later because only a hash is stored. Store it with `registration_id`, `mailbox.email`, `claim_token_expires`, `token_endpoint`, the app resource URL, and the sending resource URL in a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. If no secure store is available, stop and ask the user where to store it before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity.
+The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later. Store it with `registration_id`, `mailbox.email`, `claim_token_expires`, `token_endpoint`, the app resource URL, and the sending resource URL in a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. If no secure store is available, stop and ask the user where to store it before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity.
 
 ### Agent triage loop
 
