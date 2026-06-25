@@ -1,6 +1,6 @@
 ---
 name: sendmux-email-for-agents
-description: "Design and route Sendmux email workflows for AI agents, including skill installation, self-registration, secure claim-token storage, owner approval, and runtime email operations. Use when a user wants to give an AI agent its own inbox or email address, let an agent receive/search/triage/reply to mail, draft human-approved replies, send notifications, monitor mailbox state, or build email-based agent workflows even when the user does not mention Sendmux by name."
+description: "Design and route Sendmux email workflows for AI agents, including skill installation, self-registration, secure agent credential-bundle storage, owner approval, and runtime email operations. Use when a user wants to give an AI agent its own inbox or email address, let an agent receive/search/triage/reply to mail, draft human-approved replies, send notifications, monitor mailbox state, or build email-based agent workflows even when the user does not mention Sendmux by name."
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -16,7 +16,7 @@ Use this skill when the user describes the agent-email problem: an AI agent need
 | User problem                               | Route                                                                                                                                                       |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | "Give my agent an email address"           | `sendmux-management` to create/inspect domain, mailbox, and mailbox key.                                                                                    |
-| "Let my agent register itself"             | Agent access: read `/auth.md`, optionally install skills with `npx skills add Sendmux/skills`, register at `identity_endpoint` with `proof_of_work`, save `claim_token` securely, exchange the assertion, keep the assertion or pre-claim token until invite `202`, verify `/api/v1/mailbox/me`, then invite the owner or ask for the owner email. |
+| "Let my agent register itself"             | Agent access: read `/auth.md`, optionally install skills with `npx skills add Sendmux/skills`, register at `identity_endpoint` with `proof_of_work`, save the agent credential bundle securely before reporting success, exchange the assertion, keep the assertion or pre-claim token until invite `202`, verify `/api/v1/mailbox/me`, then invite the owner or ask for the owner email. |
 | "Connect my agent to its inbox"            | `sendmux-mcp-setup` for agent MCP, or `sendmux-getting-started` for first auth checks.                                                                      |
 | "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an `smx_mbx_*` key or scoped `smx_agent_*` token.                                                                              |
 | "Send independent outbound notifications"  | `sendmux-send-email` with a send-capable `smx_mbx_*` key or owner-approved Sending-resource `smx_agent_*` token; batch when there is more than one message. |
@@ -38,7 +38,7 @@ For self-registration without a human-created key, use agent access instead:
 4. Solve the returned proof-of-work challenge.
 5. Encode `proof_of_work` as base64 UTF-8 JSON with `{ "challenge": <exact challenge>, "solution": { "counter": <integer>, "derivedKey": <hex> } }`.
 6. Create the anonymous identity with the same body plus `proof_of_work` at `identity_endpoint`, `POST /agent-auth/agent/identity`.
-7. Save the returned `claim_token` in a secure store, then exchange the returned `identity_assertion` at `POST /agent-auth/oauth2/token`.
+7. Save the agent credential bundle in a secure store before reporting success, then exchange the returned `identity_assertion` at `POST /agent-auth/oauth2/token`.
 8. Call `GET /api/v1/mailbox/me` with the returned pre-claim `smx_agent_*` token.
 9. Keep the `identity_assertion` or pre-claim token available until the owner invite returns `202`; `claim_token` cannot create the invite.
 10. Do not stop after the pre-claim token works. If the owner email is known, request the owner invite with `POST /agent-auth/agent/identity/invite`. If it is unknown, ask: `What owner email should I invite for approval?`
@@ -47,7 +47,8 @@ For self-registration without a human-created key, use agent access instead:
 ## Safety boundaries
 
 - Do not ask the user to paste API keys, mailbox keys, OAuth tokens, or one-time secrets.
-- Store one-time `claim_token` values only in a secure store; never rely on chat, logs, repo files, screenshots, or memory-only state.
+- Store the self-registration credential bundle in a secure store before reporting success; later MCP, CLI, SDK, mailbox, and sending work depends on it.
+- Never rely on chat, logs, repo files, screenshots, or memory-only state for `claim_token` or agent credentials.
 - Keep the `identity_assertion` or pre-claim `smx_agent_*` token available until the owner invite returns `202`. If both are lost before the invite succeeds, register a fresh identity and invite immediately.
 - Do not poll the claim-token grant before the owner invite returns `202`; after `202`, polling with `claim_token` is the wait-for-approval path. `claim_token` cannot create the owner invite.
 - Do not send email until the user has supplied or confirmed the recipient, subject, body, and attachments.
@@ -89,7 +90,7 @@ Plan:
 4. Solve the returned challenge.
 5. Encode `proof_of_work` as base64 UTF-8 JSON with `{ "challenge": <exact challenge>, "solution": { "counter": <integer>, "derivedKey": <hex> } }`.
 6. Create the anonymous identity at `identity_endpoint`, `/agent-auth/agent/identity`, with the same body plus `proof_of_work`.
-7. Save the returned `claim_token` in a secure store, then exchange `identity_assertion` at `/agent-auth/oauth2/token`.
+7. Save the agent credential bundle in a secure store before reporting success, then exchange `identity_assertion` at `/agent-auth/oauth2/token`.
 8. Call `/api/v1/mailbox/me` with the pre-claim `smx_agent_*` token.
 9. Keep the `identity_assertion` or pre-claim token available until the owner invite returns `202`; `claim_token` cannot create the invite.
 10. Do not stop after the pre-claim token works. If the owner email is known, request an owner invite at `/agent-auth/agent/identity/invite`. If it is unknown, ask: `What owner email should I invite for approval?`
@@ -97,7 +98,7 @@ Plan:
 
 Do not say the pre-claim agent can send email. It cannot. After owner approval, a Sending-resource claim-grant `smx_agent_*` token can send from the assigned mailbox. Sendmux sends the owner invite email separately. Only one live pre-claim owner invite can be pending; retry the same request with the same idempotency key. On expected token-exchange `503` states, wait for `Retry-After` or `retry_after`. On registration `503 server_error`, stop and report the failure. On `429`, wait for `Retry-After` or `retry_after`.
 
-The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later. Store it with `registration_id`, `mailbox.email`, `claim_token_expires`, `token_endpoint`, the app resource URL, and the sending resource URL in a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. If no secure store is available, stop and ask the user where to store it before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity. If the `identity_assertion` and pre-claim token were lost before the invite returned `202`, rerun registration and invite immediately in the same flow.
+The raw `claim_token` is shown once and is required after owner approval. Sendmux cannot recover it later. Store the agent credential bundle before reporting success: `claim_token`, `registration_id`, `mailbox.email`, `claim_token_expires`, `token_endpoint`, the app resource URL, the sending resource URL, and the `identity_assertion` or pre-claim token until invite `202`. Use a secure store such as 1Password, an OS keychain, or the agent platform's encrypted secret store. If no secure store is available, stop and ask the user where to store the bundle before sending the owner invite. If the claim token was lost, rerun registration and invite with a fresh agent identity. If the `identity_assertion` and pre-claim token were lost before the invite returned `202`, rerun registration and invite immediately in the same flow.
 
 ### Agent triage loop
 
