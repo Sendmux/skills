@@ -21,6 +21,7 @@ const sendingOpenApi =
 
 const expectedSkills = [
   "sendmux-cli",
+  "sendmux-attachments",
   "sendmux-email-for-agents",
   "sendmux-getting-started",
   "sendmux-mailbox-agent",
@@ -36,6 +37,9 @@ const requiredSendingPaths = [
 ];
 
 const requiredMailboxPaths = [
+  ["post", "/mailbox/attachments:upload"],
+  ["get", "/mailbox/messages/{message_id}/attachments/{attachment_id}"],
+  ["post", "/mailbox/attachment-uploads"],
   ["post", "/mailbox/messages:batch-get"],
   ["post", "/mailbox/messages:batch-update"],
   ["post", "/mailbox/messages:batch-delete"],
@@ -54,6 +58,9 @@ const requiredMcpTools = [
   "mailbox_batch_get_messages",
   "mailbox_get_changes",
   "mailbox_send_message",
+  "mailbox_get_attachment",
+  "mailbox_upload_attachment",
+  "mailbox_wait_for_message",
   "management_create_domain",
   "management_create_mailbox",
   "management_create_mailbox_key",
@@ -126,6 +133,9 @@ const requiredCorpusTokens = [
   ["mailbox snippets MCP tool", /mailbox_search_message_snippets/],
   ["mailbox batch-get MCP tool", /mailbox_batch_get_messages/],
   ["mailbox changes MCP tool", /mailbox_get_changes/],
+  ["attachment skill", /sendmux-attachments/],
+  ["mailbox upload attachment MCP tool", /mailbox_upload_attachment/],
+  ["mailbox attachment metadata MCP tool", /mailbox_get_attachment/],
   ["management create domain MCP tool", /management_create_domain/],
   ["management create mailbox MCP tool", /management_create_mailbox/],
   ["management create mailbox key MCP tool", /management_create_mailbox_key/],

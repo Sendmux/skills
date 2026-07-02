@@ -31,6 +31,7 @@ Use this skill for mailbox-scoped workflows with an `smx_mbx_` key or scoped `sm
 | Mark, flag, or label many messages | `mailbox_batch_update_messages`, CLI `mailbox:batch-update-messages`, SDK `mailboxBatchUpdateMessages`.       |
 | Delete many messages               | `mailbox_batch_delete_messages`, CLI `mailbox:batch-delete-messages`, SDK `mailboxBatchDeleteMessages`.       |
 | Reply/send from this mailbox       | `mailbox_send_message`, CLI `mailbox:send-message`, SDK `mailboxSendMessage`.                                 |
+| Upload/read attachments            | `mailbox_upload_attachment`, `mailbox_get_attachment`, and `sendmux-attachments` for zero-context files.       |
 | Threads                            | `mailbox_list_threads`, `mailbox_get_thread`, `mailbox_list_thread_messages`.                                 |
 | Folders                            | `mailbox_list_folders`; inspect folders before filing or moving messages.                                     |
 | Broad sync                         | `mailbox_get_changes`, CLI `mailbox:get-changes`, SDK `mailboxGetChanges`.                                    |
@@ -168,17 +169,18 @@ SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux mailbox:send-message \
 
 Mailbox send uses `to` as an array. `subject` and `to` are required. `from` is optional when sending from the authenticated mailbox identity.
 
-Attachments may be inline small files:
+For attachments, route to `sendmux-attachments`.
 
-```json
-{
-  "filename": "report.pdf",
-  "content_type": "application/pdf",
-  "content": "<<base64-content>>"
-}
-```
+Prefer zero-context file flows:
 
-or uploaded blobs:
+- Local MCP: `mailbox_upload_attachment` with `file_path`, then send with the returned `blob_id`.
+- Hosted or shell-capable MCP: mint a presigned upload URL, `PUT` the file without an API key, then send with the returned `blob_id`.
+- CLI: `sendmux mailbox:send-message --attach ./report.pdf`.
+- SDK: use the Node or Python file helpers.
+
+Mailbox upload paths share a 7,500,000 byte per-attachment cap. For larger files, split them or send a link to externally hosted content.
+
+Inline base64 is only for tiny generated files. If you already have a blob, send it as:
 
 ```json
 {
@@ -246,6 +248,7 @@ Store the returned new state token. Follow `has_more` with the same filters when
 
 - First setup/auth check: `sendmux-getting-started`.
 - Independent outbound sending or batch sends: `sendmux-send-email`.
+- Attachment upload/download mechanics: `sendmux-attachments`.
 - Domain/mailbox/key creation and mailbox admin: `sendmux-management`.
 - CLI command details: `sendmux-cli`.
 - Cheapest-call doctrine: `sendmux-token-efficient-usage`.

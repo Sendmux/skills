@@ -55,7 +55,9 @@ Useful optional fields:
 - `reply_to`: one address object.
 - `return_path`: envelope sender for bounce handling.
 - `custom_headers`: custom `X-*` headers.
-- `attachments`: up to 10 items, each with `filename` and base64 `content`; optional `type`; `encoding` is `base64`.
+- `attachments`: up to 10 items, each with `filename` and base64 `content`; optional `type`; `encoding` is `base64`; total request body must stay within the Sending API limit.
+
+For real local files, do not ask the model to produce base64. Route attachment-heavy work to `sendmux-attachments`; use CLI `--attach`, SDK file helpers, or mailbox upload-to-`blob_id` first. Mailbox upload-to-`blob_id` caps each attachment at 7,500,000 bytes.
 
 Batch send body:
 
@@ -93,7 +95,7 @@ Use MCP when the user's agent already has the Sending server connected:
 - One message: `sending_send_email`.
 - Multiple messages: `sending_send_email_batch`.
 
-Include an idempotency key when the client exposes the header parameter. If the MCP client does not expose headers clearly, use CLI, SDK, or direct HTTP for retry-sensitive sends.
+Include an idempotency key when the client exposes the header parameter. If the MCP client does not expose headers clearly, use CLI, SDK, or direct HTTP for retry-sensitive sends. For attachments through MCP, use `sendmux-attachments` so the agent chooses `file_path`, presigned upload, or tiny inline base64 correctly.
 
 ## CLI
 
@@ -121,7 +123,7 @@ SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux sending:send:batch \
   --json
 ```
 
-Use `--body-file` for attachments or larger JSON payloads to avoid shell escaping mistakes.
+Use `--attach ./file.pdf` for local files. Use `--body-file` for larger JSON payloads or already-prepared Sending API attachment objects.
 
 ## TypeScript SDK
 
@@ -206,6 +208,7 @@ Handle these errors deliberately:
 ## Routing
 
 - Setup/auth first call: `sendmux-getting-started`.
+- Attachment file paths, presigned upload URLs, and download URLs: `sendmux-attachments`.
 - Mailbox-centred replies: `sendmux-mailbox-agent`.
 - CLI-only details: `sendmux-cli`.
 - Cheapest-call decisions: `sendmux-token-efficient-usage`.

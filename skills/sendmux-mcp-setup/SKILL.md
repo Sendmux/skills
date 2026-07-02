@@ -49,11 +49,17 @@ Console scripts:
 
 | Surface    | Key                                                                     | Tool count | Example tools                                                                                                                                         |
 | ---------- | ----------------------------------------------------------------------- | ---------: | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mailbox    | `smx_mbx_` or scoped `smx_agent_`                                       |         21 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_batch_get_messages`, `mailbox_get_changes`, `mailbox_send_message`      |
+| Mailbox    | `smx_mbx_` or scoped `smx_agent_`                                       |         24 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_get_attachment`, `mailbox_upload_attachment`, `mailbox_wait_for_message` |
 | Management | `smx_root_`                                                             |         20 | `management_create_domain`, `management_create_mailbox`, `management_create_mailbox_key`, `management_get_spend_summary`, `management_create_webhook` |
 | Sending    | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` |          2 | `sending_send_email`, `sending_send_email_batch`                                                                                                      |
 
 For multi-mailbox grants, call `mailbox_list_granted_mailboxes` first and pass the returned `mailbox_id` to mailbox tools when targeting a mailbox.
+
+Attachment upload mode depends on transport:
+
+- Local stdio can use `mailbox_upload_attachment` with `file_path` when the file is inside a client-shared filesystem root.
+- Hosted MCP cannot read local paths. Use `presign_upload_url=true`, upload with shell `curl`, then send with the returned `blob_id`.
+- Use `content_base64` only for tiny generated files. Mailbox `file_path` and presigned upload modes cap each attachment at 7,500,000 bytes; MCP inline base64 caps at 32 KiB decoded. See `sendmux-attachments`.
 
 ## Local Servers
 
@@ -384,6 +390,7 @@ After adding the server:
 - First Sendmux API setup or first call: `sendmux-getting-started`.
 - Sending body shape or send strategy: `sendmux-send-email`.
 - Mailbox read, search, sync, triage, or reply: `sendmux-mailbox-agent`.
+- Attachment file paths, presigned uploads, and download URLs: `sendmux-attachments`.
 - Account-level management strategy: `sendmux-management`.
 - Terminal command mechanics: `sendmux-cli`.
 - Cheapest-call doctrine: `sendmux-token-efficient-usage`.

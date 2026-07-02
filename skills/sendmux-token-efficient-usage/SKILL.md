@@ -1,6 +1,6 @@
 ---
 name: sendmux-token-efficient-usage
-description: "Choose the cheapest correct Sendmux surface and call. Use whenever a Sendmux task could be done through MCP, the sendmux CLI, an SDK, or direct HTTP and the user needs low-token, low-round-trip usage: batch sends, mailbox search/count/batch reads, sync deltas, cursor pagination, ETags, conditional requests, idempotency keys, or avoiding broad mailbox/log fetches."
+description: "Choose the cheapest correct Sendmux surface and call. Use whenever a Sendmux task could be done through MCP, the sendmux CLI, an SDK, or direct HTTP and the user needs low-token, low-round-trip usage: batch sends, mailbox search/count/batch reads, sync deltas, cursor pagination, ETags, conditional requests, idempotency keys, attachment file transfer, or avoiding broad mailbox/log fetches."
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -18,6 +18,7 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 - Use scoped `smx_agent_*` only for the calls its scopes and resource allow. Pre-claim agent tokens cannot send.
 - Use `smx_root_*` for Management calls.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.
+- Do not pipe real attachments through model context as base64. Route attachment transfer to `sendmux-attachments`; prefer `file_path`, presigned URLs, CLI `--attach`, or SDK file helpers. Mailbox uploads cap each attachment at 7,500,000 bytes; MCP inline base64 caps at 32 KiB decoded.
 - Do not read full mailbox bodies, every message, or every log row unless the user asks for full content and narrower calls cannot answer.
 
 ## Surface choice
@@ -36,6 +37,7 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Send one outbound email         | `sending_send_email`, CLI `sending:send`, SDK `sendingSendEmail`; include `Idempotency-Key`.                                           |
 | Send multiple outbound emails   | `sending_send_email_batch`, CLI `sending:send:batch`, SDK `sendingSendEmailBatch`; do not loop single sends.                           |
+| Send or read attachments        | `sendmux-attachments`; use `file_path`, presigned upload/download URLs, CLI `--attach`, or SDK file helpers instead of inline base64.   |
 | Count matching mailbox messages | `mailbox_count_messages`, CLI `mailbox:count-messages`, SDK `mailboxCountMessages`.                                                    |
 | Search mailbox text             | `mailbox_search_message_snippets`, CLI `mailbox:search-message-snippets`, SDK `mailboxSearchMessageSnippets`; then fetch selected IDs. |
 | Read several known messages     | `mailbox_batch_get_messages`, CLI `mailbox:batch-get-messages`, SDK `mailboxBatchGetMessages`.                                         |
@@ -140,6 +142,8 @@ Store the returned state token. Continue with the same filters only while `has_m
 - Prefer summary or metrics endpoints before log lists.
 - Use `If-None-Match` for repeated detail reads that previously returned an `ETag`.
 - Use `If-Match` for updates when the prior read returned an `ETag`.
+- For inbound attachments, fetch metadata and use the short-lived `download_url`; if it expires, re-fetch metadata instead of building URLs manually.
+- For outbound attachments, a file path or presigned URL is usually under 100 tokens, while base64 can burn thousands of tokens and corrupt large files.
 
 CLI conditional examples:
 
@@ -188,7 +192,8 @@ When retrying application code, prefer SDK retry helpers only for safe reads or 
 ## Routing
 
 - Setup, key scopes, first call: `sendmux-getting-started`.
-- Email send bodies, attachments, SMTP-vs-HTTP choice: `sendmux-send-email`.
+- Email send bodies and SMTP-vs-HTTP choice: `sendmux-send-email`.
+- Attachment upload/download mechanics: `sendmux-attachments`.
 - Mailbox read/search/sync/triage/reply details: `sendmux-mailbox-agent`.
 - Management domains, mailboxes, webhooks, billing, logs: `sendmux-management`.
 - CLI syntax and profiles: `sendmux-cli`.
