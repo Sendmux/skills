@@ -1,0 +1,117 @@
+{
+  "owner": "sendmux.ai",
+  "outputRoot": "dist/clawhub/skills",
+  "homepage": "https://github.com/Sendmux/skills",
+  "version": "1.0.0",
+  "releaseTags": ["latest"],
+  "manualListing": {
+    "license": "MIT-0",
+    "categories": ["Communication", "Developer Tools", "Automation"],
+    "topics": [
+      "sendmux",
+      "email",
+      "agent-inbox",
+      "mcp",
+      "cli",
+      "inbound-email",
+      "outbound-email",
+      "routing"
+    ]
+  },
+  "envVars": {
+    "SENDMUX_API_KEY": "Optional Sendmux API key or scoped agent token used by CLI, SDK, HTTP, or MCP examples.",
+    "SENDMUX_ROOT_KEY": "Optional Sendmux root key for account-level Management API setup.",
+    "SENDMUX_MBX_KEY": "Optional Sendmux mailbox key for Mailbox and send-capable mailbox workflows.",
+    "SENDMUX_PROFILE": "Optional Sendmux CLI profile name.",
+    "SENDMUX_BASE_URL": "Optional Sendmux API base URL override for CLI examples.",
+    "SENDMUX_MCP_SURFACES": "Optional comma-separated surfaces for the combined Sendmux MCP server.",
+    "SENDMUX_MAILBOX_API_KEY": "Optional mailbox key for the Mailbox surface in the combined MCP server.",
+    "SENDMUX_MANAGEMENT_API_KEY": "Optional root key for the Management surface in the combined MCP server.",
+    "SENDMUX_SENDING_API_KEY": "Optional send-capable mailbox key or owner-approved agent token for the Sending MCP surface.",
+    "SENDMUX_MCP_HTTP_BEARER_TOKEN": "Optional bearer token expected by the local HTTP MCP server."
+  },
+  "skills": {
+    "sendmux-attachments": {
+      "displayName": "Sendmux Attachments",
+      "description": "Move email attachments through Sendmux without putting file bytes in model context, using file paths, presigned URLs, CLI, SDKs, or MCP.",
+      "categories": ["Communication", "Developer Tools", "Automation"],
+      "topics": ["sendmux", "email", "attachments", "mcp", "cli", "file-upload"]
+    },
+    "sendmux-cli": {
+      "displayName": "Sendmux CLI",
+      "description": "Use the Sendmux CLI for terminal-driven Management, Mailbox, and Sending workflows with JSON output and scoped credentials.",
+      "categories": ["Developer Tools", "Communication", "Automation"],
+      "topics": ["sendmux", "cli", "email", "developer-tools", "automation"],
+      "install": [
+        {
+          "kind": "node",
+          "package": "@sendmux/cli",
+          "bins": ["sendmux"]
+        }
+      ]
+    },
+    "sendmux-email-for-agents": {
+      "displayName": "Sendmux Agent Inbox",
+      "description": "Give OpenClaw agents a Sendmux inbox to receive, triage, route, reply to, and send email with owner approval and scoped credentials.",
+      "categories": ["Communication", "Automation", "Developer Tools"],
+      "topics": [
+        "sendmux",
+        "agent-inbox",
+        "email",
+        "inbound-email",
+        "outbound-email",
+        "routing",
+        "human-approval",
+        "mcp"
+      ]
+    },
+    "sendmux-getting-started": {
+      "displayName": "Sendmux Getting Started",
+      "description": "Set up Sendmux for agents, choose MCP, CLI, SDK, or HTTP, validate scoped credentials, and make the first harmless call.",
+      "categories": ["Developer Tools", "Communication", "Automation"],
+      "topics": ["sendmux", "getting-started", "email", "agent-auth", "mcp", "cli"]
+    },
+    "sendmux-mailbox-agent": {
+      "displayName": "Sendmux Mailbox Agent",
+      "description": "Let an OpenClaw agent read, search, count, sync, triage, file, delete, thread, and reply from one Sendmux mailbox efficiently.",
+      "categories": ["Communication", "Automation", "Developer Tools"],
+      "topics": ["sendmux", "mailbox", "agent-inbox", "email", "triage", "sync"]
+    },
+    "sendmux-management": {
+      "displayName": "Sendmux Management",
+      "description": "Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup.",
+      "categories": ["Developer Tools", "Automation", "Communication"],
+      "topics": ["sendmux", "management", "domains", "mailboxes", "webhooks", "email"]
+    },
+    "sendmux-mcp-setup": {
+      "displayName": "Sendmux MCP Setup",
+      "description": "Connect OpenClaw and other agent clients to hosted or local Sendmux MCP servers for mailbox, sending, and management tools.",
+      "categories": ["Developer Tools", "Automation", "Communication"],
+      "topics": ["sendmux", "mcp", "openclaw", "email", "agent-tools", "setup"],
+      "install": [
+        {
+          "kind": "uv",
+          "package": "sendmux-mcp",
+          "bins": [
+            "sendmux-mcp",
+            "sendmux-mcp-mailbox",
+            "sendmux-mcp-management",
+            "sendmux-mcp-sending"
+          ]
+        }
+      ]
+    },
+    "sendmux-send-email": {
+      "displayName": "Sendmux Send Email",
+      "description": "Send one or many emails through Sendmux using approved mailbox or agent credentials, idempotency keys, attachments, MCP, CLI, SDKs, or HTTP.",
+      "categories": ["Communication", "Automation", "Developer Tools"],
+      "topics": ["sendmux", "email", "outbound-email", "sending", "attachments", "mcp"]
+    },
+    "sendmux-token-efficient-usage": {
+      "displayName": "Sendmux Token Efficient Usage",
+      "description": "Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency.",
+      "categories": ["Developer Tools", "Automation", "Communication"],
+      "topics": ["sendmux", "token-efficiency", "mcp", "cli", "batching", "email"]
+    }
+  }
+}
