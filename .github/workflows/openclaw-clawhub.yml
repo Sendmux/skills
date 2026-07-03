@@ -7,6 +7,8 @@ on:
       - "openclaw.skills.json"
       - "scripts/build-openclaw-bundle.mjs"
       - "scripts/check-openclaw-bundle.mjs"
+      - "scripts/publish-openclaw-bundle.mjs"
+      - "scripts/publish-openclaw-bundle.test.mjs"
       - ".github/workflows/openclaw-clawhub.yml"
   push:
     branches:
@@ -16,6 +18,8 @@ on:
       - "openclaw.skills.json"
       - "scripts/build-openclaw-bundle.mjs"
       - "scripts/check-openclaw-bundle.mjs"
+      - "scripts/publish-openclaw-bundle.mjs"
+      - "scripts/publish-openclaw-bundle.test.mjs"
       - ".github/workflows/openclaw-clawhub.yml"
   workflow_dispatch:
     inputs:
@@ -45,6 +49,9 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Test OpenClaw publisher
+        run: node --test scripts/publish-openclaw-bundle.test.mjs
+
       - name: Generate OpenClaw bundle
         run: node scripts/build-openclaw-bundle.mjs
 
@@ -55,10 +62,7 @@ jobs:
         run: npm install -g clawhub
 
       - name: Dry-run ClawHub publish
-        run: |
-          for skill_path in dist/clawhub/skills/*; do
-            clawhub skill publish "$skill_path" --owner sendmux.ai --dry-run --json
-          done
+        run: node scripts/publish-openclaw-bundle.mjs --dry-run
 
   publish:
     name: Publish OpenClaw bundle
@@ -66,6 +70,7 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     environment: clawhub
+    timeout-minutes: 90
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -92,7 +97,4 @@ jobs:
           clawhub login --token "$CLAWHUB_TOKEN"
 
       - name: Publish ClawHub skills
-        run: |
-          for skill_path in dist/clawhub/skills/*; do
-            clawhub skill publish "$skill_path" --owner sendmux.ai --json
-          done
+        run: node scripts/publish-openclaw-bundle.mjs
