@@ -69,6 +69,7 @@ jobs:
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
     needs: validate
     runs-on: ubuntu-latest
+    environment: clawhub
     timeout-minutes: 90
     steps:
       - name: Check out repository
