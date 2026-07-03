@@ -57,5 +57,5 @@ test("workflow auto-publishes ClawHub skills on main pushes", () => {
   const workflow = readFileSync(".github/workflows/openclaw-clawhub.yml", "utf8");
 
   assert.match(workflow, /if:\s*\$\{\{\s*github\.event_name == 'push'/);
-  assert.doesNotMatch(workflow, /^\s+environment:\s+clawhub$/m);
+  assert.match(workflow, /^\s+environment:\s+clawhub$/m);
 });
