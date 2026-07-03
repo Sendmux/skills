@@ -1,0 +1,43 @@
+{
+  "skill_name": "sendmux-attachments",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "A local MCP agent needs to send a 5 MB PDF through Sendmux Mailbox. What should it do?",
+      "expected_output": "The answer chooses mailbox_upload_attachment with file_path for local stdio MCP, says the path must be inside a shared root, avoids base64, then uses the returned blob_id in mailbox_send_message.",
+      "files": [],
+      "expectations": [
+        "The output chooses mailbox_upload_attachment with file_path.",
+        "The output says file_path is local stdio only or must be inside a shared root.",
+        "The output avoids inline base64 for a 5 MB file.",
+        "The output uses the returned blob_id in mailbox_send_message."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "A hosted MCP agent with shell access needs to attach ./report.pdf without exposing an API key in curl. What Sendmux flow should it use?",
+      "expected_output": "The answer mints a presigned upload URL with mailbox_upload_attachment presign_upload_url true, then uses curl PUT with exact Content-Type and Content-Length and no Authorization header, then sends with the returned blob_id.",
+      "files": [],
+      "expectations": [
+        "The output uses presign_upload_url true.",
+        "The output includes size_bytes, filename, and content_type.",
+        "The output uses curl PUT with exact Content-Type and Content-Length.",
+        "The output says the PUT does not include an Authorization header.",
+        "The output sends with the returned blob_id."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Show TypeScript and Python Sendmux helpers for sending an email with a local file attachment without manual base64 encoding.",
+      "expected_output": "The answer uses @sendmux/mailbox/node or @sendmux/sending/node helpers in TypeScript and sendmux_mailbox or sendmux_sending file helpers in Python, with file paths rather than hand-written base64.",
+      "files": [],
+      "expectations": [
+        "The output names @sendmux/mailbox/node or @sendmux/sending/node.",
+        "The output names sendMailboxMessageWithFiles or sendEmailWithFiles.",
+        "The output names Python send_mailbox_message_with_files or send_email_with_files.",
+        "The output passes a file path.",
+        "The output avoids manual base64 encoding."
+      ]
+    }
+  ]
+}

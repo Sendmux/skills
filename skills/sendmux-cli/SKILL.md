@@ -74,8 +74,8 @@ The CLI exposes generated operation commands:
 
 | Surface    | Count | Examples                                                                                                                                                   |
 | ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Management |    52 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
-| Mailbox    |    40 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
+| Management |    53 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
+| Mailbox    |    41 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
 | Sending    |     3 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`                                                                                          |
 | Profiles   |     3 | `profiles:list`, `profiles:set`, `profiles:show`                                                                                                           |
 
@@ -98,6 +98,10 @@ Operation commands share these flags:
 | `--profile`, `-p`     | Select a local profile.                                                    |
 | `--body`              | Inline JSON request body, or text bytes for byte-oriented operations.      |
 | `--body-file`         | Read a JSON request body or byte payload from a file.                      |
+| `--attach`            | Attach a local file to supported send commands. Repeat for multiple files. |
+| `--file`              | Read a local file for attachment upload commands.                          |
+| `--via-presigned`     | Upload a `--file` through a short-lived signed URL instead of API bytes.   |
+| `--content-type`      | Override inferred MIME type for `--attach` or `--file`.                    |
 | `--path name=value`   | Path parameters. Repeat for multiple path params.                          |
 | `--query name=value`  | Query parameters. Repeat for filters and pagination.                       |
 | `--header name=value` | Headers accepted by the operation. Repeat for multiple headers.            |
@@ -109,6 +113,8 @@ Operation commands share these flags:
 `--path`, `--query`, and `--header` require `name=value`. Booleans use `true` or `false`. Repeat an array-valued parameter rather than comma-joining it.
 
 Pass either `--body` or `--body-file`, not both.
+
+Use `sendmux-attachments` for attachment-heavy flows and size/token trade-offs.
 
 ## Examples
 
@@ -165,6 +171,29 @@ sendmux sending:send:batch \
   --json
 ```
 
+Send a mailbox message with a local attachment:
+
+```bash
+sendmux mailbox:send-message \
+  --profile mailbox \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
+  --attach ./report.pdf \
+  --body '{"to":[{"email":"user@example.com","name":null}],"subject":"Report","text_body":"Attached."}' \
+  --json
+```
+
+Mailbox attachment upload commands share the 7,500,000 byte per-attachment cap. For larger files, split the file or host it externally and send a link.
+
+Upload a mailbox attachment by presigned URL:
+
+```bash
+sendmux mailbox:upload-attachment \
+  --profile mailbox \
+  --file ./report.pdf \
+  --via-presigned \
+  --json
+```
+
 Poll one unchanged-safe delivery log:
 
 ```bash
@@ -179,6 +208,7 @@ sendmux management:get-email-log \
 
 - First setup/auth check: `sendmux-getting-started`.
 - Sending strategy and body shape: `sendmux-send-email`.
+- Attachment file paths and presigned upload/download: `sendmux-attachments`.
 - Mailbox read, search, sync, triage, or reply: `sendmux-mailbox-agent`.
 - Account-level management strategy: `sendmux-management`.
 - MCP connection setup: `sendmux-mcp-setup`.

@@ -35,6 +35,7 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 | ------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `sendmux-getting-started`       | Choosing a Sendmux surface, setting up auth, or making a first verified call.                           |
 | `sendmux-send-email`            | Sending single or batch transactional email.                                                            |
+| `sendmux-attachments`           | Uploading, downloading, or sending attachments without wasting context on base64.                       |
 | `sendmux-mailbox-agent`         | Reading, triaging, replying, or syncing one mailbox.                                                    |
 | `sendmux-management`            | Managing domains, mailboxes, sending accounts, webhooks, billing, and logs.                             |
 | `sendmux-cli`                   | Using the `sendmux` CLI from a terminal.                                                                |

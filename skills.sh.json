@@ -16,6 +16,7 @@
       "description": "Skills for sending email, reading mailboxes, and giving agents email workflows.",
       "skills": [
         "sendmux-send-email",
+        "sendmux-attachments",
         "sendmux-mailbox-agent",
         "sendmux-email-for-agents"
       ]
