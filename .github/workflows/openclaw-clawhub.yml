@@ -1,0 +1,98 @@
+name: OpenClaw ClawHub
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "openclaw.skills.json"
+      - "scripts/build-openclaw-bundle.mjs"
+      - "scripts/check-openclaw-bundle.mjs"
+      - ".github/workflows/openclaw-clawhub.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "skills/**"
+      - "openclaw.skills.json"
+      - "scripts/build-openclaw-bundle.mjs"
+      - "scripts/check-openclaw-bundle.mjs"
+      - ".github/workflows/openclaw-clawhub.yml"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish generated Sendmux skills to ClawHub"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openclaw-clawhub-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Build and dry-run OpenClaw bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate OpenClaw bundle
+        run: node scripts/build-openclaw-bundle.mjs
+
+      - name: Check OpenClaw bundle
+        run: node scripts/check-openclaw-bundle.mjs
+
+      - name: Install ClawHub CLI
+        run: npm install -g clawhub
+
+      - name: Dry-run ClawHub publish
+        run: |
+          for skill_path in dist/clawhub/skills/*; do
+            clawhub skill publish "$skill_path" --owner sendmux.ai --dry-run --json
+          done
+
+  publish:
+    name: Publish OpenClaw bundle
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: clawhub
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate OpenClaw bundle
+        run: node scripts/build-openclaw-bundle.mjs
+
+      - name: Check OpenClaw bundle
+        run: node scripts/check-openclaw-bundle.mjs
+
+      - name: Install ClawHub CLI
+        run: npm install -g clawhub
+
+      - name: Authenticate ClawHub CLI
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+        run: |
+          test -n "$CLAWHUB_TOKEN"
+          clawhub login --token "$CLAWHUB_TOKEN"
+
+      - name: Publish ClawHub skills
+        run: |
+          for skill_path in dist/clawhub/skills/*; do
+            clawhub skill publish "$skill_path" --owner sendmux.ai --json
+          done
