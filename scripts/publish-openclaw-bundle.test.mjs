@@ -52,3 +52,10 @@ test("workflow publishes through the rate-limit-aware wrapper", () => {
   assert.match(workflow, /node scripts\/publish-openclaw-bundle\.mjs/);
   assert.doesNotMatch(workflow, /for skill_path in dist\/clawhub\/skills\/\*/);
 });
+
+test("workflow auto-publishes ClawHub skills on main pushes", () => {
+  const workflow = readFileSync(".github/workflows/openclaw-clawhub.yml", "utf8");
+
+  assert.match(workflow, /if:\s*\$\{\{\s*github\.event_name == 'push'/);
+  assert.doesNotMatch(workflow, /^\s+environment:\s+clawhub$/m);
+});
