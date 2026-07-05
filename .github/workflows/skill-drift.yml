@@ -1,0 +1,72 @@
+name: Skill drift
+
+# Guards the canonical skills against the real product surfaces. scripts/
+# check-skill-drift.mjs asserts every OpenAPI path, SDK/MCP package name, CLI
+# topic, and MCP tool the skills claim actually exists in source. Runs on every
+# change to the skills or the checker.
+#
+# ── Setup required before this is green (Claude Code cannot verify these blind) ──
+# 1. Add a repo/org secret `SENDMUX_SDK_TOKEN` = a fine-grained PAT with read
+#    access to the private `Sendmux/sendmux-sdk` repo (the SDK/MCP/CLI asserts
+#    read package manifests + the MCP curation source from there).
+# 2. Confirm the two public OpenAPI URLs below are reachable from CI (they are
+#    public today). If the OpenAPI must come from `sendmux-docs` instead, swap
+#    the "Fetch public OpenAPI" step for a checkout of that repo and point
+#    SENDMUX_APP_OPENAPI / SENDMUX_SENDING_OPENAPI at its files.
+# 3. If the SDK layout differs from what check-skill-drift.mjs expects
+#    (packages/ts/*, packages/python/mcp/*, go/go.mod, …), reconcile there.
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "scripts/check-skill-drift.mjs"
+      - ".github/workflows/skill-drift.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "skills/**"
+      - "scripts/check-skill-drift.mjs"
+      - ".github/workflows/skill-drift.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skill-drift-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  drift:
+    name: Check skill drift vs product surfaces
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out sendmux-skills
+        uses: actions/checkout@v4
+
+      - name: Check out sendmux-sdk (private)
+        uses: actions/checkout@v4
+        with:
+          repository: Sendmux/sendmux-sdk
+          token: ${{ secrets.SENDMUX_SDK_TOKEN }}
+          path: _sdk
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch public OpenAPI specs
+        run: |
+          curl -fsSL https://app.sendmux.ai/api/v1/openapi.json -o "$RUNNER_TEMP/openapi-app.json"
+          curl -fsSL https://smtp.sendmux.ai/api/v1/openapi.json -o "$RUNNER_TEMP/openapi-sending.json"
+
+      - name: Check skill drift
+        env:
+          SENDMUX_SKILLS_ROOT: ${{ github.workspace }}
+          SENDMUX_SDK: ${{ github.workspace }}/_sdk
+          SENDMUX_APP_OPENAPI: ${{ runner.temp }}/openapi-app.json
+          SENDMUX_SENDING_OPENAPI: ${{ runner.temp }}/openapi-sending.json
+        run: node scripts/check-skill-drift.mjs
