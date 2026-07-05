@@ -5,16 +5,13 @@ name: Skill drift
 # topic, and MCP tool the skills claim actually exists in source. Runs on every
 # change to the skills or the checker.
 #
-# ── Setup required before this is green (Claude Code cannot verify these blind) ──
-# 1. Add a repo/org secret `SENDMUX_SDK_TOKEN` = a fine-grained PAT with read
-#    access to the private `Sendmux/sendmux-sdk` repo (the SDK/MCP/CLI asserts
-#    read package manifests + the MCP curation source from there).
-# 2. Confirm the two public OpenAPI URLs below are reachable from CI (they are
-#    public today). If the OpenAPI must come from `sendmux-docs` instead, swap
-#    the "Fetch public OpenAPI" step for a checkout of that repo and point
-#    SENDMUX_APP_OPENAPI / SENDMUX_SENDING_OPENAPI at its files.
-# 3. If the SDK layout differs from what check-skill-drift.mjs expects
-#    (packages/ts/*, packages/python/mcp/*, go/go.mod, …), reconcile there.
+# No secrets required: Sendmux/sendmux-sdk is public (checked out with the
+# default GITHUB_TOKEN) and the OpenAPI specs are fetched from public URLs.
+# If the OpenAPI must instead come from sendmux-docs, swap the "Fetch public
+# OpenAPI" step for a checkout of that repo and point SENDMUX_APP_OPENAPI /
+# SENDMUX_SENDING_OPENAPI at its files. If the SDK layout changes
+# (packages/ts/*, packages/python/mcp/*, go/go.mod, …) reconcile
+# check-skill-drift.mjs there.
 
 on:
   pull_request:
@@ -46,11 +43,10 @@ jobs:
       - name: Check out sendmux-skills
         uses: actions/checkout@v4
 
-      - name: Check out sendmux-sdk (private)
+      - name: Check out sendmux-sdk (public)
         uses: actions/checkout@v4
         with:
           repository: Sendmux/sendmux-sdk
-          token: ${{ secrets.SENDMUX_SDK_TOKEN }}
           path: _sdk
 
       - name: Set up Node.js
