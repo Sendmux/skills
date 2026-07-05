@@ -1,0 +1,48 @@
+name: Notify SITE of skill changes
+
+# On every skill change merged to main, tell SITE_sendmux.ai to re-sync its
+# agent-skills discovery surfaces immediately (instead of waiting for the SITE's
+# daily schedule). Fires a `skills-updated` repository_dispatch that the SITE's
+# .github/workflows/sync-agent-skills.yml listens for.
+#
+# ── One-time secret (optional; enables the *immediate* trigger) ──
+# Add a repo/org secret SITE_DISPATCH_TOKEN = a fine-grained PAT scoped to
+# Sendmux/SITE_sendmux.ai with Contents: Read and write (the dispatches API
+# needs write). Without it this workflow skips cleanly and the SITE's daily
+# schedule still catches the drift within 24h.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notify-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dispatch:
+    name: Dispatch skills-updated to SITE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fire repository_dispatch
+        env:
+          SITE_DISPATCH_TOKEN: ${{ secrets.SITE_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$SITE_DISPATCH_TOKEN" ]; then
+            echo "SITE_DISPATCH_TOKEN not set — skipping immediate dispatch."
+            echo "The SITE daily schedule still catches this drift within 24h."
+            exit 0
+          fi
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer $SITE_DISPATCH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/Sendmux/SITE_sendmux.ai/dispatches \
+            -d '{"event_type":"skills-updated"}'
+          echo "Dispatched skills-updated to Sendmux/SITE_sendmux.ai."
