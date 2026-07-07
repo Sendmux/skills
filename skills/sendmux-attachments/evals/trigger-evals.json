@@ -8,7 +8,11 @@
     "should_trigger": true
   },
   {
-    "query": "Fetch a Sendmux attachment download_url from mailbox metadata.",
+    "query": "A hosted MCP agent needs to attach a PDF through the Sendmux Sending API without base64.",
+    "should_trigger": true
+  },
+  {
+    "query": "Read a markdown attachment from a Sendmux mailbox message.",
     "should_trigger": true
   },
   {

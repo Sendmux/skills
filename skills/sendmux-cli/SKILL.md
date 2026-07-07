@@ -76,7 +76,7 @@ The CLI exposes generated operation commands:
 | ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Management |    53 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
 | Mailbox    |    41 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
-| Sending    |     3 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`                                                                                          |
+| Sending    |     7 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`, `sending:upload-attachment`, `sending:create-attachment-upload`, `sending:complete-attachment-upload`, `sending:get-attachment` |
 | Profiles   |     3 | `profiles:list`, `profiles:set`, `profiles:show`                                                                                                           |
 
 Use command-level help to discover accepted path, query, header, and body fields:
@@ -85,6 +85,7 @@ Use command-level help to discover accepted path, query, header, and body fields
 sendmux management:create-domain --help
 sendmux mailbox:search-message-snippets --help
 sendmux sending:send:batch --help
+sendmux sending:upload-attachment --help
 ```
 
 ## Operation flags
@@ -99,8 +100,8 @@ Operation commands share these flags:
 | `--body`              | Inline JSON request body, or text bytes for byte-oriented operations.      |
 | `--body-file`         | Read a JSON request body or byte payload from a file.                      |
 | `--attach`            | Attach a local file to supported send commands. Repeat for multiple files. |
-| `--file`              | Read a local file for attachment upload commands.                          |
-| `--via-presigned`     | Upload a `--file` through a short-lived signed URL instead of API bytes.   |
+| `--file`              | Read a local file for mailbox attachment upload convenience commands.       |
+| `--via-presigned`     | Upload a mailbox `--file` through a short-lived signed URL instead of API bytes. |
 | `--content-type`      | Override inferred MIME type for `--attach` or `--file`.                    |
 | `--path name=value`   | Path parameters. Repeat for multiple path params.                          |
 | `--query name=value`  | Query parameters. Repeat for filters and pagination.                       |
@@ -168,6 +169,30 @@ sendmux sending:send:batch \
   --profile sending \
   --idempotency-key "$IDEMPOTENCY_KEY" \
   --body-file ./messages.json \
+  --json
+```
+
+Send through the Sending API with a local attachment:
+
+```bash
+sendmux sending:send \
+  --profile sending \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
+  --attach ./report.pdf \
+  --body '{"from":{"email":"sender@example.com"},"to":{"email":"user@example.com"},"subject":"Report","html_body":"<p>Attached.</p>"}' \
+  --json
+```
+
+`sending:send --attach` uploads the file first and injects an `attachment_id` reference; it does not place base64 in the send body.
+
+Upload a Sending attachment separately:
+
+```bash
+sendmux sending:upload-attachment \
+  --profile sending \
+  --body-file ./report.pdf \
+  --query filename=report.pdf \
+  --query content_type=application/pdf \
   --json
 ```
 

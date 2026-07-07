@@ -53,7 +53,7 @@ For self-registration without a human-created key, use agent access instead:
 - Keep the `identity_assertion` or pre-claim `smx_agent_*` token available until the owner invite returns `202`. If both are lost before the invite succeeds, register a fresh identity and invite immediately.
 - Do not poll the claim-token grant before the owner invite returns `202`; after `202`, polling with `claim_token` is the wait-for-approval path. `claim_token` cannot create the owner invite.
 - Do not send email until the user has supplied or confirmed the recipient, subject, body, and attachments.
-- Do not place real attachment bytes or long base64 in chat. Use `sendmux-attachments` so local files move by path, presigned URL, CLI, or SDK helper. Mailbox upload modes cap each attachment at 7,500,000 bytes.
+- Do not place real attachment bytes or long base64 in chat. Use `sendmux-attachments` so local files move by path, presigned URL, CLI, or SDK helper. Mailbox upload modes cap each attachment at 7,500,000 bytes; Sending uploads cap each file at 18 MiB and send by `attachment_id`.
 - Treat "draft for approval" as a draft. Ask for explicit approval before calling `mailbox_send_message`, `sending_send_email`, or `sending_send_email_batch`.
 - Use separate scopes: `smx_root_*` for provisioning/admin, send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending, `smx_mbx_*` keys for normal Mailbox runtime, and `smx_agent_*` only for the scopes it was issued with.
 - Do not use a root key inside an agent that only needs mailbox read/send work.

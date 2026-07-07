@@ -51,15 +51,16 @@ Console scripts:
 | ---------- | ----------------------------------------------------------------------- | ---------: | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Mailbox    | `smx_mbx_` or scoped `smx_agent_`                                       |         24 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_get_attachment`, `mailbox_upload_attachment`, `mailbox_wait_for_message` |
 | Management | `smx_root_`                                                             |         20 | `management_create_domain`, `management_create_mailbox`, `management_create_mailbox_key`, `management_get_spend_summary`, `management_create_webhook` |
-| Sending    | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` |          2 | `sending_send_email`, `sending_send_email_batch`                                                                                                      |
+| Sending    | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` |          5 | `sending_send_email`, `sending_send_email_batch`, `sending_upload_attachment`, `sending_create_attachment_upload`, `sending_get_attachment`            |
 
 For multi-mailbox grants, call `mailbox_list_granted_mailboxes` first and pass the returned `mailbox_id` to mailbox tools when targeting a mailbox.
 
-Attachment upload mode depends on transport:
+Attachment upload mode depends on transport and send surface:
 
 - Local stdio can use `mailbox_upload_attachment` with `file_path` when the file is inside a client-shared filesystem root.
 - Hosted MCP cannot read local paths. Use `presign_upload_url=true`, upload with shell `curl`, then send with the returned `blob_id`.
-- Use `content_base64` only for tiny generated files. Mailbox `file_path` and presigned upload modes cap each attachment at 7,500,000 bytes; MCP inline base64 caps at 32 KiB decoded. See `sendmux-attachments`.
+- Sending MCP uses `sending_upload_attachment` with `file_path` on local stdio, or `sending_create_attachment_upload` plus an external `PUT` for hosted/shell-capable agents, then sends with `attachment_id`.
+- Use `content_base64` only for tiny generated files. Mailbox upload modes cap each attachment at 7,500,000 bytes; Sending upload caps each file at 18 MiB; MCP inline base64 caps at 32 KiB decoded. See `sendmux-attachments`.
 
 ## Local Servers
 
@@ -377,7 +378,7 @@ After adding the server:
 2. Confirm the visible tools match the selected surfaces:
    - Mailbox-only: no `management_*` or `sending_*` tools.
    - Management-only: no `mailbox_*` or `sending_*` tools.
-   - Sending-only: only `sending_send_email` and `sending_send_email_batch`.
+   - Sending-only: `sending_send_email`, `sending_send_email_batch`, and Sending attachment tools.
 3. Run one harmless read tool:
    - Mailbox: `mailbox_get_me` or `mailbox_get_session`.
    - Management: `management_list_domains` with a small limit.

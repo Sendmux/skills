@@ -17,14 +17,15 @@
     {
       "id": 1,
       "prompt": "Show a Sendmux CLI example for sending one email with an attachment and safe retry behaviour.",
-      "expected_output": "The answer uses sendmux sending:send, a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, Idempotency-Key, --body or --body-file, and attachment fields filename/content with base64 content.",
+      "expected_output": "The answer uses sendmux sending:send with --attach for the local file, a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, Idempotency-Key, --body or --body-file, and says the CLI uploads bytes first and injects an attachment_id ref rather than base64.",
       "files": [],
       "expectations": [
         "The output uses the CLI command sendmux sending:send.",
         "The output uses a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token.",
         "The output includes an Idempotency-Key or --idempotency-key.",
-        "The output uses attachment fields filename and content.",
-        "The output states attachment content is base64."
+        "The output uses --attach for the local file.",
+        "The output says the CLI uploads bytes first and uses an attachment_id reference.",
+        "The output avoids manual base64 encoding."
       ]
     },
     {

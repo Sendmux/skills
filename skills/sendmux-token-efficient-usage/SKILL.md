@@ -18,7 +18,7 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 - Use scoped `smx_agent_*` only for the calls its scopes and resource allow. Pre-claim agent tokens cannot send.
 - Use `smx_root_*` for Management calls.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.
-- Do not pipe real attachments through model context as base64. Route attachment transfer to `sendmux-attachments`; prefer `file_path`, presigned URLs, CLI `--attach`, or SDK file helpers. Mailbox uploads cap each attachment at 7,500,000 bytes; MCP inline base64 caps at 32 KiB decoded.
+- Do not pipe real attachments through model context as base64. Route attachment transfer to `sendmux-attachments`; prefer `file_path`, presigned URLs, CLI `--attach`, or SDK file helpers. Mailbox uploads cap each attachment at 7,500,000 bytes; Sending uploads cap each file at 18 MiB; MCP inline base64 caps at 32 KiB decoded.
 - Do not read full mailbox bodies, every message, or every log row unless the user asks for full content and narrower calls cannot answer.
 
 ## Surface choice
@@ -37,7 +37,7 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Send one outbound email         | `sending_send_email`, CLI `sending:send`, SDK `sendingSendEmail`; include `Idempotency-Key`.                                           |
 | Send multiple outbound emails   | `sending_send_email_batch`, CLI `sending:send:batch`, SDK `sendingSendEmailBatch`; do not loop single sends.                           |
-| Send or read attachments        | `sendmux-attachments`; use `file_path`, presigned upload/download URLs, CLI `--attach`, or SDK file helpers instead of inline base64.   |
+| Send or read attachments        | `sendmux-attachments`; use `file_path`, presigned upload/download URLs, CLI `--attach`, SDK file helpers, `blob_id` for mailbox sends, and `attachment_id` for Sending sends instead of inline base64. |
 | Count matching mailbox messages | `mailbox_count_messages`, CLI `mailbox:count-messages`, SDK `mailboxCountMessages`.                                                    |
 | Search mailbox text             | `mailbox_search_message_snippets`, CLI `mailbox:search-message-snippets`, SDK `mailboxSearchMessageSnippets`; then fetch selected IDs. |
 | Read several known messages     | `mailbox_batch_get_messages`, CLI `mailbox:batch-get-messages`, SDK `mailboxBatchGetMessages`.                                         |
