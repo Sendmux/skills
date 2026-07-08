@@ -308,6 +308,33 @@ function assertSkillCorpusTokens() {
   }
 }
 
+function assertAttachmentSkillContentLengthGuidance() {
+  const skillPath = fullPath(
+    skillsRoot,
+    "skills/sendmux-attachments/SKILL.md",
+  );
+  const skillText = readText(skillPath);
+  const directUploadExample = skillText.match(
+    /curl -X POST "https:\/\/smtp\.sendmux\.ai\/api\/v1\/emails\/attachments[\s\S]*?--data-binary @\.\/report\.pdf/,
+  )?.[0];
+
+  if (!directUploadExample) {
+    fail("sendmux-attachments missing Direct HTTP Sending direct upload curl example");
+  } else if (!/Content-Length/.test(directUploadExample)) {
+    fail(
+      "sendmux-attachments Direct HTTP Sending upload example must include Content-Length",
+    );
+  }
+
+  if (
+    !/direct Sending API binary uploads require exact `Content-Length`/i.test(
+      skillText,
+    )
+  ) {
+    fail("sendmux-attachments missing direct Sending Content-Length guidance");
+  }
+}
+
 function assertCliPackage() {
   const cliPackagePath = fullPath(sdkRoot, "packages/ts/cli/package.json");
   const cliPackage = readJson(cliPackagePath);
@@ -431,6 +458,7 @@ assertOfficialSendmuxEnvOnly();
 assertSdkPackages();
 assertSkillsCatalogue();
 assertSkillCorpusTokens();
+assertAttachmentSkillContentLengthGuidance();
 
 if (failures.length > 0) {
   console.error("Sendmux skill drift check failed:");

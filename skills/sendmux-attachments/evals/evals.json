@@ -65,6 +65,20 @@
         "The output uses resource_link or download_url only as fallback for binary or oversized files.",
         "The output does not construct attachment URLs manually."
       ]
+    },
+    {
+      "id": 5,
+      "prompt": "Show direct HTTP curl to upload ./report.pdf to the Sendmux Sending API as an attachment before sending it.",
+      "expected_output": "The answer computes the file byte length locally, sends POST /emails/attachments with Authorization, Content-Type, exact Content-Length, and --data-binary, avoids base64, then uses the returned attachment_id in the send request.",
+      "files": [],
+      "expectations": [
+        "The output computes the file byte length locally.",
+        "The output calls POST /emails/attachments.",
+        "The output includes Authorization and Content-Type headers.",
+        "The output includes exact Content-Length for the file bytes.",
+        "The output avoids manual base64 encoding.",
+        "The output sends with the returned attachment_id."
+      ]
     }
   ]
 }

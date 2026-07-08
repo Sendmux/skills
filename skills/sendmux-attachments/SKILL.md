@@ -30,6 +30,7 @@ Approximate base64 cost: 25 KB becomes about 11K generated tokens; 1 MB is impra
 - The later presigned `PUT` has no `Authorization` header, but it only works with the unguessable short-lived signed URL and exact headers returned by Sendmux.
 - Do not invent file-type allow-lists. Set the best `Content-Type`; let Sendmux return the real validation error if a file is rejected.
 - For presigned `PUT`, send the exact `Content-Type` and `Content-Length` returned with the URL.
+- Direct Sending API binary uploads require exact `Content-Length`. CLI, SDK, and MCP file helpers calculate it for you.
 - Do not try to bypass upload size caps. For mailbox uploads, split or externally host files over 7,500,000 bytes.
 - For MCP reads, call `mailbox_read_attachment` first. It returns inline text for text-like attachments and a link for binary or oversized files.
 - For direct downloads, use the `download_url` in attachment metadata promptly. If it expires, fetch the message or attachment metadata again.
@@ -197,9 +198,12 @@ Override MIME type with `--content-type` only when inference is wrong.
 Sending API direct upload with an API key:
 
 ```bash
+SIZE_BYTES="$(wc -c < ./report.pdf | tr -d '[:space:]')"
+
 curl -X POST "https://smtp.sendmux.ai/api/v1/emails/attachments?filename=report.pdf&content_type=application/pdf" \
   -H "Authorization: Bearer $SENDMUX_MBX_KEY" \
   -H "Content-Type: application/pdf" \
+  -H "Content-Length: $SIZE_BYTES" \
   --data-binary @./report.pdf
 ```
 
