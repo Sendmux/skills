@@ -32,6 +32,10 @@ const expectedSkills = [
 ];
 
 const requiredSendingPaths = [
+  ["post", "/emails/attachment-uploads"],
+  ["put", "/emails/attachment-uploads/{upload_id}"],
+  ["post", "/emails/attachments"],
+  ["get", "/emails/attachments/{attachment_id}"],
   ["post", "/emails/send"],
   ["post", "/emails/send/batch"],
 ];
@@ -59,6 +63,7 @@ const requiredMcpTools = [
   "mailbox_get_changes",
   "mailbox_send_message",
   "mailbox_get_attachment",
+  "mailbox_read_attachment",
   "mailbox_upload_attachment",
   "mailbox_wait_for_message",
   "management_create_domain",
@@ -66,8 +71,11 @@ const requiredMcpTools = [
   "management_create_mailbox_key",
   "management_get_spend_summary",
   "management_create_webhook",
+  "sending_create_attachment_upload",
+  "sending_get_attachment",
   "sending_send_email",
   "sending_send_email_batch",
+  "sending_upload_attachment",
 ];
 
 const requiredMcpEnv = [
@@ -136,9 +144,15 @@ const requiredCorpusTokens = [
   ["attachment skill", /sendmux-attachments/],
   ["mailbox upload attachment MCP tool", /mailbox_upload_attachment/],
   ["mailbox attachment metadata MCP tool", /mailbox_get_attachment/],
+  ["mailbox read attachment MCP tool", /mailbox_read_attachment/],
   ["management create domain MCP tool", /management_create_domain/],
   ["management create mailbox MCP tool", /management_create_mailbox/],
   ["management create mailbox key MCP tool", /management_create_mailbox_key/],
+  ["sending upload attachment MCP tool", /sending_upload_attachment/],
+  ["sending create attachment upload MCP tool", /sending_create_attachment_upload/],
+  ["sending get attachment MCP tool", /sending_get_attachment/],
+  ["sending attachment upload endpoint", /\/emails\/attachments/],
+  ["sending delegated upload endpoint", /\/emails\/attachment-uploads/],
 ];
 
 const failures = [];
@@ -294,6 +308,33 @@ function assertSkillCorpusTokens() {
   }
 }
 
+function assertAttachmentSkillContentLengthGuidance() {
+  const skillPath = fullPath(
+    skillsRoot,
+    "skills/sendmux-attachments/SKILL.md",
+  );
+  const skillText = readText(skillPath);
+  const directUploadExample = skillText.match(
+    /curl -X POST "https:\/\/smtp\.sendmux\.ai\/api\/v1\/emails\/attachments[\s\S]*?--data-binary @\.\/report\.pdf/,
+  )?.[0];
+
+  if (!directUploadExample) {
+    fail("sendmux-attachments missing Direct HTTP Sending direct upload curl example");
+  } else if (!/Content-Length/.test(directUploadExample)) {
+    fail(
+      "sendmux-attachments Direct HTTP Sending upload example must include Content-Length",
+    );
+  }
+
+  if (
+    !/direct Sending API binary uploads require exact `Content-Length`/i.test(
+      skillText,
+    )
+  ) {
+    fail("sendmux-attachments missing direct Sending Content-Length guidance");
+  }
+}
+
 function assertCliPackage() {
   const cliPackagePath = fullPath(sdkRoot, "packages/ts/cli/package.json");
   const cliPackage = readJson(cliPackagePath);
@@ -417,6 +458,7 @@ assertOfficialSendmuxEnvOnly();
 assertSdkPackages();
 assertSkillsCatalogue();
 assertSkillCorpusTokens();
+assertAttachmentSkillContentLengthGuidance();
 
 if (failures.length > 0) {
   console.error("Sendmux skill drift check failed:");

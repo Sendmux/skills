@@ -38,6 +38,47 @@
         "The output passes a file path.",
         "The output avoids manual base64 encoding."
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "A hosted MCP agent with shell access needs to attach ./report.pdf through the Sendmux Sending API without base64. What flow should it use?",
+      "expected_output": "The answer calls sending_create_attachment_upload with filename, content_type, and size_bytes, PUTs the file bytes to the returned upload_url with returned headers including X-Sendmux-Upload-Token and no Sendmux API key, then passes the returned attachment_id in sending_send_email attachments[].",
+      "files": [],
+      "expectations": [
+        "The output chooses sending_create_attachment_upload.",
+        "The output includes filename, content_type, and size_bytes.",
+        "The output uses PUT to the returned upload_url.",
+        "The output uses X-Sendmux-Upload-Token or returned headers.",
+        "The output says not to include a Sendmux API key on the PUT.",
+        "The output sends with an attachment_id reference."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "An MCP agent found a markdown attachment in a Sendmux mailbox message. How should it read it?",
+      "expected_output": "The answer calls mailbox_read_attachment with message_id and attachment_id, uses returned text for text-like attachments, falls back to resource_link or download_url for binary or oversized files, and does not construct attachment URLs manually.",
+      "files": [],
+      "expectations": [
+        "The output chooses mailbox_read_attachment.",
+        "The output passes message_id and attachment_id.",
+        "The output uses returned text for text-like attachments.",
+        "The output uses resource_link or download_url only as fallback for binary or oversized files.",
+        "The output does not construct attachment URLs manually."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Show direct HTTP curl to upload ./report.pdf to the Sendmux Sending API as an attachment before sending it.",
+      "expected_output": "The answer computes the file byte length locally, sends POST /emails/attachments with Authorization, Content-Type, exact Content-Length, and --data-binary, avoids base64, then uses the returned attachment_id in the send request.",
+      "files": [],
+      "expectations": [
+        "The output computes the file byte length locally.",
+        "The output calls POST /emails/attachments.",
+        "The output includes Authorization and Content-Type headers.",
+        "The output includes exact Content-Length for the file bytes.",
+        "The output avoids manual base64 encoding.",
+        "The output sends with the returned attachment_id."
+      ]
     }
   ]
 }
