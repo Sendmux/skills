@@ -1,6 +1,6 @@
 {
   "name": "sendmux",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Official Sendmux Agent Skills for email, mailbox, MCP, CLI, and SDK workflows.",
   "author": {
     "name": "Sendmux",
