@@ -1,0 +1,54 @@
+name: Plugin bundles
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "openclaw.skills.json"
+      - ".claude-plugin/**"
+      - ".agents/plugins/**"
+      - "plugins/sendmux/**"
+      - "scripts/build-plugin-bundles.mjs"
+      - "scripts/check-plugin-bundles.mjs"
+      - "scripts/build-plugin-bundles.test.mjs"
+      - ".github/workflows/plugin-bundles.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "skills/**"
+      - "openclaw.skills.json"
+      - ".claude-plugin/**"
+      - ".agents/plugins/**"
+      - "plugins/sendmux/**"
+      - "scripts/build-plugin-bundles.mjs"
+      - "scripts/check-plugin-bundles.mjs"
+      - "scripts/build-plugin-bundles.test.mjs"
+      - ".github/workflows/plugin-bundles.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plugin-bundles-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Check Claude and Codex plugin bundles
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test plugin bundle scripts
+        run: node --test scripts/build-plugin-bundles.test.mjs
+
+      - name: Check generated plugin bundles
+        run: node scripts/check-plugin-bundles.mjs

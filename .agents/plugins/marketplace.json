@@ -1,0 +1,20 @@
+{
+  "name": "sendmux",
+  "interface": {
+    "displayName": "Sendmux"
+  },
+  "plugins": [
+    {
+      "name": "sendmux",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sendmux"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Communication"
+    }
+  ]
+}

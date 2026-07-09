@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sendmux Token Efficiency"
+  short_description: "Choose low-token Sendmux calls."
+  default_prompt: "Use $sendmux-token-efficient-usage to choose the cheapest correct Sendmux surface and call."

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "sendmux",
+  "description": "Official Sendmux Agent Skills for email, mailbox, MCP, CLI, and SDK workflows.",
+  "owner": {
+    "name": "Sendmux",
+    "url": "https://sendmux.ai"
+  },
+  "plugins": [
+    {
+      "name": "sendmux",
+      "source": "./plugins/sendmux",
+      "description": "Official Sendmux Agent Skills for email, mailbox, MCP, CLI, and SDK workflows.",
+      "version": "1.2.0",
+      "author": {
+        "name": "Sendmux"
+      },
+      "category": "communication",
+      "homepage": "https://docs.sendmux.ai/guides/agent-skills"
+    }
+  ]
+}
