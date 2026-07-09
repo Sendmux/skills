@@ -1,0 +1,21 @@
+{
+  "name": "sendmux",
+  "displayName": "Sendmux",
+  "version": "1.2.0",
+  "description": "Official Sendmux Agent Skills for email, mailbox, MCP, CLI, and SDK workflows.",
+  "author": {
+    "name": "Sendmux",
+    "url": "https://sendmux.ai"
+  },
+  "homepage": "https://docs.sendmux.ai/guides/agent-skills",
+  "repository": "https://github.com/Sendmux/skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "sendmux",
+    "email",
+    "agent-skills",
+    "mcp",
+    "cli"
+  ],
+  "skills": "./skills/"
+}

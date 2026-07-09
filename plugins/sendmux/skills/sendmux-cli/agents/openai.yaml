@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sendmux CLI"
+  short_description: "Use the Sendmux terminal CLI."
+  default_prompt: "Use $sendmux-cli to choose and run the right Sendmux CLI command."

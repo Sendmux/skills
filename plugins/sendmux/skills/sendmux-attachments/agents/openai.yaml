@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sendmux Attachments"
+  short_description: "Use Sendmux attachments efficiently."
+  default_prompt: "Use $sendmux-attachments to upload, download, or send Sendmux email attachments without wasting context on base64."

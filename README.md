@@ -2,7 +2,37 @@
 
 Official Sendmux skills for AI coding agents.
 
-Install the pack:
+## Marketplace install
+
+Claude and Codex users can install Sendmux as a plugin marketplace from this repository.
+
+Claude app, Claude Desktop, and Cowork:
+
+1. Open **Customize**.
+2. Go to **Plugins**.
+3. In **Personal plugins**, click **+** and choose **Add marketplace**.
+4. Choose **Add from a repository**.
+5. Enter `Sendmux/skills`, then install the **Sendmux** plugin.
+
+Claude Code:
+
+```text
+/plugin marketplace add Sendmux/skills
+/plugin install sendmux@sendmux
+/reload-plugins
+```
+
+Codex app and Codex CLI:
+
+```bash
+codex plugin marketplace add Sendmux/skills
+```
+
+Then open **Plugins** in the Codex app or `/plugins` in Codex CLI and install **Sendmux** from the Sendmux marketplace.
+
+## Direct Agent Skills install
+
+Use `skills add` when your agent supports raw Agent Skills rather than plugin marketplaces.
 
 ```bash
 npx skills add Sendmux/skills
@@ -43,20 +73,17 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 | `sendmux-token-efficient-usage` | Choosing low-token Sendmux calls and avoiding wasteful reads.                                           |
 | `sendmux-email-for-agents`      | Giving an AI agent an inbox, challenge-first self-registration flow, or email workflow, even when Sendmux is not named. |
 
-## Install Matrix
+## Target matrix
 
-| Agent                    | Project path        | Global path                   |
-| ------------------------ | ------------------- | ----------------------------- |
-| Claude Code              | `.claude/skills/`   | `~/.claude/skills/`           |
-| Cursor                   | `.agents/skills/`   | `~/.cursor/skills/`           |
-| OpenAI Codex CLI         | `.agents/skills/`   | `~/.codex/skills/`            |
-| GitHub Copilot / VS Code | `.agents/skills/`   | `~/.copilot/skills/`          |
-| Windsurf                 | `.windsurf/skills/` | `~/.codeium/windsurf/skills/` |
-| Gemini CLI               | `.agents/skills/`   | `~/.gemini/skills/`           |
-| Cline                    | `.agents/skills/`   | `~/.agents/skills/`           |
-| Other supported agents   | Per agent           | Per agent                     |
+| Target | Recommended install |
+| --- | --- |
+| Claude app, Claude Desktop, Cowork | Add marketplace from repository `Sendmux/skills`, then install **Sendmux**. |
+| Claude Code | `/plugin marketplace add Sendmux/skills`, then `/plugin install sendmux@sendmux`. |
+| Codex app and Codex CLI | `codex plugin marketplace add Sendmux/skills`, then install **Sendmux** from **Plugins** or `/plugins`. |
+| Agent Skills clients | `npx skills add Sendmux/skills`. |
+| Single-skill installs | `npx skills add Sendmux/skills --skill <skill-name>`. |
 
-Claude.ai and Claude Desktop are not `skills add` targets. Upload a zipped individual skill folder manually through **Settings -> Capabilities/Features**.
+Marketplace plugins and raw Agent Skills only teach workflows. They do not grant Sendmux access. Authorise hosted MCP, create API keys, or use agent access before asking an agent to act on Sendmux data.
 
 ## Development
 
@@ -72,6 +99,15 @@ skills/
 ```
 
 Each skill must be validated, benchmarked against a baseline, and packaged before it is marked complete.
+
+Generate Claude and Codex marketplace bundles:
+
+```bash
+node scripts/build-plugin-bundles.mjs
+node scripts/check-plugin-bundles.mjs
+```
+
+The canonical skill source stays in `skills/`. The generated marketplace plugin lives in `plugins/sendmux/` and is checked for drift in CI.
 
 See `docs/eval-lint-package-playbook.md` for the local eval, lint, package, and install-smoke loop.
 See `docs/regen-update-playbook.md` for the source drift check and regeneration procedure.
