@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "skills/**"
+      - "openclaw.skills.json"
       - ".claude-plugin/**"
       - ".agents/plugins/**"
       - "plugins/sendmux/**"
@@ -16,6 +17,7 @@ on:
       - main
     paths:
       - "skills/**"
+      - "openclaw.skills.json"
       - ".claude-plugin/**"
       - ".agents/plugins/**"
       - "plugins/sendmux/**"

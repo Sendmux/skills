@@ -143,4 +143,5 @@ test("workflow checks plugin bundle drift", () => {
   assert.match(workflow, /node --test scripts\/build-plugin-bundles\.test\.mjs/);
   assert.match(workflow, /node scripts\/check-plugin-bundles\.mjs/);
   assert.match(workflow, /"skills\/\*\*"/);
+  assert.match(workflow, /"openclaw\.skills\.json"/);
 });
