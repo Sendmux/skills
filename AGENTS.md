@@ -12,6 +12,7 @@ Build only public Sendmux agent skills in this repository.
 - Draft evals before skill bodies. Validate, benchmark, optimise descriptions, and package each skill before marking it done.
 - Use Australian spelling in public copy.
 - Never put secrets in files or examples.
+- When plugin bundle generation reads a source or metadata file, include that file in every relevant CI path filter and test each filter list independently.
 
 ## Layout
 
