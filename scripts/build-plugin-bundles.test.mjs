@@ -3,6 +3,7 @@ import {
   existsSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -225,6 +226,28 @@ test("workflow checks plugin bundle drift", () => {
 
   assert.match(workflow, /node --test scripts\/build-plugin-bundles\.test\.mjs/);
   assert.match(workflow, /node scripts\/check-plugin-bundles\.mjs/);
-  assert.equal(workflow.match(/"skills\/\*\*"/g)?.length, 2);
-  assert.equal(workflow.match(/"openclaw\.skills\.json"/g)?.length, 2);
+  for (const filteredPath of [
+    "skills/\\*\\*",
+    "openclaw\\.skills\\.json",
+    "assets/\\*\\*",
+    "\\.cursor-plugin/\\*\\*",
+    "mcp\\.json",
+    "\\.mcp\\.json",
+  ]) {
+    assert.equal(
+      workflow.match(new RegExp(`"${filteredPath}"`, "g"))?.length,
+      2,
+      `${filteredPath} must appear in pull_request and push filters`,
+    );
+  }
+});
+
+test("Cursor discovers every declared canonical skill", () => {
+  const manifest = readJson(".cursor-plugin/plugin.json");
+  const config = readJson("openclaw.skills.json");
+  const skillRoot = path.resolve(manifest.skills);
+  const discoverable = readdirSync(skillRoot)
+    .filter((slug) => existsSync(path.join(skillRoot, slug, "SKILL.md")))
+    .sort();
+  assert.deepEqual(discoverable, Object.keys(config.skills).sort());
 });

@@ -5,8 +5,12 @@ on:
     paths:
       - "skills/**"
       - "openclaw.skills.json"
+      - "assets/**"
       - ".claude-plugin/**"
       - ".agents/plugins/**"
+      - ".cursor-plugin/**"
+      - "mcp.json"
+      - ".mcp.json"
       - "plugins/sendmux/**"
       - "scripts/build-plugin-bundles.mjs"
       - "scripts/check-plugin-bundles.mjs"
@@ -18,8 +22,12 @@ on:
     paths:
       - "skills/**"
       - "openclaw.skills.json"
+      - "assets/**"
       - ".claude-plugin/**"
       - ".agents/plugins/**"
+      - ".cursor-plugin/**"
+      - "mcp.json"
+      - ".mcp.json"
       - "plugins/sendmux/**"
       - "scripts/build-plugin-bundles.mjs"
       - "scripts/check-plugin-bundles.mjs"
@@ -36,7 +44,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Check Claude and Codex plugin bundles
+    name: Check Cursor, Claude, and Codex plugin bundles
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
