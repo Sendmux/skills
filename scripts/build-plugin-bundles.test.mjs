@@ -120,6 +120,18 @@ test("builds marketplace plugin bundles from canonical skills", () => {
       mcpServers: "./mcp.json",
     });
 
+    const cursorMcp = readFileSync(path.join(repoRoot, "mcp.json"), "utf8");
+    const openPluginMcp = readFileSync(path.join(repoRoot, ".mcp.json"), "utf8");
+    assert.equal(cursorMcp, openPluginMcp);
+    assert.deepEqual(JSON.parse(cursorMcp), {
+      mcpServers: {
+        sendmux: {
+          type: "http",
+          url: "https://mcp.sendmux.ai/mcp",
+        },
+      },
+    });
+
     assert.equal(
       existsSync(path.join(repoRoot, "plugins", "sendmux", "skills", "sendmux-test", "SKILL.md")),
       true,
@@ -157,6 +169,26 @@ test("detects stale committed plugin bundles", () => {
     );
 
     assert.match(collectPluginBundleDrift(repoRoot).join("\n"), /plugins\/sendmux\/skills\/sendmux-test\/SKILL\.md/);
+  } finally {
+    rmSync(repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("detects stale Cursor manifest and MCP outputs", () => {
+  const repoRoot = makeRepo();
+  try {
+    for (const relativePath of [
+      ".cursor-plugin/plugin.json",
+      "mcp.json",
+      ".mcp.json",
+    ]) {
+      buildPluginBundles(repoRoot);
+      writeFileSync(path.join(repoRoot, relativePath), "stale\n");
+      assert.match(
+        collectPluginBundleDrift(repoRoot).join("\n"),
+        new RegExp(relativePath.replaceAll(".", "\\.")),
+      );
+    }
   } finally {
     rmSync(repoRoot, { recursive: true, force: true });
   }

@@ -26,11 +26,14 @@ const DESCRIPTION =
 const LONG_DESCRIPTION =
   "Official Sendmux Agent Skills teach Codex how to send email, read mailboxes, manage team resources, and choose efficient Sendmux API, CLI, MCP, or SDK workflows.";
 const CURSOR_LOGO = "assets/sendmux-mark.svg";
+const MCP_SERVER_URL = "https://mcp.sendmux.ai/mcp";
 const RUNTIME_SKILL_ENTRIES = ["SKILL.md", "references", "scripts", "assets", "agents"];
-const GENERATED_ROOTS = [
+const GENERATED_OUTPUTS = [
   ".claude-plugin",
   ".agents/plugins",
   ".cursor-plugin",
+  ".mcp.json",
+  "mcp.json",
   "plugins/sendmux",
 ];
 
@@ -66,7 +69,11 @@ function assertSafeGeneratedPath(repoRoot, outputPath) {
   if (relative.startsWith("..") || path.isAbsolute(relative)) {
     throw new Error(`Refusing to write outside repository: ${outputPath}`);
   }
-  if (!GENERATED_ROOTS.some((root) => relative === root || relative.startsWith(`${root}/`))) {
+  if (
+    !GENERATED_OUTPUTS.some(
+      (output) => relative === output || relative.startsWith(`${output}/`),
+    )
+  ) {
     throw new Error(`Refusing to write unexpected generated path: ${relative}`);
   }
 }
@@ -150,6 +157,17 @@ function cursorPluginManifest(metadata) {
     category: "communication",
     skills: "./skills/",
     mcpServers: "./mcp.json",
+  };
+}
+
+function mcpConfiguration() {
+  return {
+    mcpServers: {
+      sendmux: {
+        type: "http",
+        url: MCP_SERVER_URL,
+      },
+    },
   };
 }
 
@@ -241,6 +259,11 @@ export function buildPluginBundles(repoRoot = defaultRepoRoot) {
     path.join(repoRoot, ".cursor-plugin", "plugin.json"),
     cursorPluginManifest(metadata),
   );
+  for (const relativePath of ["mcp.json", ".mcp.json"]) {
+    const outputPath = path.join(repoRoot, relativePath);
+    assertSafeGeneratedPath(repoRoot, outputPath);
+    writeJson(outputPath, mcpConfiguration());
+  }
   writeJson(
     path.join(pluginRoot, ".claude-plugin", "plugin.json"),
     claudePluginManifest(metadata),
@@ -258,6 +281,7 @@ export function buildPluginBundles(repoRoot = defaultRepoRoot) {
 
 function walkFiles(root) {
   if (!existsSync(root)) return [];
+  if (!statSync(root).isDirectory()) return [root];
   const files = [];
   for (const entry of readdirSync(root)) {
     const entryPath = path.join(root, entry);
@@ -272,8 +296,8 @@ function walkFiles(root) {
 }
 
 function generatedFiles(repoRoot) {
-  return GENERATED_ROOTS.flatMap((root) =>
-    walkFiles(path.join(repoRoot, root)).map((filePath) => path.relative(repoRoot, filePath)),
+  return GENERATED_OUTPUTS.flatMap((output) =>
+    walkFiles(path.join(repoRoot, output)).map((filePath) => path.relative(repoRoot, filePath)),
   ).sort();
 }
 

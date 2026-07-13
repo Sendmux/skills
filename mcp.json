@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sendmux": {
+      "type": "http",
+      "url": "https://mcp.sendmux.ai/mcp"
+    }
+  }
+}
