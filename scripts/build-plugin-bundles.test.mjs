@@ -18,6 +18,11 @@ function makeRepo() {
   mkdirSync(path.join(repoRoot, "skills", "sendmux-test", "references"), { recursive: true });
   mkdirSync(path.join(repoRoot, "skills", "sendmux-test", "agents"), { recursive: true });
   mkdirSync(path.join(repoRoot, "skills", "sendmux-test", "evals"), { recursive: true });
+  mkdirSync(path.join(repoRoot, "assets"), { recursive: true });
+  writeFileSync(
+    path.join(repoRoot, "assets", "sendmux-mark.svg"),
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>\n',
+  );
   writeFileSync(
     path.join(repoRoot, "openclaw.skills.json"),
     `${JSON.stringify(
@@ -95,6 +100,26 @@ test("builds marketplace plugin bundles from canonical skills", () => {
     assert.equal(codexManifest.skills, "./skills/");
     assert.equal(codexManifest.interface.displayName, "Sendmux");
 
+    const cursorManifest = readJson(
+      path.join(repoRoot, ".cursor-plugin", "plugin.json"),
+    );
+    assert.deepEqual(cursorManifest, {
+      name: "sendmux",
+      displayName: "Sendmux",
+      version: "1.2.3",
+      description:
+        "Official Sendmux Agent Skills for email, mailbox, MCP, CLI, and SDK workflows.",
+      author: { name: "Sendmux" },
+      homepage: "https://docs.sendmux.ai/guides/agent-skills",
+      repository: "https://github.com/Sendmux/skills",
+      license: "Apache-2.0",
+      logo: "assets/sendmux-mark.svg",
+      keywords: ["sendmux", "email", "agent-skills", "mcp", "cli"],
+      category: "communication",
+      skills: "./skills/",
+      mcpServers: "./mcp.json",
+    });
+
     assert.equal(
       existsSync(path.join(repoRoot, "plugins", "sendmux", "skills", "sendmux-test", "SKILL.md")),
       true,
@@ -132,6 +157,32 @@ test("detects stale committed plugin bundles", () => {
     );
 
     assert.match(collectPluginBundleDrift(repoRoot).join("\n"), /plugins\/sendmux\/skills\/sendmux-test\/SKILL\.md/);
+  } finally {
+    rmSync(repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("fails clearly when the Cursor logo is missing", () => {
+  const repoRoot = makeRepo();
+  try {
+    rmSync(path.join(repoRoot, "assets", "sendmux-mark.svg"));
+    assert.throws(
+      () => buildPluginBundles(repoRoot),
+      /assets\/sendmux-mark\.svg must exist for the Cursor plugin bundle/,
+    );
+  } finally {
+    rmSync(repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("fails clearly when canonical skills are missing", () => {
+  const repoRoot = makeRepo();
+  try {
+    rmSync(path.join(repoRoot, "skills"), { recursive: true, force: true });
+    assert.throws(
+      () => buildPluginBundles(repoRoot),
+      /skills\/ must contain at least one skill with SKILL\.md/,
+    );
   } finally {
     rmSync(repoRoot, { recursive: true, force: true });
   }

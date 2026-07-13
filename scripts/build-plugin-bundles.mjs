@@ -25,10 +25,12 @@ const DESCRIPTION =
   "Official Sendmux Agent Skills for email, mailbox, MCP, CLI, and SDK workflows.";
 const LONG_DESCRIPTION =
   "Official Sendmux Agent Skills teach Codex how to send email, read mailboxes, manage team resources, and choose efficient Sendmux API, CLI, MCP, or SDK workflows.";
+const CURSOR_LOGO = "assets/sendmux-mark.svg";
 const RUNTIME_SKILL_ENTRIES = ["SKILL.md", "references", "scripts", "assets", "agents"];
 const GENERATED_ROOTS = [
   ".claude-plugin",
   ".agents/plugins",
+  ".cursor-plugin",
   "plugins/sendmux",
 ];
 
@@ -43,13 +45,20 @@ function writeJson(filePath, payload) {
 
 function listSkillSlugs(repoRoot) {
   const sourceRoot = path.join(repoRoot, "skills");
-  return readdirSync(sourceRoot)
+  if (!existsSync(sourceRoot)) {
+    throw new Error("skills/ must contain at least one skill with SKILL.md");
+  }
+  const slugs = readdirSync(sourceRoot)
     .filter((entry) => {
       const entryPath = path.join(sourceRoot, entry);
       return statSync(entryPath).isDirectory();
     })
     .filter((entry) => existsSync(path.join(sourceRoot, entry, "SKILL.md")))
     .sort();
+  if (slugs.length === 0) {
+    throw new Error("skills/ must contain at least one skill with SKILL.md");
+  }
+  return slugs;
 }
 
 function assertSafeGeneratedPath(repoRoot, outputPath) {
@@ -126,6 +135,24 @@ function codexPluginManifest(metadata) {
   };
 }
 
+function cursorPluginManifest(metadata) {
+  return {
+    name: PLUGIN_NAME,
+    displayName: DISPLAY_NAME,
+    version: metadata.version,
+    description: DESCRIPTION,
+    author: { name: "Sendmux" },
+    homepage: metadata.homepage,
+    repository: metadata.repository,
+    license: "Apache-2.0",
+    logo: CURSOR_LOGO,
+    keywords: ["sendmux", "email", "agent-skills", "mcp", "cli"],
+    category: "communication",
+    skills: "./skills/",
+    mcpServers: "./mcp.json",
+  };
+}
+
 function claudeMarketplace(metadata) {
   return {
     $schema: "https://anthropic.com/claude-code/marketplace.schema.json",
@@ -188,6 +215,10 @@ function copySkillRuntimeFiles(repoRoot, pluginSkillsRoot, slug) {
 
 export function buildPluginBundles(repoRoot = defaultRepoRoot) {
   const metadata = readPluginMetadata(repoRoot);
+  const logoPath = path.join(repoRoot, CURSOR_LOGO);
+  if (!existsSync(logoPath)) {
+    throw new Error(`${CURSOR_LOGO} must exist for the Cursor plugin bundle`);
+  }
   const pluginRoot = path.join(repoRoot, "plugins", PLUGIN_NAME);
   assertSafeGeneratedPath(repoRoot, pluginRoot);
 
@@ -205,6 +236,10 @@ export function buildPluginBundles(repoRoot = defaultRepoRoot) {
   writeJson(
     path.join(repoRoot, ".agents", "plugins", "marketplace.json"),
     codexMarketplace(metadata),
+  );
+  writeJson(
+    path.join(repoRoot, ".cursor-plugin", "plugin.json"),
+    cursorPluginManifest(metadata),
   );
   writeJson(
     path.join(pluginRoot, ".claude-plugin", "plugin.json"),
@@ -246,6 +281,7 @@ function makeExpectedRepo(repoRoot) {
   const expectedRoot = mkdtempSync(path.join(os.tmpdir(), "sendmux-plugin-bundles-expected-"));
   cpSync(path.join(repoRoot, "openclaw.skills.json"), path.join(expectedRoot, "openclaw.skills.json"));
   cpSync(path.join(repoRoot, "skills"), path.join(expectedRoot, "skills"), { recursive: true });
+  cpSync(path.join(repoRoot, "assets"), path.join(expectedRoot, "assets"), { recursive: true });
   buildPluginBundles(expectedRoot);
   return expectedRoot;
 }
