@@ -251,3 +251,11 @@ test("Cursor discovers every declared canonical skill", () => {
     .sort();
   assert.deepEqual(discoverable, Object.keys(config.skills).sort());
 });
+
+test("documents the prepared Cursor plugin without claiming publication", () => {
+  const readme = readFileSync("README.md", "utf8");
+  assert.match(readme, /Cursor \(after marketplace publication\):/);
+  assert.match(readme, /\/add-plugin sendmux/);
+  assert.match(readme, /\| Cursor \| After official marketplace publication/);
+  assert.match(readme, /Generate Cursor, Claude, and Codex marketplace bundles:/);
+});
