@@ -667,12 +667,31 @@ Expected: tests pass, drift check prints `Plugin bundle check passed.`, and `git
 - [ ] **Step 2: Validate the manifest against Cursor's current official schema**
 
 ```bash
-cursor_schema=$(mktemp)
+cursor_validator_dir=$(mktemp -d)
+cursor_schema="$cursor_validator_dir/plugin.schema.json"
 curl -fsSL 'https://raw.githubusercontent.com/cursor/plugins/main/schemas/plugin.schema.json' -o "$cursor_schema"
-npx --yes ajv-cli@5.0.0 validate --spec=draft7 -s "$cursor_schema" -d .cursor-plugin/plugin.json
+npm install --prefix "$cursor_validator_dir" --no-save --silent ajv ajv-formats
+NODE_PATH="$cursor_validator_dir/node_modules" \
+CURSOR_SCHEMA="$cursor_schema" \
+CURSOR_MANIFEST=".cursor-plugin/plugin.json" \
+node -e '
+const fs = require("node:fs");
+const Ajv = require("ajv");
+const addFormats = require("ajv-formats");
+const schema = JSON.parse(fs.readFileSync(process.env.CURSOR_SCHEMA, "utf8"));
+const manifest = JSON.parse(fs.readFileSync(process.env.CURSOR_MANIFEST, "utf8"));
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
+const validate = ajv.compile(schema);
+if (!validate(manifest)) {
+  console.error(validate.errors);
+  process.exit(1);
+}
+console.log("Cursor plugin manifest valid.");
+'
 ```
 
-Expected: `valid` for `.cursor-plugin/plugin.json`. This installs no repository dependency. [research:https://github.com/cursor/plugins/blob/main/.github/workflows/validate-plugins.yml]
+Expected: `Cursor plugin manifest valid.` This follows Cursor's validator and installs no repository dependency. [research:https://github.com/cursor/plugins/blob/main/scripts/validate-plugins.mjs] [research:https://github.com/cursor/plugins/blob/main/.github/workflows/validate-plugins.yml]
 
 - [ ] **Step 3: Verify the hosted MCP advertises OAuth without credentials**
 
