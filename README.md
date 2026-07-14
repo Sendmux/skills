@@ -4,7 +4,13 @@ Official Sendmux skills for AI coding agents.
 
 ## Marketplace install
 
-Claude and Codex users can install Sendmux as a plugin marketplace from this repository.
+This repository contains Sendmux plugin bundles for Cursor, Claude, and Codex. The Cursor bundle is prepared but is not available through `/add-plugin` until its marketplace submission is approved.
+
+Cursor (after marketplace publication):
+
+```text
+/add-plugin sendmux
+```
 
 Claude app, Claude Desktop, and Cowork:
 
@@ -77,6 +83,7 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 
 | Target | Recommended install |
 | --- | --- |
+| Cursor | After official marketplace publication, run `/add-plugin sendmux`. |
 | Claude app, Claude Desktop, Cowork | Add marketplace from repository `Sendmux/skills`, then install **Sendmux**. |
 | Claude Code | `/plugin marketplace add Sendmux/skills`, then `/plugin install sendmux@sendmux`. |
 | Codex app and Codex CLI | `codex plugin marketplace add Sendmux/skills`, then install **Sendmux** from **Plugins** or `/plugins`. |
@@ -100,14 +107,14 @@ skills/
 
 Each skill must be validated, benchmarked against a baseline, and packaged before it is marked complete.
 
-Generate Claude and Codex marketplace bundles:
+Generate Cursor, Claude, and Codex marketplace bundles:
 
 ```bash
 node scripts/build-plugin-bundles.mjs
 node scripts/check-plugin-bundles.mjs
 ```
 
-The canonical skill source stays in `skills/`. The generated marketplace plugin lives in `plugins/sendmux/` and is checked for drift in CI.
+The canonical skill source stays in `skills/`. Cursor reads it directly; generated Cursor, Claude, and Codex manifests plus both MCP files are checked for drift in CI.
 
 See `docs/eval-lint-package-playbook.md` for the local eval, lint, package, and install-smoke loop.
 See `docs/regen-update-playbook.md` for the source drift check and regeneration procedure.
