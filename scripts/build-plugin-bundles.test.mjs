@@ -233,6 +233,8 @@ test("workflow checks plugin bundle drift", () => {
     "\\.cursor-plugin/\\*\\*",
     "mcp\\.json",
     "\\.mcp\\.json",
+    "README\\.md",
+    "scripts/build-plugin-bundles\\.test\\.mjs",
   ]) {
     assert.equal(
       workflow.match(new RegExp(`"${filteredPath}"`, "g"))?.length,
