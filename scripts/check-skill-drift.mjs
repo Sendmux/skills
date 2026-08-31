@@ -277,6 +277,23 @@ function walkCorpusFiles(dir) {
   return files;
 }
 
+function publicSkillCorpusFiles() {
+  const files = [
+    fullPath(skillsRoot, "README.md"),
+    fullPath(skillsRoot, "skills.sh.json"),
+  ];
+
+  for (const skillName of expectedSkills) {
+    const skillRoot = fullPath(skillsRoot, `skills/${skillName}`);
+    files.push(path.join(skillRoot, "SKILL.md"));
+    for (const publicDirectory of ["references", "scripts", "assets"]) {
+      files.push(...walkCorpusFiles(path.join(skillRoot, publicDirectory)));
+    }
+  }
+
+  return files;
+}
+
 function assertSkillsCatalogue() {
   const skillsDir = fullPath(skillsRoot, "skills");
   if (!existsSync(skillsDir)) {
@@ -308,11 +325,7 @@ function assertSkillsCatalogue() {
 }
 
 function assertSkillCorpusTokens() {
-  const corpusFiles = [
-    fullPath(skillsRoot, "README.md"),
-    fullPath(skillsRoot, "skills.sh.json"),
-    ...walkCorpusFiles(fullPath(skillsRoot, "skills")),
-  ];
+  const corpusFiles = publicSkillCorpusFiles();
   const corpusText = corpusFiles.map((filePath) => readText(filePath)).join("\n");
 
   for (const [label, pattern] of requiredCorpusTokens) {
@@ -411,6 +424,37 @@ function assertCliPackage() {
     "profiles",
     "sending",
   ]);
+
+  const commandContracts = [
+    {
+      path: "packages/ts/cli/src/commands/agent/register.ts",
+      args: ["profile"],
+      flags: ["base-url", "client-name", "default", "mailbox-local-part", "owner-email"],
+    },
+    {
+      path: "packages/ts/cli/src/commands/agent/invite-owner.ts",
+      args: ["email"],
+      flags: ["profile"],
+    },
+  ];
+
+  for (const contract of commandContracts) {
+    const source = readText(fullPath(sdkRoot, contract.path));
+    for (const arg of contract.args) {
+      const pattern = new RegExp(`(?:^|\\n)\\s*${escapeRegExp(arg)}\\s*:\\s*Args\\.string\\(`);
+      if (!pattern.test(source)) {
+        fail(`${contract.path} missing required argument ${arg}`);
+      }
+    }
+    for (const flag of contract.flags) {
+      const pattern = new RegExp(
+        `(?:^|\\n)\\s*(?:["']${escapeRegExp(flag)}["']|${escapeRegExp(flag)})\\s*:\\s*Flags\\.(?:string|boolean)\\(`,
+      );
+      if (!pattern.test(source)) {
+        fail(`${contract.path} missing required flag ${flag}`);
+      }
+    }
+  }
 }
 
 function assertMcpSources() {

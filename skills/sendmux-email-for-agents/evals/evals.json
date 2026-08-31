@@ -52,7 +52,7 @@
       "expectations": [
         "The output installs @sendmux/cli when needed.",
         "The output runs sendmux agent:register with a profile name and optionally --owner-email.",
-        "The output says no existing account, API key, challenge, or proof step is required.",
+        "The output says no existing account, API key, challenge, or proof of work step is required.",
         "The output says the CLI saves the credential before network use and never prints it.",
         "The output says the profile can read and receive mail without an expiry date while the registration remains active.",
         "The output runs sendmux agent:invite-owner when an owner was not invited during registration.",

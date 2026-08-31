@@ -46,7 +46,7 @@
         "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
         "The output installs @sendmux/cli when the sendmux binary is unavailable.",
         "The output runs sendmux agent:register with a profile name and may include --mailbox-local-part, --client-name, --owner-email, or --default.",
-        "The output says registration does not require an existing account, API key, challenge, or proof step.",
+        "The output says registration does not require an existing account, API key, challenge, or proof of work step.",
         "The output says the CLI persists the credential securely and does not print it.",
         "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
         "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
