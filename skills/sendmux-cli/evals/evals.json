@@ -40,6 +40,22 @@
         "The output includes --if-none-match or If-None-Match for caching.",
         "The output uses --json on commands."
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "My agent has no Sendmux account or key. Show the CLI-only path to create an inbox, read it from later processes, invite an owner, and send after approval without exposing credentials.",
+      "expected_output": "The answer installs @sendmux/cli, runs sendmux agent:register <profile> with --default and optional --owner-email, explains that the durable read credential is stored in the local profile and never printed, reads with --profile, uses agent:invite-owner if needed, states the 500 MiB pre-owner and 5 GiB owner-approved storage allocations, and says Sending commands automatically exchange and cache a one-hour delegated token only after owner acceptance and sending approval.",
+      "files": [],
+      "expectations": [
+        "The output uses sendmux agent:register with a named profile.",
+        "The output says no existing account or API key is required.",
+        "The output says the durable read credential is persisted locally without being printed.",
+        "The output reads through a later sendmux mailbox command using --profile.",
+        "The output uses sendmux agent:invite-owner or --owner-email.",
+        "The output states that storage is capped at 500 MiB before owner approval and raised to 5 GiB with sending approval.",
+        "The output says sending is blocked until owner acceptance and approval.",
+        "The output says Sending commands automatically exchange and cache a one-hour delegated token after approval."
+      ]
     }
   ]
 }

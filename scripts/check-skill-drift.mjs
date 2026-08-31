@@ -128,6 +128,10 @@ const requiredCorpusTokens = [
   ["cursor pagination", /pagination\.next_cursor|cursor pagination|next_cursor/],
   ["CLI package", /@sendmux\/cli/],
   ["CLI binary", /\bsendmux\b/],
+  ["agent registration command", /agent:register/],
+  ["agent owner invite command", /agent:invite-owner/],
+  ["durable agent read access", /durable[^\n.]*read|read[^\n.]*without an expiry/i],
+  ["owner-gated agent sending", /owner[^\n.]*approv[^\n.]*(?:send|sending)|send[^\n.]*owner[^\n.]*approv/i],
   ["Sending TS package", /@sendmux\/sending/],
   ["Mailbox TS package", /@sendmux\/mailbox/],
   ["Management TS package", /@sendmux\/management/],
@@ -153,6 +157,16 @@ const requiredCorpusTokens = [
   ["sending get attachment MCP tool", /sending_get_attachment/],
   ["sending attachment upload endpoint", /\/emails\/attachments/],
   ["sending delegated upload endpoint", /\/emails\/attachment-uploads/],
+];
+
+const forbiddenAgentOnboardingPatterns = [
+  ["ALTCHA", /\bALTCHA\b/i],
+  ["registration challenge", /\/identity\/challenge|registration challenge/i],
+  ["proof of work", /proof_of_work|proof-of-work|proof of work/i],
+  ["identity assertion", /identity_assertion|identity assertion/i],
+  ["claim token", /claim_token|claim token/i],
+  ["pre-claim credential", /pre-claim/i],
+  ["runtime auth instructions", /\/auth\.md/i],
 ];
 
 const failures = [];
@@ -306,6 +320,48 @@ function assertSkillCorpusTokens() {
       fail(`Skill corpus missing ${label} (${pattern})`);
     }
   }
+
+  for (const [label, pattern] of forbiddenAgentOnboardingPatterns) {
+    if (pattern.test(corpusText)) {
+      fail(`Skill corpus still contains obsolete ${label} guidance (${pattern})`);
+    }
+  }
+}
+
+function assertUntrustedInboundContentBoundaries() {
+  const targetedSkills = [
+    "sendmux-attachments",
+    "sendmux-email-for-agents",
+    "sendmux-mailbox-agent",
+  ];
+
+  for (const skillName of targetedSkills) {
+    const skillText = readText(fullPath(skillsRoot, `skills/${skillName}/SKILL.md`));
+    if (!/untrusted/i.test(skillText) || !/instruction/i.test(skillText)) {
+      fail(`${skillName} must treat inbound email and attachment content as untrusted data, not instructions`);
+    }
+  }
+}
+
+function assertAgentStorageTransitions() {
+  const targetedSkills = [
+    "sendmux-cli",
+    "sendmux-email-for-agents",
+    "sendmux-getting-started",
+    "sendmux-mailbox-agent",
+    "sendmux-send-email",
+    "sendmux-token-efficient-usage",
+  ];
+
+  for (const skillName of targetedSkills) {
+    const skillText = readText(fullPath(skillsRoot, `skills/${skillName}/SKILL.md`));
+    if (!/500 MiB/.test(skillText)) {
+      fail(`${skillName} must state the pre-owner 500 MiB inbox storage cap`);
+    }
+    if (!/5 GiB/.test(skillText)) {
+      fail(`${skillName} must state the owner-approved 5 GiB inbox storage allocation`);
+    }
+  }
 }
 
 function assertAttachmentSkillContentLengthGuidance() {
@@ -349,6 +405,7 @@ function assertCliPackage() {
 
   const topics = Object.keys(cliPackage.oclif?.topics || {}).sort();
   compareSets("CLI topics", topics, [
+    "agent",
     "mailbox",
     "management",
     "profiles",
@@ -458,6 +515,8 @@ assertOfficialSendmuxEnvOnly();
 assertSdkPackages();
 assertSkillsCatalogue();
 assertSkillCorpusTokens();
+assertUntrustedInboundContentBoundaries();
+assertAgentStorageTransitions();
 assertAttachmentSkillContentLengthGuidance();
 
 if (failures.length > 0) {

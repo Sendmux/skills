@@ -59,7 +59,8 @@ npx skills update
 ## What This Pack Teaches
 
 - Choose the cheapest correct Sendmux surface for the task: MCP for connected agents, the `sendmux` CLI for terminal one-shots, and SDKs for application flows.
-- Use the right credential for each job: `smx_root_*` for account-level work, send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for sending, `smx_mbx_*` keys for single-mailbox work, and scoped `smx_agent_*` tokens for self-registered agent mailbox work.
+- Register an agent inbox without an existing account or key by using `sendmux agent:register`; the saved profile keeps durable read access while active, and sending remains owner-gated.
+- Use the right credential for each job: `smx_root_*` for account-level work, send-capable `smx_mbx_*` keys for owner-created workflows, durable agent profiles for self-registered mailbox reads, and one-hour delegated tokens after owner-approved agent sends.
 - Prefer efficient calls: batch operations, cursor pagination, conditional requests, idempotency keys, counts, snippets, and delta sync where the public surface supports them.
 - Verify results before reporting success.
 
@@ -77,7 +78,7 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 | `sendmux-cli`                   | Using the `sendmux` CLI from a terminal.                                                                |
 | `sendmux-mcp-setup`             | Connecting Sendmux MCP servers to an agent client.                                                      |
 | `sendmux-token-efficient-usage` | Choosing low-token Sendmux calls and avoiding wasteful reads.                                           |
-| `sendmux-email-for-agents`      | Giving an AI agent an inbox, challenge-first self-registration flow, or email workflow, even when Sendmux is not named. |
+| `sendmux-email-for-agents`      | Giving an AI agent an inbox, durable self-registration flow, or email workflow, even when Sendmux is not named. |
 
 ## Target matrix
 

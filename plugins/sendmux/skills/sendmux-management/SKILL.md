@@ -15,6 +15,7 @@ Use this skill for team administration with an `smx_root_` key.
 
 - Do not ask the user to paste an API key or one-time secret.
 - Use `smx_root_` keys for Management API calls.
+- Agent self-registration does not require Management or a root key. Route a user who only wants an agent inbox to `sendmux-getting-started` and `sendmux agent:register`.
 - Do not use management calls to read, triage, sync, or reply from a mailbox; route those tasks to `sendmux-mailbox-agent`.
 - Treat create-key and webhook-secret responses as sensitive one-time values. Put them only in the user's chosen secret store or secure output path.
 - Confirm destructive operations before deleting domains, mailboxes, mailbox keys, sending accounts, or webhooks.
@@ -108,6 +109,8 @@ Use CLI `management:update-domain` or SDK `managementUpdateDomain` with `If-Matc
 ## Mailboxes and keys
 
 Create mailboxes with a root key; use mailbox keys afterwards for agent mailbox work.
+
+This owner-administered path is separate from self-registration. A self-registering agent uses a durable CLI profile without an existing account or API key; do not create or expose a root key merely to give that agent an inbox.
 
 MCP tools:
 

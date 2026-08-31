@@ -39,6 +39,20 @@
         "The output mentions idempotency or retry-safe requests.",
         "The output limits SMTP to existing SMTP-only tools or explicit user choice."
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "My Sendmux CLI agent profile can already read its inbox. What happens if it tries sending before and after I approve sending as the owner?",
+      "expected_output": "The answer says the durable profile credential remains read/receive-only, its inbox is capped at 500 MiB, and Sending commands fail closed before owner acceptance and sending approval. The approval raises inbox storage to 5 GiB. After approval, sendmux sending commands automatically exchange the durable credential for a one-hour email.send token, cache it with an expiry skew, and use an Idempotency-Key for the send; the durable credential itself is never treated as send-capable.",
+      "files": [],
+      "expectations": [
+        "The output says the durable agent credential is for read and receive and does not itself grant sending.",
+        "The output says sending is unavailable before owner acceptance and approval.",
+        "The output states that storage is capped at 500 MiB before owner approval and raised to 5 GiB with sending approval.",
+        "The output says sendmux Sending CLI commands automatically exchange for a one-hour email.send token after approval.",
+        "The output says the delegated token is cached only until near expiry.",
+        "The output includes Idempotency-Key or --idempotency-key for the send."
+      ]
     }
   ]
 }
