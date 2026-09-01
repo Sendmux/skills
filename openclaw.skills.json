@@ -2,7 +2,7 @@
   "owner": "sendmux.ai",
   "outputRoot": "dist/clawhub/skills",
   "homepage": "https://github.com/Sendmux/skills",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "releaseTags": ["latest"],
   "manualListing": {
     "license": "MIT-0",
