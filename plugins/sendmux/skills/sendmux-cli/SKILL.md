@@ -59,7 +59,7 @@ sendmux mailbox:messages:list --profile my-agent --query limit=25 --json
 
 Read/receive access has no expiry date while the registration remains active. Sending remains blocked until the owner accepts and approves it. After approval, a command such as `sending:send --profile my-agent` automatically exchanges the durable credential for a one-hour `email.send` token and caches it until near expiry. Full registration revocation removes read access and every delegated token.
 
-The inbox is capped at 500 MiB before approval. Enabling owner-approved sending first raises it to at least 5 GiB. Later send revocation leaves that storage allocation unchanged.
+The inbox is capped at 500 MiB before approval. Enabling owner-approved sending first raises it to at least 5 GiB. Revoking sending does not itself change the current inbox storage allocation.
 
 ## Profiles
 

@@ -20,7 +20,7 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for the Sending API.
 - A durable agent profile is read/receive-only. Do not treat its stored credential as send-capable.
 - Before owner acceptance and sending approval, agent-profile sends fail closed. After approval, the CLI exchanges and caches a one-hour delegated `email.send` token automatically.
-- The self-registered inbox is capped at 500 MiB before approval. Sending approval raises it to at least 5 GiB first; revoking delegated sending later does not shrink it.
+- The self-registered inbox is capped at 500 MiB before approval. Sending approval raises it to at least 5 GiB first. Revoking sending does not itself change the current inbox storage allocation.
 
 ## Choose the send path
 

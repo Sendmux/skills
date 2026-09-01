@@ -45,7 +45,7 @@ For self-registration without a human-created key, route to `sendmux-getting-sta
 - Do not use a root key inside an agent that only needs mailbox read/send work.
 - Owner invites are sent by Sendmux through the invite endpoint. Do not route them through the Sending API.
 - The durable agent profile is read/receive-only. Sending remains unavailable until owner acceptance and approval; the CLI then exchanges and caches a one-hour delegated token automatically.
-- A self-registered inbox is capped at 500 MiB before approval. Owner-approved sending first raises it to at least 5 GiB, and later send revocation does not shrink it.
+- A self-registered inbox is capped at 500 MiB before approval. Owner-approved sending first raises it to at least 5 GiB. Revoking sending does not itself change the current inbox storage allocation.
 - Confirm destructive mailbox actions before delete, permanent delete, key revocation, suspend, or resume.
 
 ## Workflow patterns
