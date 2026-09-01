@@ -53,11 +53,11 @@
     {
       "id": 4,
       "prompt": "How much inbox storage does a self-registered Sendmux agent have before and after its owner approves sending? Does revoking sending shrink it again?",
-      "expected_output": "The answer states that a self-registered agent inbox is capped at 500 MiB before owner approval, rises to 5 GiB when owner-approved sending is enabled, and stays at 5 GiB if delegated sending is later revoked. Durable read continues while the registration remains active.",
+      "expected_output": "The answer states that a self-registered agent inbox is capped at 500 MiB before owner approval, rises to at least 5 GiB when owner-approved sending is enabled, and remains at least 5 GiB if delegated sending is later revoked. Durable read continues while the registration remains active.",
       "files": [],
       "expectations": [
         "The output states the 500 MiB pre-owner storage cap.",
-        "The output states the 5 GiB owner-approved storage allocation.",
+        "The output states the at least 5 GiB owner-approved storage floor.",
         "The output says later send revocation does not shrink the inbox.",
         "The output says durable read continues while the registration remains active."
       ]

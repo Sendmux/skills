@@ -132,7 +132,7 @@ sendmux agent:invite-owner owner@example.com --profile my-agent --json
 
 The owner must accept the invitation and approve sending. Before then, the durable credential remains read/receive-only. After approval, `sending:*` CLI commands automatically exchange it for a one-hour `email.send` token and cache that delegated token until near expiry. A full registration revoke removes the durable read credential, owner link, invite/recovery handles, and every derived delegated token.
 
-The self-registered inbox is capped at 500 MiB before approval. Owner-approved sending first raises it to 5 GiB. Revoking delegated sending later does not shrink the inbox.
+The self-registered inbox is capped at 500 MiB before approval. Owner-approved sending first raises it to at least 5 GiB. Revoking delegated sending later does not shrink the inbox.
 
 ### Root key, management work
 
