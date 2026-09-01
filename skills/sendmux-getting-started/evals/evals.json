@@ -40,7 +40,7 @@
     {
       "id": 3,
       "prompt": "My coding agent has no Sendmux key. How does it register itself and invite me as the owner?",
-      "expected_output": "The answer uses the installed Sendmux skill as the workflow authority, installs @sendmux/cli when needed, runs sendmux agent:register <profile> with optional mailbox and owner flags, explains that the CLI saves the durable read credential without printing it and waits for readiness, reads with the saved profile for as long as the registration remains active, and uses agent:invite-owner when needed. It states the 500 MiB pre-owner storage cap and the 5 GiB allocation applied with owner-approved sending. Sending remains unavailable until the owner accepts and approves it, after which Sending CLI commands automatically exchange and cache a one-hour delegated token.",
+      "expected_output": "The answer uses the installed Sendmux skill as the workflow authority, installs @sendmux/cli when needed, runs sendmux agent:register <profile> with optional mailbox and owner flags, explains that the CLI saves the durable read credential without printing it and waits for readiness, reads with the saved profile for as long as the registration remains active, and uses agent:invite-owner when needed. It states the 500 MiB pre-owner storage cap and the at least 5 GiB floor applied with owner-approved sending. Sending remains unavailable until the owner accepts and approves it, after which Sending CLI commands automatically exchange and cache a one-hour delegated token.",
       "files": [],
       "expectations": [
         "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
@@ -50,7 +50,7 @@
         "The output says the CLI persists the credential securely and does not print it.",
         "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
         "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
-        "The output states that storage is capped at 500 MiB before owner approval and raised to 5 GiB with sending approval.",
+        "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
         "The output says the owner must accept and approve sending before the agent can send.",
         "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
         "The output says a full registration revoke removes read access and delegated sending access."

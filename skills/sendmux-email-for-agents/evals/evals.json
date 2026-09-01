@@ -47,7 +47,7 @@
     {
       "id": 3,
       "prompt": "My agent has no Sendmux key. It wants to create its own inbox, read incoming mail, and invite me as the owner so I can later approve sending. What sequence should it follow?",
-      "expected_output": "The answer installs @sendmux/cli if needed, registers with sendmux agent:register <profile>, optionally passes --owner-email, and relies on the CLI to persist the durable read credential before the request and wait for mailbox readiness. The agent reads through that profile without an expiry date while active, with 500 MiB of storage before owner approval. If needed it runs agent:invite-owner, then waits for owner acceptance and sending approval; approval raises storage to 5 GiB and Sending CLI commands automatically exchange and cache a one-hour delegated token.",
+      "expected_output": "The answer installs @sendmux/cli if needed, registers with sendmux agent:register <profile>, optionally passes --owner-email, and relies on the CLI to persist the durable read credential before the request and wait for mailbox readiness. The agent reads through that profile without an expiry date while active, with 500 MiB of storage before owner approval. If needed it runs agent:invite-owner, then waits for owner acceptance and sending approval; approval raises storage to at least 5 GiB and Sending CLI commands automatically exchange and cache a one-hour delegated token.",
       "files": [],
       "expectations": [
         "The output installs @sendmux/cli when needed.",
@@ -56,7 +56,7 @@
         "The output says the CLI saves the credential before network use and never prints it.",
         "The output says the profile can read and receive mail without an expiry date while the registration remains active.",
         "The output runs sendmux agent:invite-owner when an owner was not invited during registration.",
-        "The output states that storage is capped at 500 MiB before owner approval and raised to 5 GiB with sending approval.",
+        "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
         "The output waits for owner acceptance and sending approval.",
         "The output says Sending CLI commands automatically exchange and cache a one-hour delegated token after approval."
       ]

@@ -16,6 +16,7 @@ on:
       - "scripts/build-plugin-bundles.mjs"
       - "scripts/check-plugin-bundles.mjs"
       - "scripts/build-plugin-bundles.test.mjs"
+      - "scripts/agent-storage-floor.test.mjs"
       - ".github/workflows/plugin-bundles.yml"
   push:
     branches:
@@ -34,6 +35,7 @@ on:
       - "scripts/build-plugin-bundles.mjs"
       - "scripts/check-plugin-bundles.mjs"
       - "scripts/build-plugin-bundles.test.mjs"
+      - "scripts/agent-storage-floor.test.mjs"
       - ".github/workflows/plugin-bundles.yml"
   workflow_dispatch:
 
@@ -58,7 +60,7 @@ jobs:
           node-version: "22"
 
       - name: Test plugin bundle scripts
-        run: node --test scripts/build-plugin-bundles.test.mjs
+        run: node --test scripts/build-plugin-bundles.test.mjs scripts/agent-storage-floor.test.mjs
 
       - name: Check generated plugin bundles
         run: node scripts/check-plugin-bundles.mjs

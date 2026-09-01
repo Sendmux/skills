@@ -43,13 +43,13 @@
     {
       "id": 3,
       "prompt": "My agent has no key and needs a low-token way to create one inbox, keep reading it over time, and occasionally send after owner approval. Which Sendmux path avoids repeated setup and token handling?",
-      "expected_output": "The answer uses one CLI agent profile: agent:register persists a durable read credential with a 500 MiB inbox, mailbox commands reuse that profile across processes, agent:invite-owner establishes the approval path, and sending approval raises storage to 5 GiB before Sending commands automatically exchange and cache a one-hour delegated token. It avoids repeated registration, manual token copying, and direct protocol calls.",
+      "expected_output": "The answer uses one CLI agent profile: agent:register persists a durable read credential with a 500 MiB inbox, mailbox commands reuse that profile across processes, agent:invite-owner establishes the approval path, and sending approval raises storage to at least 5 GiB before Sending commands automatically exchange and cache a one-hour delegated token. It avoids repeated registration, manual token copying, and direct protocol calls.",
       "files": [],
       "expectations": [
         "The output uses sendmux agent:register once with a named profile.",
         "The output reuses the durable profile for mailbox reads across processes.",
         "The output uses --owner-email or sendmux agent:invite-owner.",
-        "The output states that storage is capped at 500 MiB before owner approval and raised to 5 GiB with sending approval.",
+        "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
         "The output says sending waits for owner acceptance and approval.",
         "The output says Sending commands automatically exchange and cache a one-hour delegated token.",
         "The output avoids manual token copying and repeated registration."

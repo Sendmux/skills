@@ -16,7 +16,7 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 - Do not ask the user to paste an API key.
 - Use send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending calls, and `smx_mbx_*` keys for normal Mailbox calls.
 - For a self-registered agent, reuse one durable CLI profile for reads. Sending stays blocked until owner approval, then `sending:*` commands exchange and cache a one-hour delegated token automatically.
-- Its inbox is capped at 500 MiB before approval. Owner-approved sending raises it to 5 GiB first, and later send revocation does not shrink it.
+- Its inbox is capped at 500 MiB before approval. Owner-approved sending raises it to at least 5 GiB first, and later send revocation does not shrink it.
 - Use `smx_root_*` for Management calls.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.
 - Do not pipe real attachments through model context as base64. Route attachment transfer to `sendmux-attachments`; prefer `file_path`, presigned URLs, CLI `--attach`, or SDK file helpers. Mailbox uploads cap each attachment at 7,500,000 bytes; Sending uploads cap each file at 18 MiB; MCP inline base64 caps at 32 KiB decoded.
