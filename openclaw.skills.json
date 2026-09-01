@@ -2,7 +2,7 @@
   "owner": "sendmux.ai",
   "outputRoot": "dist/clawhub/skills",
   "homepage": "https://github.com/Sendmux/skills",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "releaseTags": ["latest"],
   "manualListing": {
     "license": "MIT-0",
@@ -39,7 +39,7 @@
     },
     "sendmux-cli": {
       "displayName": "Sendmux CLI",
-      "description": "Use the Sendmux CLI for terminal-driven Management, Mailbox, and Sending workflows with JSON output and scoped credentials.",
+      "description": "Use the Sendmux CLI for durable agent inbox registration, owner invites, profiles, and terminal-driven Management, Mailbox, and Sending workflows.",
       "categories": ["Developer Tools", "Communication", "Automation"],
       "topics": ["sendmux", "cli", "email", "developer-tools", "automation"],
       "install": [
@@ -67,7 +67,7 @@
     },
     "sendmux-getting-started": {
       "displayName": "Sendmux Getting Started",
-      "description": "Set up Sendmux for agents, choose MCP, CLI, SDK, or HTTP, validate scoped credentials, and make the first harmless call.",
+      "description": "Set up Sendmux for agents, register a durable inbox without an existing key, link an owner, choose a runtime surface, and make the first harmless call.",
       "categories": ["Developer Tools", "Communication", "Automation"],
       "topics": ["sendmux", "getting-started", "email", "agent-auth", "mcp", "cli"]
     },

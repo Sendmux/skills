@@ -38,6 +38,18 @@
         "The output mentions If-None-Match or ETag for unchanged detail reads.",
         "The output avoids broad unfiltered log reads."
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "My coding agent only needs its own inbox and I do not want to create a root key for it. Is Sendmux Management required for self-registration?",
+      "expected_output": "The answer says no: route to sendmux-getting-started and the CLI-first sendmux agent:register workflow, which needs no existing account or API key and creates a durable read profile. Management and smx_root_ remain for owner-administered domains, mailboxes, keys, billing, and account resources, not agent self-registration.",
+      "files": [],
+      "expectations": [
+        "The output says a root key and Management API are not required for agent self-registration.",
+        "The output routes self-registration to sendmux-getting-started or sendmux agent:register.",
+        "The output says the registered profile has durable read access while active.",
+        "The output reserves smx_root_ for owner-administered account-level work."
+      ]
     }
   ]
 }

@@ -4,7 +4,7 @@
   "groupings": [
     {
       "title": "Start and connect",
-      "description": "Skills for choosing a Sendmux surface, authenticating, and connecting agent clients.",
+      "description": "Skills for registering durable agent inboxes, choosing a Sendmux surface, authenticating, and connecting agent clients.",
       "skills": [
         "sendmux-getting-started",
         "sendmux-cli",
