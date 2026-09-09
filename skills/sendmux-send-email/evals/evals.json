@@ -53,6 +53,18 @@
         "The output says the delegated token is cached only until near expiry.",
         "The output includes Idempotency-Key or --idempotency-key for the send."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "I have a REST OAuth token with email.send. Can I validate it without sending and use it as my SMTP password?",
+      "expected_output": "Uses the Sending connection endpoint or sending:get-connection as the non-sending validation step. Accepts REST OAuth for the Sending HTTP API with email.send. States OAuth access tokens cannot be used as SMTP or IMAP passwords. Preserves explicit approval and message details before any actual send.",
+      "files": [],
+      "expectations": [
+        "Uses the Sending connection endpoint or sending:get-connection as the non-sending validation step.",
+        "Accepts REST OAuth for the Sending HTTP API with email.send.",
+        "States OAuth access tokens cannot be used as SMTP or IMAP passwords.",
+        "Preserves explicit approval and message details before any actual send."
+      ]
     }
   ]
 }

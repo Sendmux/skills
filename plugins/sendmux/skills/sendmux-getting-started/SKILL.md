@@ -1,6 +1,6 @@
 ---
 name: sendmux-getting-started
-description: Use when a user needs Sendmux setup, agent inbox registration, owner linking, credential validation, surface selection, or a first harmless call through MCP, CLI, or an SDK.
+description: Use when a user needs Sendmux setup, OAuth connection checks, agent inbox registration, owner linking, credential validation, surface selection, or a first harmless call through MCP, CLI, or an SDK.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -32,6 +32,8 @@ Skills are optional. If the pack is unavailable, use the installed CLI's `--help
 
 ## Pick the key
 
+For user-approved access to an existing account, use OAuth login through `sendmux-cli`. REST OAuth grants can cover multiple API surfaces and mailboxes with explicit scopes; hosted MCP and A2A retain separate OAuth resources. The table below describes API-key credentials and the separate agent self-registration flow.
+
 | Task                                                                                    | Key prefix                                                              | Start here                                                                                                               |
 | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Send email through the Sending API                                                      | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` | `sendmux-send-email` for real sends; this skill can verify package/API discovery first.                                  |
@@ -39,7 +41,20 @@ Skills are optional. If the pack is unavailable, use the installed CLI's `--help
 | Manage domains, mailboxes, mailbox keys, providers, webhooks, logs, billing, or metrics | `smx_root_`                                                             | Management MCP, CLI, or SDK.                                                                                             |
 | Let an agent register itself and invite its owner                                       | No existing key                                                         | CLI `agent:register`, then `agent:invite-owner` when the owner was not invited during registration.                         |
 
-If the task mixes management and mailbox work, use separate keys and separate clients or profiles. Do not use a root key for mailbox-scoped examples.
+For API-key authentication, use separate Management and Mailbox keys with separate clients or profiles. Do not use a root key for mailbox-scoped examples.
+
+## Verify the connection
+
+Use the selected surface's connection check before reading customer data or sending email:
+
+| Surface | CLI | HTTP |
+| --- | --- | --- |
+| Sending | `sendmux sending:get-connection --profile work --json` | `GET https://smtp.sendmux.ai/api/v1/me` |
+| Mailbox | `sendmux mailbox:get-connection --profile work --json` | `GET https://app.sendmux.ai/api/v1/mailbox/connection` |
+| Management | `sendmux management:get-connection --profile work --json` | `GET https://app.sendmux.ai/api/v1/me` |
+
+These operations need no mailbox selector and return team and credential details. Use `data.label` for the connection name and `data.team.id` for its stable team identifier. Sending requires `email.send`; Management and Mailbox require access to their respective surfaces without an additional read permission. Public OpenAPI discovery does not validate credentials.
+
 
 ## Choose the surface
 
@@ -165,11 +180,11 @@ const response = await managementListMailboxes({
 console.log(response.data);
 ```
 
-Use a small list call as the first management check. It verifies the root key and avoids creating or changing resources.
+Use `management:get-connection` as the first Management check; the list example additionally requires its listed operation permission (`mailbox.admin.read` for OAuth).
 
 ### Sending work
 
-The Sending surface needs a send-capable `smx_mbx_` key with `email.send` or an owner-approved agent profile. Do not send a real email as a health check unless the user explicitly asks to send one and provides the message details.
+The Sending HTTP API needs a send-capable `smx_mbx_` key, an owner-approved agent profile, or a REST OAuth grant with Sending access and `email.send`. Use `sending:get-connection` to validate the credential. Do not send a real email as a health check unless the user explicitly asks to send one and provides the message details.
 
 CLI package/API discovery:
 

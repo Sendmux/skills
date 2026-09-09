@@ -50,6 +50,18 @@
         "The output says the registered profile has durable read access while active.",
         "The output reserves smx_root_ for owner-administered account-level work."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "My CLI has an OAuth profile with Management access. Verify it and explain how to choose permissions without creating resources.",
+      "expected_output": "Accepts a user-approved OAuth profile instead of requiring a root key. Uses management:get-connection with --profile and --json. Explains that resource operations require their advertised scopes and current user permissions. Keeps self-registration and mailbox message work on their existing skills.",
+      "files": [],
+      "expectations": [
+        "Accepts a user-approved OAuth profile instead of requiring a root key.",
+        "Uses management:get-connection with --profile and --json.",
+        "Explains that resource operations require their advertised scopes and current user permissions.",
+        "Keeps self-registration and mailbox message work on their existing skills."
+      ]
     }
   ]
 }

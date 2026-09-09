@@ -55,6 +55,18 @@
         "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
         "The output says a full registration revoke removes read access and delegated sending access."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Check a Sendmux automation connection without sending mail or listing customer data. It may use an API key or a user-approved OAuth profile.",
+      "expected_output": "Chooses the Sending, Mailbox or Management get-connection operation for the selected surface. Uses data.label for the connection name and data.team.id for the stable team identifier. Distinguishes user-approved OAuth login from agent self-registration. Does not use public OpenAPI discovery as proof that credentials are valid.",
+      "files": [],
+      "expectations": [
+        "Chooses the Sending, Mailbox or Management get-connection operation for the selected surface.",
+        "Uses data.label for the connection name and data.team.id for the stable team identifier.",
+        "Distinguishes user-approved OAuth login from agent self-registration.",
+        "Does not use public OpenAPI discovery as proof that credentials are valid."
+      ]
     }
   ]
 }

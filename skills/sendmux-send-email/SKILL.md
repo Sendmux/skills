@@ -17,7 +17,7 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - Do not invent recipients, sender addresses, subject lines, or body content.
 - Send only after the user supplies or confirms every recipient and message.
 - For batch sends, confirm the full recipient/message set before calling a send tool.
-- Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for the Sending API.
+- Use a send-capable `smx_mbx_` key, owner-approved Sending-resource `smx_agent_` token, or REST OAuth grant with Sending access and `email.send` for the Sending HTTP API. SMTP requires a send-capable API key; OAuth access tokens are not SMTP or IMAP passwords.
 - A durable agent profile is read/receive-only. Do not treat its stored credential as send-capable.
 - Before owner acceptance and sending approval, agent-profile sends fail closed. After approval, the CLI exchanges and caches a one-hour delegated `email.send` token automatically.
 - The self-registered inbox is capped at 500 MiB before approval. Sending approval raises it to at least 5 GiB first. Revoking sending does not itself change the current inbox storage allocation.
@@ -33,6 +33,8 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 | Existing app only supports SMTP           | Use SMTP only because the existing tool requires it. For new agent or app integrations, prefer the HTTP Sending API.                   |
 
 Batch sends accept up to 100 messages. A batch response can partially succeed, so inspect every result item.
+
+Validate a Sending connection without sending email with `sendmux sending:get-connection --profile work --json`. For OAuth profile setup, refresh and logout, follow `sendmux-cli`. SDK clients accept `accessToken` instead of `apiKey`, including a token provider; your application owns storage and refresh coordination.
 
 ## Required JSON shape
 
