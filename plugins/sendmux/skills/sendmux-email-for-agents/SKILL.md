@@ -18,13 +18,15 @@ Use this skill when the user describes the agent-email problem: an AI agent need
 | "Give my agent an email address"           | `sendmux-management` to create/inspect domain, mailbox, and mailbox key.                                                                                    |
 | "Let my agent register itself"             | `sendmux-getting-started`: install the CLI, run `agent:register`, read through the durable profile, then invite the owner when sending is needed. |
 | "Connect my agent to its inbox"            | `sendmux-mcp-setup` for agent MCP, or `sendmux-getting-started` for first auth checks.                                                                      |
-| "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an `smx_mbx_*` key or scoped `smx_agent_*` token.                                                                              |
-| "Send independent outbound notifications"  | `sendmux-send-email` with a send-capable `smx_mbx_*` key or owner-approved agent profile; batch when there is more than one message. |
+| "Read, search, triage, label, sync, reply" | `sendmux-mailbox-agent` with an authorised Mailbox OAuth profile, `smx_mbx_*` key or scoped `smx_agent_*` token.                                                                              |
+| "Send independent outbound notifications"  | `sendmux-send-email` with Sending OAuth access and `email.send`, a send-capable `smx_mbx_*` key or owner-approved agent profile; batch when there is more than one message. |
 | "Upload, download, or forward attachments" | `sendmux-attachments` for `file_path`, presigned upload URLs, CLI `--attach`, SDK file helpers, and short-lived download URLs.                              |
 | "Build this into an app or worker"         | SDK path from the task skill; use `sendmux-token-efficient-usage` for call minimisation.                                                                    |
 | "Show terminal commands"                   | `sendmux-cli`.                                                                                                                                              |
 
-If the task crosses setup and runtime, split it:
+For an existing account using REST OAuth, route login to `sendmux-cli`, validate the selected surface with its `get-connection` operation, and use the task skill with the approved scopes and mailbox access. Do not create API keys or register another inbox just to use an existing OAuth grant. Hosted MCP has a separate OAuth resource.
+
+For owner-managed API-key setup, split provisioning and runtime:
 
 1. `sendmux-management` provisions the mailbox and mailbox API key with an `smx_root_*` key.
 2. Runtime agent work uses the new `smx_mbx_*` key.
@@ -41,7 +43,7 @@ For self-registration without a human-created key, route to `sendmux-getting-sta
 - Do not send email until the user has supplied or confirmed the recipient, subject, body, and attachments.
 - Do not place real attachment bytes or long base64 in chat. Use `sendmux-attachments` so local files move by path, presigned URL, CLI, or SDK helper. Mailbox upload modes cap each attachment at 7,500,000 bytes; Sending uploads cap each file at 18 MiB and send by `attachment_id`.
 - Treat "draft for approval" as a draft. Ask for explicit approval before calling `mailbox_send_message`, `sending_send_email`, or `sending_send_email_batch`.
-- Use separate scopes: `smx_root_*` for provisioning/admin, send-capable `smx_mbx_*` keys or owner-approved agent profiles for Sending, and `smx_mbx_*` keys or durable agent profiles for Mailbox runtime.
+- For API-key and self-registration workflows, use separate scopes: `smx_root_*` for provisioning/admin, send-capable `smx_mbx_*` keys or owner-approved agent profiles for Sending, and `smx_mbx_*` keys or durable agent profiles for Mailbox runtime.
 - Do not use a root key inside an agent that only needs mailbox read/send work.
 - Owner invites are sent by Sendmux through the invite endpoint. Do not route them through the Sending API.
 - The durable agent profile is read/receive-only. Sending remains unavailable until owner acceptance and approval; the CLI then exchanges and caches a one-hour delegated token automatically.
@@ -59,7 +61,7 @@ Plan:
 1. Domain and mailbox setup: route to `sendmux-management`.
 2. Mailbox key: create a mailbox-scoped key for the agent runtime.
 3. Connection: route to `sendmux-mcp-setup` if the agent client can use MCP; otherwise use CLI or SDK.
-4. First harmless check: `mailbox_get_me`, CLI `mailbox:me:get`, or SDK `mailboxGetMe`.
+4. First harmless check: `mailbox_get_connection`, CLI `mailbox:get-connection`, or SDK `mailboxGetConnection`; identify a selected mailbox afterwards.
 5. Runtime loop: route read/search/sync/reply tasks to `sendmux-mailbox-agent`.
 
 Mention that DNS/domain setup may be required before a custom address receives mail.
@@ -114,7 +116,7 @@ Use `sendmux-send-email` when the email is not a reply inside an active mailbox 
 When designing a workflow, answer in this order:
 
 1. **Recommended route:** name the Sendmux skill(s) to use next.
-2. **Key scope:** `smx_root_*` for admin, `smx_mbx_*` for owner-created runtime keys, and a durable agent profile for self-registered read access plus owner-approved delegated sending.
+2. **Credential scope:** the OAuth grant's approved surfaces, permissions and mailboxes; for API keys, `smx_root_*` for admin and `smx_mbx_*` for runtime; for self-registration, durable read access plus owner-approved delegated sending.
 3. **Runtime surface:** MCP when curated and connected, CLI for terminal work, SDK for application code.
 4. **Core calls:** list the smallest Sendmux calls needed.
 5. **Human approval:** state what must be confirmed before sending or mutating mail.

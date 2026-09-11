@@ -110,7 +110,7 @@ Use CLI `management:update-domain` or SDK `managementUpdateDomain` with `If-Matc
 
 ## Mailboxes and keys
 
-Create mailboxes with a root key; use mailbox keys afterwards for agent mailbox work.
+For API-key setup, create mailboxes with a root key and use mailbox keys afterwards for agent mailbox work. A Management OAuth profile can provision with the required scopes; Mailbox runtime needs its own approved access.
 
 This owner-administered path is separate from self-registration. A self-registering agent uses a durable CLI profile without an existing account or API key; do not create or expose a root key merely to give that agent an inbox.
 

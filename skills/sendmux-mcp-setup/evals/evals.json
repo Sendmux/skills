@@ -56,6 +56,18 @@
         "The output does not ask the user to paste a raw credential.",
         "The output configures MCP only after the user chooses that surface and authorised credentials exist."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "I connected Sendmux MCP using hosted OAuth. Verify Sending access without sending a test email, and explain whether my REST OAuth token is interchangeable.",
+      "expected_output": "Use sending_get_connection as the harmless Sending credential check. Do not substitute tool discovery alone for credential validation. Distinguish hosted MCP OAuth from REST OAuth resources; do not reuse a REST token as the MCP bearer. Do not send an email or request secrets in chat.",
+      "files": [],
+      "expectations": [
+        "Use sending_get_connection as the harmless Sending credential check.",
+        "Do not substitute tool discovery alone for credential validation.",
+        "Distinguish hosted MCP OAuth from REST OAuth resources; do not reuse a REST token as the MCP bearer.",
+        "Do not send an email or request secrets in chat."
+      ]
     }
   ]
 }
