@@ -54,6 +54,18 @@
         "The output says Sending commands automatically exchange and cache a one-hour delegated token.",
         "The output avoids manual token copying and repeated registration."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "What is the smallest Sendmux check for an existing OAuth profile without listing domains, opening messages or sending an email?",
+      "expected_output": "Choose the selected surface get-connection operation. Do not use public OpenAPI discovery as credential verification. Do not list customer resources or send email for the connection check. Keep OAuth restricted to its approved surface, scopes and mailboxes.",
+      "files": [],
+      "expectations": [
+        "Choose the selected surface get-connection operation.",
+        "Do not use public OpenAPI discovery as credential verification.",
+        "Do not list customer resources or send email for the connection check.",
+        "Keep OAuth restricted to its approved surface, scopes and mailboxes."
+      ]
     }
   ]
 }

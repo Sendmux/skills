@@ -14,13 +14,15 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 ## Boundaries
 
 - Do not ask the user to paste an API key.
-- Use send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending calls, and `smx_mbx_*` keys for normal Mailbox calls.
+- For API-key authentication, use send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending calls, and `smx_mbx_*` keys for normal Mailbox calls.
 - For a self-registered agent, reuse one durable CLI profile for reads. Sending stays blocked until owner approval, then `sending:*` commands exchange and cache a one-hour delegated token automatically.
 - Its inbox is capped at 500 MiB before approval. Owner-approved sending raises it to at least 5 GiB first. Revoking sending does not itself change the current inbox storage allocation.
-- Use `smx_root_*` for Management calls.
+- For API-key authentication, use `smx_root_*` for Management calls. REST OAuth profiles can use their approved surfaces, scopes and mailboxes; route login and refresh to `sendmux-cli`.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.
 - Do not pipe real attachments through model context as base64. Route attachment transfer to `sendmux-attachments`; prefer `file_path`, presigned URLs, CLI `--attach`, or SDK file helpers. Mailbox uploads cap each attachment at 7,500,000 bytes; Sending uploads cap each file at 18 MiB; MCP inline base64 caps at 32 KiB decoded.
 - Do not read full mailbox bodies, every message, or every log row unless the user asks for full content and narrower calls cannot answer.
+
+Validate credentials with the selected surface's `get-connection` CLI operation or MCP `mailbox_get_connection`, `management_get_connection`, or `sending_get_connection`. These checks need no mailbox selector and send no email; public OpenAPI discovery does not validate credentials.
 
 ## Surface choice
 

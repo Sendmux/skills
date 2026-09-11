@@ -60,7 +60,8 @@ npx skills update
 
 - Choose the cheapest correct Sendmux surface for the task: MCP for connected agents, the `sendmux` CLI for terminal one-shots, and SDKs for application flows.
 - Register an agent inbox without an existing account or key by using `sendmux agent:register`; the saved profile keeps durable read access while active, and sending remains owner-gated.
-- Use the right credential for each job: `smx_root_*` for account-level work, send-capable `smx_mbx_*` keys for owner-created workflows, durable agent profiles for self-registered mailbox reads, and one-hour delegated tokens after owner-approved agent sends.
+- Connect an existing account through scoped REST OAuth, validate access without sending email, and manage login, refresh and logout through the CLI.
+- For API-key workflows, use `smx_root_*` for account-level work, send-capable `smx_mbx_*` keys for owner-created workflows, durable agent profiles for self-registered mailbox reads, and one-hour delegated tokens after owner-approved agent sends.
 - Prefer efficient calls: batch operations, cursor pagination, conditional requests, idempotency keys, counts, snippets, and delta sync where the public surface supports them.
 - Verify results before reporting success.
 
@@ -91,7 +92,7 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 | Agent Skills clients | `npx skills add Sendmux/skills`. |
 | Single-skill installs | `npx skills add Sendmux/skills --skill <skill-name>`. |
 
-Marketplace plugins and raw Agent Skills only teach workflows. They do not grant Sendmux access. Authorise hosted MCP, create API keys, or use agent access before asking an agent to act on Sendmux data.
+Marketplace plugins and raw Agent Skills only teach workflows. They do not grant Sendmux access. Authorise hosted MCP or scoped REST OAuth, create API keys, or use agent access before asking an agent to act on Sendmux data.
 
 ## Development
 

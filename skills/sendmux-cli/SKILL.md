@@ -1,6 +1,6 @@
 ---
 name: sendmux-cli
-description: Use when a user wants Sendmux terminal commands for agent inbox registration, owner invites, profiles, key-scope preflight, JSON output, or Management, Mailbox, and Sending operations.
+description: Use when a user wants Sendmux terminal commands for OAuth login/logout, connection checks, agent inbox registration, owner invites, profiles, key-scope preflight, JSON output, or Management, Mailbox, and Sending operations.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -14,8 +14,8 @@ Use this skill when the terminal is the right Sendmux surface.
 ## Boundaries
 
 - Do not ask the user to paste API keys.
-- Use `smx_root_` keys only for `management:*` commands.
-- Use `smx_mbx_` keys or scoped `smx_agent_` tokens for `mailbox:*` commands.
+- For API-key profiles, use `smx_root_` for `management:*` and `smx_mbx_` or scoped `smx_agent_` for `mailbox:*`.
+- OAuth profiles require the operation's approved surface, scopes and mailbox access. REST OAuth tokens authenticate HTTP, not SMTP or IMAP.
 - Durable agent profiles can read and receive mail while active, but cannot send until an invited owner accepts and approves sending.
 - After owner approval, `sending:*` commands with an agent profile automatically exchange and cache a one-hour delegated token.
 - Do not run destructive commands without explicit confirmation.
@@ -30,6 +30,23 @@ sendmux --help
 ```
 
 The package exposes the `sendmux` binary.
+
+## OAuth login and connection checks
+
+For an existing user's account, create a new named OAuth profile with the required scopes:
+
+```bash
+sendmux auth:login work --scope mailbox.read --scope email.send
+sendmux mailbox:get-connection --profile work --json
+```
+
+The CLI opens browser consent and receives the callback on the same computer. `--no-browser` prints the authorisation URL for manual opening. It preserves existing profiles and stores tokens with restricted file permissions. Expiring tokens refresh automatically with concurrent refreshes serialised; an uncertain refresh requires a new login.
+
+Use `sending:get-connection`, `mailbox:get-connection`, or `management:get-connection` for the selected surface. These checks require no mailbox selector and send no email. Use `data.label` for the connection name and `data.team.id` for its stable team identifier.
+
+Run `sendmux auth:logout work` to revoke the connection and remove its profile. A failed revocation keeps the profile for retry; logout also clears an interrupted login reservation.
+
+For externally managed tokens, inject `SENDMUX_ACCESS_TOKEN` through the environment. The CLI does not refresh that token. Supplying it alongside an API key is an error. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth) for grant scopes and refresh rules.
 
 ## Agent inbox onboarding
 
@@ -75,7 +92,7 @@ sendmux profiles:show default --json
 
 Profile reads mask stored API keys and never reveal agent credentials. `profiles:set` reports `key_kind` as `root` or `mailbox`; `agent:register` creates a discriminated agent profile.
 
-Authentication resolution:
+Authentication resolution: `SENDMUX_ACCESS_TOKEN` takes precedence and rejects a simultaneous API key. Otherwise:
 
 1. `--api-key`, then `SENDMUX_API_KEY`.
 2. If no direct key is present, `--profile` / `-p`, then `SENDMUX_PROFILE`, then the configured default profile.
@@ -83,7 +100,7 @@ Authentication resolution:
 
 ## Preflight
 
-The CLI infers key kind from the prefix before sending a request.
+For API-key authentication, the CLI infers key kind from the prefix before sending a request. OAuth profiles use their approved grants instead of API-key prefix checks.
 
 | Command surface | Required key                                                                      |
 | --------------- | --------------------------------------------------------------------------------- |
@@ -106,9 +123,10 @@ The CLI exposes generated operation commands:
 
 | Surface    | Count | Examples                                                                                                                                                   |
 | ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Management |    53 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
-| Mailbox    |    41 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
-| Sending    |     7 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`, `sending:upload-attachment`, `sending:create-attachment-upload`, `sending:complete-attachment-upload`, `sending:get-attachment` |
+| Management |    54 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
+| Mailbox    |    42 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
+| Sending    |     8 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`, `sending:upload-attachment`, `sending:create-attachment-upload`, `sending:complete-attachment-upload`, `sending:get-attachment` |
+| OAuth      |     2 | `auth:login`, `auth:logout` |
 | Profiles   |     3 | `profiles:list`, `profiles:set`, `profiles:show`                                                                                                           |
 | Agent      |     2 | `agent:register`, `agent:invite-owner`                                                                                                                      |
 

@@ -61,6 +61,18 @@
         "The output says sending revocation itself does not change the current storage allocation.",
         "The output says durable read continues while the registration remains active."
       ]
+    },
+    {
+      "id": 5,
+      "prompt": "I already have a Sendmux OAuth CLI profile that grants two mailboxes. Validate it without reading messages, then explain how to select an inbox.",
+      "expected_output": "Use mailbox:get-connection with the existing profile and --json without a mailbox selector. Accept the OAuth profile and route login or refresh help to sendmux-cli. List granted mailboxes and pass the selected mailbox_id for mailbox operations. Do not request tokens in chat or create a root key.",
+      "files": [],
+      "expectations": [
+        "Use mailbox:get-connection with the existing profile and --json without a mailbox selector.",
+        "Accept the OAuth profile and route login or refresh help to sendmux-cli.",
+        "List granted mailboxes and pass the selected mailbox_id for mailbox operations.",
+        "Do not request tokens in chat or create a root key."
+      ]
     }
   ]
 }

@@ -56,6 +56,19 @@
         "The output says sending is blocked until owner acceptance and approval.",
         "The output says Sending commands automatically exchange and cache a one-hour delegated token after approval."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "I already have a Sendmux account. Connect the CLI with browser consent, validate the connection, and explain refresh failures and logout.",
+      "expected_output": "Uses auth:login with a new named profile and explicit --scope values. Uses the surface get-connection command with --profile and --json without sending email. Explains protected local token storage, automatic refresh and a new login after an uncertain refresh. Uses auth:logout and keeps a failed revocation retryable. Does not request tokens in chat or imply OAuth tokens work with SMTP.",
+      "files": [],
+      "expectations": [
+        "Uses auth:login with a new named profile and explicit --scope values.",
+        "Uses the surface get-connection command with --profile and --json without sending email.",
+        "Explains protected local token storage, automatic refresh and a new login after an uncertain refresh.",
+        "Uses auth:logout and keeps a failed revocation retryable.",
+        "Does not request tokens in chat or imply OAuth tokens work with SMTP."
+      ]
     }
   ]
 }

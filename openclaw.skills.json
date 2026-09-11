@@ -2,7 +2,7 @@
   "owner": "sendmux.ai",
   "outputRoot": "dist/clawhub/skills",
   "homepage": "https://github.com/Sendmux/skills",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "releaseTags": ["latest"],
   "manualListing": {
     "license": "MIT-0",
@@ -19,6 +19,7 @@
     ]
   },
   "envVars": {
+    "SENDMUX_ACCESS_TOKEN": "Optional externally managed OAuth access token for CLI HTTP requests; the CLI does not refresh it.",
     "SENDMUX_API_KEY": "Optional Sendmux API key or scoped agent token used by CLI, SDK, HTTP, or MCP examples.",
     "SENDMUX_ROOT_KEY": "Optional Sendmux root key for account-level Management API setup.",
     "SENDMUX_MBX_KEY": "Optional Sendmux mailbox key for Mailbox and send-capable mailbox workflows.",
