@@ -16,6 +16,7 @@ import {
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
 
 const clawhubToken = "synthetic-clawhub-token-task5a";
 const siteToken = "synthetic-site-token-task5a";
@@ -184,10 +185,11 @@ function settleWithin(promise, label, timeoutMs = 3000) {
   });
 }
 
-async function runShell(block, { onStart, timeoutMs = 3000, ...options }) {
+async function runShell(block, { onStart, timeoutMs = 3000, waitUntilReady, ...options }) {
   const running = startShell(block, options);
   onStart?.(running);
   try {
+    await waitUntilReady?.();
     return await settleWithin(running.closed, `workflow shell PID ${running.pid}`, timeoutMs);
   } catch (error) {
     await recoverShell(running);
@@ -457,6 +459,83 @@ test("ClawHub publish removes its exact config directory on workflow SIGHUP, SIG
   }
 });
 
+test("ClawHub startup cancellation exits before the publisher installs handlers or starts a child", async (t) => {
+  const fixture = makeClawhubFixture();
+  t.after(() => rmSync(fixture.root, { recursive: true, force: true }));
+  const preload = path.join(fixture.root, "publisher-preload.mjs");
+  const preloadReady = path.join(fixture.root, "publisher-preload-ready");
+  writeFileSync(
+    preload,
+    `import { writeFileSync } from "node:fs";
+
+if (process.argv[1]?.endsWith("/scripts/publish-openclaw-bundle.mjs")) {
+  writeFileSync(process.env.FIXTURE_PRELOAD_READY, String(process.pid));
+  await new Promise(() => setInterval(() => {}, 1000));
+}
+`,
+  );
+  const block = extractStepRun(".github/workflows/openclaw-clawhub.yml", "Publish ClawHub skills");
+  const running = startShell(block, {
+    cwd: fixture.repo,
+    env: clawhubEnvironment(fixture, {
+      FIXTURE_PRELOAD_READY: preloadReady,
+      NODE_OPTIONS: `--import=${pathToFileURL(preload).href}`,
+    }),
+  });
+  let configPath;
+  let publisherPid;
+  let result;
+  let stateBeforeRecovery;
+
+  try {
+    assert.equal(
+      await waitForPathToExist(preloadReady),
+      true,
+      "publisher preload must reach its bounded startup barrier",
+    );
+    publisherPid = Number(readFileSync(preloadReady, "utf8"));
+    const credentialEntries = readdirSync(fixture.runnerTemp);
+    assert.equal(credentialEntries.length, 1, "workflow must own one credential directory at startup");
+    configPath = path.join(fixture.runnerTemp, credentialEntries[0], "config.json");
+    assert.equal(existsSync(configPath), true, "credential config must exist while the publisher is starting");
+    assert.equal(existsSync(fixture.attempts), false, "ClawHub must not be invoked before the entry module runs");
+    assert.equal(existsSync(fixture.receipt), false, "ClawHub must not start before the entry module runs");
+    t.diagnostic(
+      `startup owned handles: shell PID ${running.pid}, publisher PID ${publisherPid}, config ${configPath}; ClawHub child not started`,
+    );
+
+    process.kill(running.pid, "SIGINT");
+    result = await settleWithin(running.closed, "startup cancellation shell close", 2000);
+    stateBeforeRecovery = {
+      attempts: existsSync(fixture.attempts),
+      config: existsSync(configPath),
+      publisher: isPidRunning(publisherPid),
+      receipt: existsSync(fixture.receipt),
+      shell: isPidRunning(running.pid),
+    };
+    assert.equal(result.code, 130);
+    assert.equal(result.signal, null);
+    assert.deepEqual(stateBeforeRecovery, {
+      attempts: false,
+      config: false,
+      publisher: false,
+      receipt: false,
+      shell: false,
+    });
+    assert.deepEqual(readdirSync(fixture.runnerTemp), []);
+  } finally {
+    if (publisherPid && isPidRunning(publisherPid)) await terminateFixturePid(publisherPid);
+    if (isPidRunning(running.pid) || isProcessGroupRunning(running.pid)) await recoverShell(running);
+  }
+
+  assertSecretAbsent(result);
+  assert.equal(isPidRunning(running.pid), false);
+  assert.equal(isPidRunning(publisherPid), false);
+  t.diagnostic(
+    `startup before test recovery: shell PID ${running.pid} gone, publisher PID ${publisherPid} gone, config removed, ClawHub child not started; exact PIDs remained absent after finally`,
+  );
+});
+
 test("ClawHub cancellation interrupts a rate-limit wait before another publication", async (t) => {
   const fixture = makeClawhubFixture();
   t.after(() => rmSync(fixture.root, { recursive: true, force: true }));
@@ -515,8 +594,9 @@ test("runShell timeout recovers its exact owned shell and child before fixture r
       runShell(
         `node --input-type=module -e '
           import { writeFileSync } from "node:fs";
-          writeFileSync(process.env.FIXTURE_READY, String(process.pid));
+          await new Promise((resolve) => setTimeout(resolve, 250));
           process.on("SIGTERM", () => {});
+          writeFileSync(process.env.FIXTURE_READY, String(process.pid));
           setInterval(() => {}, 1000);
         ' &
         wait $!`,
@@ -528,11 +608,17 @@ test("runShell timeout recovers its exact owned shell and child before fixture r
             t.diagnostic(`timeout owned shell/process-group PID ${handle.pid}`);
           },
           timeoutMs: 100,
+          waitUntilReady: async () => {
+            assert.equal(
+              await waitForPathToExist(ready),
+              true,
+              "timeout child must report its exact PID before the shell deadline starts",
+            );
+          },
         },
       ),
       /did not settle within 100ms/,
     );
-    assert.equal(await waitForPathToExist(ready), true, "timeout child must report its exact PID");
     childPid = Number(readFileSync(ready, "utf8"));
     t.diagnostic(`timeout owned handles: shell/process-group PID ${running.pid}, child PID ${childPid}`);
     assert.equal(isPidRunning(running.pid), false, "timed-out shell must be recovered by runShell");
