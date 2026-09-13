@@ -49,11 +49,13 @@ function writeExecutable(filePath, source) {
 
 function makeClawhubFixture() {
   const root = mkdtempSync(path.join(os.tmpdir(), "sendmux-clawhub-workflow-"));
+  process.stderr.write(`ClawHub fixture root: ${root}\n`);
   const repo = path.join(root, "repo");
   const bin = path.join(root, "bin");
   const runnerTemp = path.join(root, "runner-temp");
   const receipt = path.join(root, "clawhub-receipt.json");
   const ready = path.join(root, "clawhub-ready");
+  const attempts = path.join(root, "clawhub-attempts");
   mkdirSync(path.join(repo, "scripts"), { recursive: true });
   mkdirSync(path.join(repo, "dist", "clawhub", "skills", "sendmux-test"), {
     recursive: true,
@@ -75,10 +77,14 @@ import path from "node:path";
 
 const configPath = process.env.CLAWHUB_CONFIG_PATH || "";
 const configExists = Boolean(configPath) && existsSync(configPath);
+const attemptsPath = process.env.FIXTURE_ATTEMPTS;
+const attempt = existsSync(attemptsPath) ? Number(readFileSync(attemptsPath, "utf8")) + 1 : 1;
+writeFileSync(attemptsPath, String(attempt));
 let config = null;
 if (configExists) config = JSON.parse(readFileSync(configPath, "utf8"));
 writeFileSync(process.env.FIXTURE_RECEIPT, JSON.stringify({
   argv: process.argv.slice(2),
+  attempt,
   configPath,
   configExists,
   directoryMode: configExists ? statSync(path.dirname(configPath)).mode & 0o777 : null,
@@ -90,7 +96,17 @@ writeFileSync(process.env.FIXTURE_RECEIPT, JSON.stringify({
   tokenEnvironmentPresent: Object.hasOwn(process.env, "CLAWHUB_TOKEN"),
 }));
 if (!configExists) process.exit(86);
+if (process.env.FIXTURE_RATE_LIMIT === "1") {
+  writeFileSync(process.env.FIXTURE_READY, String(process.pid));
+  process.stderr.write("Rate limit: max 5 new skills per hour (reset in 0s)\\n");
+  process.exit(1);
+}
 if (process.env.FIXTURE_WAIT === "1") {
+  if (process.env.FIXTURE_IGNORE_SIGNAL === "1") {
+    process.on("SIGHUP", () => {});
+    process.on("SIGINT", () => {});
+    process.on("SIGTERM", () => {});
+  }
   writeFileSync(process.env.FIXTURE_READY, String(process.pid));
   setInterval(() => {}, 1000);
 } else {
@@ -98,11 +114,12 @@ if (process.env.FIXTURE_WAIT === "1") {
 }
 `,
   );
-  return { bin, ready, receipt, repo, root, runnerTemp };
+  return { attempts, bin, ready, receipt, repo, root, runnerTemp };
 }
 
 function makeSiteFixture() {
   const root = mkdtempSync(path.join(os.tmpdir(), "sendmux-site-workflow-"));
+  process.stderr.write(`SITE fixture root: ${root}\n`);
   const bin = path.join(root, "bin");
   const receipt = path.join(root, "curl-receipt.json");
   mkdirSync(bin);
@@ -167,14 +184,21 @@ function settleWithin(promise, label, timeoutMs = 3000) {
   });
 }
 
-function runShell(block, options) {
+async function runShell(block, { onStart, timeoutMs = 3000, ...options }) {
   const running = startShell(block, options);
-  return settleWithin(running.closed, `workflow shell PID ${running.pid}`);
+  onStart?.(running);
+  try {
+    return await settleWithin(running.closed, `workflow shell PID ${running.pid}`, timeoutMs);
+  } catch (error) {
+    await recoverShell(running);
+    throw error;
+  }
 }
 
 function clawhubEnvironment(fixture, overrides = {}) {
   return {
     CLAWHUB_TOKEN: clawhubToken,
+    FIXTURE_ATTEMPTS: fixture.attempts,
     FIXTURE_READY: fixture.ready,
     FIXTURE_RECEIPT: fixture.receipt,
     PATH: `${fixture.bin}:${process.env.PATH}`,
@@ -203,6 +227,10 @@ async function waitForPidToExit(pid) {
       process.kill(pid, 0);
     } catch (error) {
       if (error.code === "ESRCH") return true;
+      if (error.code === "EPERM") {
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        continue;
+      }
       throw error;
     }
     await new Promise((resolve) => setTimeout(resolve, 20));
@@ -216,8 +244,13 @@ function isPidRunning(pid) {
     return true;
   } catch (error) {
     if (error.code === "ESRCH") return false;
+    if (error.code === "EPERM") return true;
     throw error;
   }
+}
+
+function isProcessGroupRunning(pid) {
+  return isPidRunning(-pid);
 }
 
 async function waitForPathToDisappear(filePath) {
@@ -243,7 +276,34 @@ async function terminateFixturePid(pid) {
     if (error.code === "ESRCH") return;
     throw error;
   }
-  assert.equal(await waitForPidToExit(pid), true, `fixture PID ${pid} must exit`);
+  if (await waitForPidToExit(pid)) return;
+  process.kill(pid, "SIGKILL");
+  assert.equal(await waitForPidToExit(pid), true, `fixture PID ${pid} must exit after SIGKILL`);
+}
+
+async function recoverShell(running) {
+  try {
+    process.kill(-running.pid, "SIGTERM");
+  } catch (error) {
+    if (error.code !== "ESRCH") throw error;
+  }
+
+  try {
+    await settleWithin(running.closed, `workflow shell PID ${running.pid} recovery`, 500);
+  } catch (error) {
+    if (!error.message.includes("did not settle")) throw error;
+  }
+
+  if (isProcessGroupRunning(running.pid)) {
+    process.kill(-running.pid, "SIGKILL");
+    assert.equal(
+      await waitForPidToExit(-running.pid),
+      true,
+      `workflow process group ${running.pid} must exit after SIGKILL`,
+    );
+  }
+  assert.equal(await waitForPidToExit(running.pid), true, `workflow shell PID ${running.pid} must exit`);
+  assert.equal(isProcessGroupRunning(running.pid), false, `workflow process group ${running.pid} must exit`);
 }
 
 test("ClawHub publish reads an owner-only ephemeral config without secret argv", async (t) => {
@@ -324,15 +384,15 @@ test("ClawHub publish rejects a missing credential before starting the publisher
   t.diagnostic(`missing-credential shell PID ${result.pid}; publisher was not started`);
 });
 
-test("ClawHub publish removes its exact config directory on workflow SIGINT and SIGTERM", async (t) => {
+test("ClawHub publish removes its exact config directory on workflow SIGHUP, SIGINT, and SIGTERM", async (t) => {
   const block = extractStepRun(".github/workflows/openclaw-clawhub.yml", "Publish ClawHub skills");
 
-  for (const [signal, expectedStatus] of [["SIGINT", 130], ["SIGTERM", 143]]) {
+  for (const [signal, expectedStatus] of [["SIGHUP", 129], ["SIGINT", 130], ["SIGTERM", 143]]) {
     const fixture = makeClawhubFixture();
     t.after(() => rmSync(fixture.root, { recursive: true, force: true }));
     const running = startShell(block, {
       cwd: fixture.repo,
-      env: clawhubEnvironment(fixture, { FIXTURE_WAIT: "1" }),
+      env: clawhubEnvironment(fixture, { FIXTURE_IGNORE_SIGNAL: "1", FIXTURE_WAIT: "1" }),
     });
     let receipt;
     let result;
@@ -345,7 +405,18 @@ test("ClawHub publish removes its exact config directory on workflow SIGINT and 
         "the publisher fixture must reach its live wait boundary",
       );
       receipt = readReceipt(fixture);
+      t.diagnostic(
+        `${signal} owned handles: shell PID ${running.pid}, publisher PID ${receipt.parentPid}, child PID ${receipt.pid}, config ${receipt.configPath}`,
+      );
       process.kill(running.pid, signal);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      assert.equal(isPidRunning(receipt.parentPid), true, "publisher must await its signal-ignoring child");
+      assert.equal(isPidRunning(receipt.pid), true, "signal-ignoring child must exercise bounded escalation");
+      assert.equal(
+        existsSync(path.dirname(receipt.configPath)),
+        true,
+        "credential config must remain until the active child has closed",
+      );
       const shellExit = await settleWithin(running.exit, `${signal} workflow shell exit`, 2000);
       assert.equal(shellExit.code, expectedStatus);
       assert.equal(shellExit.signal, null);
@@ -359,6 +430,8 @@ test("ClawHub publish removes its exact config directory on workflow SIGINT and 
         child: isPidRunning(receipt.pid),
         publisher: isPidRunning(receipt.parentPid),
       };
+      assert.equal(descendantsBeforeRecovery.publisher, false, "publisher must stop before fixture recovery");
+      assert.equal(descendantsBeforeRecovery.child, false, "ClawHub child must stop before fixture recovery");
     } finally {
       if (receipt) {
         await terminateFixturePid(receipt.pid);
@@ -379,9 +452,105 @@ test("ClawHub publish removes its exact config directory on workflow SIGINT and 
     assert.equal(isPidRunning(receipt.parentPid), false);
     assert.equal(isPidRunning(receipt.pid), false);
     t.diagnostic(
-      `${signal} pre-recovery: workflow PID ${running.pid} gone, config removed, publisher alive=${descendantsBeforeRecovery.publisher}, child alive=${descendantsBeforeRecovery.child}; recovery tore down publisher PID ${receipt.parentPid} and child PID ${receipt.pid}`,
+      `${signal} before test recovery: workflow PID ${running.pid} gone, config removed, publisher alive=${descendantsBeforeRecovery.publisher}, child alive=${descendantsBeforeRecovery.child}; exact PIDs remained absent after finally`,
     );
   }
+});
+
+test("ClawHub cancellation interrupts a rate-limit wait before another publication", async (t) => {
+  const fixture = makeClawhubFixture();
+  t.after(() => rmSync(fixture.root, { recursive: true, force: true }));
+  const block = extractStepRun(".github/workflows/openclaw-clawhub.yml", "Publish ClawHub skills");
+  const running = startShell(block, {
+    cwd: fixture.repo,
+    env: clawhubEnvironment(fixture, { FIXTURE_RATE_LIMIT: "1" }),
+  });
+  let receipt;
+  let result;
+
+  try {
+    assert.equal(await waitForPathToExist(fixture.ready), true, "publisher must enter its retry wait");
+    receipt = readReceipt(fixture);
+    t.diagnostic(
+      `rate-limit owned handles: shell PID ${running.pid}, publisher PID ${receipt.parentPid}, child PID ${receipt.pid}, config ${receipt.configPath}`,
+    );
+    assert.equal(await waitForPidToExit(receipt.pid), true, "rate-limited ClawHub child must exit");
+    process.kill(running.pid, "SIGINT");
+    result = await settleWithin(running.closed, "rate-limit cancellation shell close", 2000);
+    assert.equal(result.code, 130);
+    assert.equal(isPidRunning(receipt.parentPid), false, "publisher retry wait must stop before recovery");
+    assert.equal(existsSync(path.dirname(receipt.configPath)), false);
+    assert.equal(readFileSync(fixture.attempts, "utf8"), "1", "cancellation must prevent another publish attempt");
+  } finally {
+    if (receipt && isPidRunning(receipt.parentPid)) await terminateFixturePid(receipt.parentPid);
+    if (isPidRunning(running.pid)) {
+      try {
+        process.kill(-running.pid, "SIGKILL");
+      } catch (error) {
+        if (error.code !== "ESRCH") throw error;
+      }
+      await waitForPidToExit(running.pid);
+    }
+  }
+
+  assertSecretAbsent(result);
+  assert.equal(isPidRunning(running.pid), false);
+  assert.equal(isPidRunning(receipt.parentPid), false);
+  assert.equal(isPidRunning(receipt.pid), false);
+  t.diagnostic(
+    `rate-limit cancellation shell PID ${running.pid}, publisher PID ${receipt.parentPid}, child PID ${receipt.pid} verified gone; one publish attempt; removed ${path.dirname(receipt.configPath)}`,
+  );
+});
+
+test("runShell timeout recovers its exact owned shell and child before fixture removal", async (t) => {
+  const root = mkdtempSync(path.join(os.tmpdir(), "sendmux-workflow-timeout-"));
+  process.stderr.write(`timeout fixture root: ${root}\n`);
+  const ready = path.join(root, "ready");
+  let running;
+  let childPid;
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  try {
+    await assert.rejects(
+      runShell(
+        `node --input-type=module -e '
+          import { writeFileSync } from "node:fs";
+          writeFileSync(process.env.FIXTURE_READY, String(process.pid));
+          process.on("SIGTERM", () => {});
+          setInterval(() => {}, 1000);
+        ' &
+        wait $!`,
+        {
+          cwd: process.cwd(),
+          env: { FIXTURE_READY: ready },
+          onStart: (handle) => {
+            running = handle;
+            t.diagnostic(`timeout owned shell/process-group PID ${handle.pid}`);
+          },
+          timeoutMs: 100,
+        },
+      ),
+      /did not settle within 100ms/,
+    );
+    assert.equal(await waitForPathToExist(ready), true, "timeout child must report its exact PID");
+    childPid = Number(readFileSync(ready, "utf8"));
+    t.diagnostic(`timeout owned handles: shell/process-group PID ${running.pid}, child PID ${childPid}`);
+    assert.equal(isPidRunning(running.pid), false, "timed-out shell must be recovered by runShell");
+    assert.equal(isPidRunning(childPid), false, "timed-out child must be recovered by runShell");
+  } finally {
+    if (!childPid && existsSync(ready)) childPid = Number(readFileSync(ready, "utf8"));
+    if (childPid) t.diagnostic(`timeout owned child PID ${childPid}`);
+    if (childPid && isPidRunning(childPid)) await terminateFixturePid(childPid);
+    if (running && isPidRunning(running.pid)) {
+      try {
+        process.kill(-running.pid, "SIGKILL");
+      } catch (error) {
+        if (error.code !== "ESRCH") throw error;
+      }
+      await waitForPidToExit(running.pid);
+    }
+  }
+  t.diagnostic(`timeout recovery verified shell/process-group PID ${running.pid} and child PID ${childPid} absent`);
 });
 
 test("SITE notification preserves its fallback and sends the secret header only through stdin", async (t) => {

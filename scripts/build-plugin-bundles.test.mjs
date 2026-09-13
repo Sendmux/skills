@@ -225,6 +225,29 @@ test("fails clearly when canonical skills are missing", () => {
   }
 });
 
+test("workflow checks plugin bundle drift", () => {
+  const workflow = readFileSync(".github/workflows/plugin-bundles.yml", "utf8");
+
+  assert.match(workflow, /node --test scripts\/build-plugin-bundles\.test\.mjs/);
+  assert.match(workflow, /node scripts\/check-plugin-bundles\.mjs/);
+  for (const filteredPath of [
+    "skills/\\*\\*",
+    "openclaw\\.skills\\.json",
+    "assets/\\*\\*",
+    "\\.cursor-plugin/\\*\\*",
+    "mcp\\.json",
+    "\\.mcp\\.json",
+    "README\\.md",
+    "scripts/build-plugin-bundles\\.test\\.mjs",
+  ]) {
+    assert.equal(
+      workflow.match(new RegExp(`"${filteredPath}"`, "g"))?.length,
+      2,
+      `${filteredPath} must appear in pull_request and push filters`,
+    );
+  }
+});
+
 function mutateEventPath(workflowText, eventName, requiredPath) {
   const lines = workflowText.replaceAll("\r\n", "\n").split("\n");
   const eventIndex = lines.findIndex((line) => line === `  ${eventName}:`);

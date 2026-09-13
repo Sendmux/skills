@@ -75,8 +75,7 @@ jobs:
 
       - name: Test plugin bundle and workflow safeguards
         run: |
-          node --test \
-            scripts/build-plugin-bundles.test.mjs \
+          node --test scripts/build-plugin-bundles.test.mjs \
             scripts/agent-storage-floor.test.mjs \
             scripts/publish-openclaw-bundle.test.mjs \
             scripts/workflow-boundaries.test.mjs

@@ -102,6 +102,7 @@ jobs:
           umask 077
           credential_dir=""
           config_path=""
+          publisher_pid=""
           cleanup() {
             status=$?
             trap - EXIT HUP INT TERM
@@ -113,10 +114,20 @@ jobs:
             fi
             exit "$status"
           }
+          stop_publisher() {
+            signal="$1"
+            status="$2"
+            trap - HUP INT TERM
+            if [ -n "$publisher_pid" ] && kill -0 "$publisher_pid" 2>/dev/null; then
+              kill -s "$signal" "$publisher_pid" 2>/dev/null || true
+              wait "$publisher_pid" || true
+            fi
+            exit "$status"
+          }
           trap cleanup EXIT
-          trap 'exit 129' HUP
-          trap 'exit 130' INT
-          trap 'exit 143' TERM
+          trap 'stop_publisher HUP 129' HUP
+          trap 'stop_publisher INT 130' INT
+          trap 'stop_publisher TERM 143' TERM
 
           credential_dir="$(mktemp -d "${RUNNER_TEMP:?}/sendmux-clawhub.XXXXXX")"
           config_path="$credential_dir/config.json"

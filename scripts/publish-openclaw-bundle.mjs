@@ -9,6 +9,80 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..");
 const configPath = path.join(repoRoot, "openclaw.skills.json");
+const cancellationForceKillMs = 1000;
+const signalExitCodes = new Map([
+  ["SIGHUP", 129],
+  ["SIGINT", 130],
+  ["SIGTERM", 143],
+]);
+
+class PublicationCancelled extends Error {
+  constructor(signal) {
+    super(`ClawHub publication cancelled by ${signal}`);
+    this.signal = signal;
+  }
+}
+
+function createPublicationCancellation() {
+  let activeChild = null;
+  let forceKillTimer = null;
+  let retryReject = null;
+  let requestedSignal = null;
+
+  function clearForceKill() {
+    if (forceKillTimer) clearTimeout(forceKillTimer);
+    forceKillTimer = null;
+  }
+
+  function stopActiveChild() {
+    if (!activeChild || activeChild.exitCode !== null || activeChild.signalCode !== null) return;
+    activeChild.kill(requestedSignal);
+    forceKillTimer = setTimeout(() => {
+      if (activeChild && activeChild.exitCode === null && activeChild.signalCode === null) {
+        activeChild.kill("SIGKILL");
+      }
+    }, cancellationForceKillMs);
+  }
+
+  return {
+    clearChild(child) {
+      if (activeChild !== child) return;
+      activeChild = null;
+      clearForceKill();
+    },
+    get signal() {
+      return requestedSignal;
+    },
+    request(signal) {
+      if (requestedSignal) return;
+      requestedSignal = signal;
+      retryReject?.(new PublicationCancelled(signal));
+      stopActiveChild();
+    },
+    sleep(ms) {
+      if (requestedSignal) return Promise.reject(new PublicationCancelled(requestedSignal));
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+          retryReject = null;
+          resolve();
+        }, ms);
+        retryReject = (error) => {
+          retryReject = null;
+          clearTimeout(timer);
+          reject(error);
+        };
+      });
+    },
+    throwIfRequested() {
+      if (requestedSignal) throw new PublicationCancelled(requestedSignal);
+    },
+    trackChild(child) {
+      activeChild = child;
+      child.once("exit", clearForceKill);
+      if (requestedSignal) stopActiveChild();
+    },
+  };
+}
 
 function readConfig() {
   return JSON.parse(readFileSync(configPath, "utf8"));
@@ -110,9 +184,11 @@ function commandForSkill(skillDir, options) {
   return { command: options.clawhubBin, args };
 }
 
-function runCommand(command, args) {
+function runCommand(command, args, cancellation) {
   return new Promise((resolve, reject) => {
+    cancellation?.throwIfRequested();
     const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
+    cancellation?.trackChild(child);
     let stdout = "";
     let stderr = "";
 
@@ -124,8 +200,18 @@ function runCommand(command, args) {
       stderr += chunk;
       process.stderr.write(chunk);
     });
-    child.on("error", reject);
-    child.on("close", (code, signal) => resolve({ code, signal, stdout, stderr }));
+    child.on("error", (error) => {
+      cancellation?.clearChild(child);
+      reject(error);
+    });
+    child.on("close", (code, signal) => {
+      cancellation?.clearChild(child);
+      if (cancellation?.signal) {
+        reject(new PublicationCancelled(cancellation.signal));
+      } else {
+        resolve({ code, signal, stdout, stderr });
+      }
+    });
   });
 }
 
@@ -135,10 +221,16 @@ function sleep(ms) {
   });
 }
 
-export async function publishSkillDir(skillDir, options, runner = runCommand, sleeper = sleep) {
+export async function publishSkillDir(
+  skillDir,
+  options,
+  runner = runCommand,
+  sleeper = sleep,
+  cancellation,
+) {
   while (true) {
     const { command, args } = commandForSkill(skillDir, options);
-    const result = await runner(command, args);
+    const result = await runner(command, args, cancellation);
     const output = [result.stdout, result.stderr].filter(Boolean).join("\n");
 
     if (result.code === 0) {
@@ -158,16 +250,20 @@ export async function publishSkillDir(skillDir, options, runner = runCommand, sl
     console.error(
       `ClawHub new-skill rate limit hit for ${path.basename(skillDir)}; retrying in ${retry.waitSeconds}s.`,
     );
-    await sleeper(retry.waitSeconds * 1000);
+    if (cancellation) {
+      await cancellation.sleep(retry.waitSeconds * 1000);
+    } else {
+      await sleeper(retry.waitSeconds * 1000);
+    }
   }
 }
 
-export async function main(argv = process.argv.slice(2)) {
+export async function main(argv = process.argv.slice(2), cancellation) {
   const options = parseArgs(argv);
   const skillDirs = listSkillDirs(options.root);
 
   for (const skillDir of skillDirs) {
-    await publishSkillDir(skillDir, options);
+    await publishSkillDir(skillDir, options, runCommand, sleep, cancellation);
   }
 
   const mode = options.dryRun ? "Dry-run checked" : "Published";
@@ -175,8 +271,22 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch((error) => {
-    console.error(error.message);
-    process.exit(1);
-  });
+  const cancellation = createPublicationCancellation();
+  const signalHandlers = new Map(
+    [...signalExitCodes].map(([signal]) => [signal, () => cancellation.request(signal)]),
+  );
+  for (const [signal, handler] of signalHandlers) process.on(signal, handler);
+
+  main(process.argv.slice(2), cancellation)
+    .catch((error) => {
+      if (error instanceof PublicationCancelled) {
+        process.exitCode = signalExitCodes.get(error.signal);
+      } else {
+        console.error(error.message);
+        process.exitCode = 1;
+      }
+    })
+    .finally(() => {
+      for (const [signal, handler] of signalHandlers) process.off(signal, handler);
+    });
 }
