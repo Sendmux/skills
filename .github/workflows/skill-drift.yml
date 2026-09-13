@@ -17,6 +17,8 @@ on:
   pull_request:
     paths:
       - "skills/**"
+      - "README.md"
+      - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - ".github/workflows/skill-drift.yml"
   push:
@@ -24,6 +26,8 @@ on:
       - main
     paths:
       - "skills/**"
+      - "README.md"
+      - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - ".github/workflows/skill-drift.yml"
   workflow_dispatch:

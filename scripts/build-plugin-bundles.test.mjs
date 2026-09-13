@@ -13,6 +13,10 @@ import path from "node:path";
 import test from "node:test";
 
 import { buildPluginBundles, collectPluginBundleDrift } from "./build-plugin-bundles.mjs";
+import {
+  validateWorkflowPathFilters,
+  workflowPathRequirements,
+} from "./check-workflow-path-filters.mjs";
 
 function makeRepo() {
   const repoRoot = mkdtempSync(path.join(os.tmpdir(), "sendmux-plugin-bundles-"));
@@ -221,26 +225,55 @@ test("fails clearly when canonical skills are missing", () => {
   }
 });
 
-test("workflow checks plugin bundle drift", () => {
-  const workflow = readFileSync(".github/workflows/plugin-bundles.yml", "utf8");
+function mutateEventPath(workflowText, eventName, requiredPath) {
+  const lines = workflowText.replaceAll("\r\n", "\n").split("\n");
+  const eventIndex = lines.findIndex((line) => line === `  ${eventName}:`);
+  assert.notEqual(eventIndex, -1, `missing ${eventName} event`);
+  const nextEventIndex = lines.findIndex(
+    (line, index) => index > eventIndex && /^  \S[^:]*:/.test(line),
+  );
+  const eventEnd = nextEventIndex === -1 ? lines.length : nextEventIndex;
+  const pathIndex = lines.findIndex(
+    (line, index) =>
+      index > eventIndex && index < eventEnd && line.trim() === `- "${requiredPath}"`,
+  );
+  assert.notEqual(pathIndex, -1, `${eventName}.paths missing ${requiredPath}`);
+  lines.splice(pathIndex, 1);
 
-  assert.match(workflow, /node --test scripts\/build-plugin-bundles\.test\.mjs/);
-  assert.match(workflow, /node scripts\/check-plugin-bundles\.mjs/);
-  for (const filteredPath of [
-    "skills/\\*\\*",
-    "openclaw\\.skills\\.json",
-    "assets/\\*\\*",
-    "\\.cursor-plugin/\\*\\*",
-    "mcp\\.json",
-    "\\.mcp\\.json",
-    "README\\.md",
-    "scripts/build-plugin-bundles\\.test\\.mjs",
-  ]) {
-    assert.equal(
-      workflow.match(new RegExp(`"${filteredPath}"`, "g"))?.length,
-      2,
-      `${filteredPath} must appear in pull_request and push filters`,
+  const otherEvent = eventName === "push" ? "pull_request" : "push";
+  const otherEventIndex = lines.findIndex((line) => line === `  ${otherEvent}:`);
+  const duplicateIndex = lines.findIndex(
+    (line, index) => index > otherEventIndex && line.trim() === `- "${requiredPath}"`,
+  );
+  assert.notEqual(duplicateIndex, -1, `${otherEvent}.paths missing ${requiredPath}`);
+  lines.splice(duplicateIndex, 0, lines[duplicateIndex]);
+  return lines.join("\n");
+}
+
+test("workflow path filters cover every reader independently for push and pull requests", () => {
+  for (const [workflowPath, requiredPaths] of workflowPathRequirements) {
+    const workflow = readFileSync(workflowPath, "utf8");
+    assert.deepEqual(validateWorkflowPathFilters(workflowPath, workflow, requiredPaths), []);
+    assert.deepEqual(
+      validateWorkflowPathFilters(workflowPath, workflow.replaceAll("\n", "\r\n"), requiredPaths),
+      [],
     );
+
+    for (const eventName of ["pull_request", "push"]) {
+      for (const requirement of requiredPaths) {
+        const mutated = mutateEventPath(workflow, eventName, requirement.path);
+        const failures = validateWorkflowPathFilters(workflowPath, mutated, requiredPaths);
+        assert.equal(
+          failures.some(
+            (failure) =>
+              failure.includes(`${eventName}.paths missing "${requirement.path}"`) &&
+              failure.includes(requirement.reader),
+          ),
+          true,
+          `${workflowPath} must reject ${eventName} omission of ${requirement.path}`,
+        );
+      }
+    }
   }
 });
 
