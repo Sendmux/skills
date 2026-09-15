@@ -1,6 +1,6 @@
 ---
 name: sendmux-management
-description: Manage Sendmux account-level resources with a root API key or authorised OAuth connection. Use for domains, mailbox provisioning, mailbox API keys, sending accounts, webhooks, billing, spend, delivery logs, incoming logs, metrics, and other team administration tasks; route mailbox reading, triage, sync, and replies to sendmux-mailbox-agent.
+description: "Use this skill for Sendmux account/team administration with a root API key or Management-scoped OAuth connection. This is the go-to skill for domain lifecycle work — create a sending domain, fetch its DNS/zone-file records, verify DNS/MX — even if asked as a single quick step. Also use it for provisioning, suspending, or deleting mailboxes and mailbox API keys; configuring sending accounts/providers; creating, testing, or rotating webhooks; checking billing, spend, or balance; and pulling delivery, incoming, or metrics logs for reporting or admin purposes. This is account/team-level administration, not inbox usage: do not trigger for reading, searching, triaging, syncing, or replying to messages inside a specific mailbox (use sendmux-mailbox-agent), one-off transactional sending (sendmux-send-email), or initial setup/login (sendmux-getting-started)."
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -35,7 +35,32 @@ Use this skill for team administration with an `smx_root_` key or a REST OAuth g
 
 For terminal work, use the `sendmux` CLI with `--json`. For application code, use `@sendmux/management` and `createManagementClient`.
 
-Validate the selected profile with `sendmux management:get-connection --profile work --json` before reading resources. This check requires Management access but no additional read permission. For OAuth login and token lifecycle, use `sendmux-cli`; SDK clients accept `accessToken` instead of `apiKey`, including a provider that resolves the current token before each request.
+SDK clients accept `accessToken` instead of `apiKey`, including a provider that resolves the current token before each request.
+
+## Check connection and permissions
+
+Explain the selected connection in this order:
+
+1. Validate it with `sendmux management:get-connection --profile work --json`, replacing `work` with the selected profile. This check requires Management access but no additional read permission.
+2. Interpret the response using the schema example below. `data.credential.type` identifies `api_key`, `oauth`, or `agent_token`; `data.permissions` contains effective permission names. `data.label` is a server-provided connection display label, not the local CLI profile name. Explain fields without exposing account metadata unnecessarily.
+3. Match the requested operation to its advertised scopes and the authorising user's current team permissions. Use the operation-specific mappings in this skill or inspect that operation's `security` entry in the public Management OpenAPI before naming its scope. Scope names cannot be inferred from an operation's name. Login/re-consent chooses requested scopes; automatic token refresh preserves the existing grant rather than choosing extra permissions.
+4. Close with the handoffs: OAuth login and token lifecycle → `sendmux-cli`; agent self-registration → `sendmux-getting-started`; mailbox read, search, sync, triage, or replies → `sendmux-mailbox-agent`. Management access does not replace those workflows.
+
+This synthetic example shows the CLI response shape, not a verified account:
+
+```json
+{
+  "ok": true,
+  "meta": { "request_id": "EXAMPLE_REQUEST_ID" },
+  "data": {
+    "credential": { "id": "EXAMPLE_CREDENTIAL_ID", "name": "Example connection", "type": "oauth" },
+    "label": "Example connection",
+    "team": { "id": "EXAMPLE_TEAM_ID", "name": "Example team" },
+    "mailboxes": [{ "id": "EXAMPLE_MAILBOX_ID", "email": "agent@example.com" }],
+    "permissions": ["domain.read", "billing.read"]
+  }
+}
+```
 
 ## Efficient defaults
 
@@ -48,7 +73,7 @@ Validate the selected profile with `sendmux management:get-connection --profile 
 
 ## Domains
 
-Use domains for sending setup and hosted mailbox domains.
+Use domains for sending setup and hosted mailbox domains. The two domain modes are `send_only` for outbound DNS verification and `send_receive` for outbound plus MX verification. Hosted mailboxes require `send_receive`.
 
 MCP tools:
 
@@ -110,9 +135,9 @@ Use CLI `management:update-domain` or SDK `managementUpdateDomain` with `If-Matc
 
 ## Mailboxes and keys
 
-For API-key setup, create mailboxes with a root key and use mailbox keys afterwards for agent mailbox work. A Management OAuth profile can provision with the required scopes; Mailbox runtime needs its own approved access.
+For API-key setup, create mailboxes with a root key and use mailbox keys afterwards for agent mailbox work. A Management OAuth profile needs `mailbox.admin.create` to create a mailbox, but `mailbox.admin.manage` to create or revoke its mailbox keys. Mailbox runtime needs its own approved access.
 
-This owner-administered path is separate from self-registration. A self-registering agent uses a durable CLI profile without an existing account or API key; do not create or expose a root key merely to give that agent an inbox.
+This owner-administered path is separate from self-registration. When explaining self-registration, state that it needs no existing account or API key and saves a durable CLI profile that can read and receive mail without expiry while the registration remains active; full revocation ends that access. Do not create or expose a root key merely to give that agent an inbox.
 
 MCP tools:
 
@@ -142,7 +167,7 @@ SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux management:create-mailbox \
 SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux management:create-mailbox-key \
   --path public_id=mbx_abc \
   --idempotency-key "$IDEMPOTENCY_KEY" \
-  --body '{"name":"agent-runtime"}' \
+  --body '{"app_name":"agent-runtime"}' \
   --json
 ```
 
@@ -174,6 +199,8 @@ SDK helpers include `managementListProviders`, `managementCreateProvider`, `mana
 Do not print provider credentials. Put secrets in the user's chosen secret store.
 
 ## Webhooks
+
+OAuth scopes are `webhook.read` for list, inspect, deliveries and payload reads; `webhook.create` for creation; `webhook.update` for updates; `webhook.delete` for deletion; and `webhook.manage` for secret rotation and test delivery.
 
 MCP covers the common create-and-test path:
 

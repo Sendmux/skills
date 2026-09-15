@@ -4,14 +4,15 @@
     {
       "id": 0,
       "prompt": "Show me how to install the Sendmux CLI, configure separate root/mailbox profiles, and explain what happens if I use the wrong key type.",
-      "expected_output": "The answer installs @sendmux/cli, creates root and mailbox or sending profiles with profiles:set, uses --json, explains smx_root_ for Management, smx_mbx_ or owner-approved Sending-resource smx_agent_ for Sending, smx_mbx_/scoped smx_agent_ for Mailbox, and says mismatched command/key prefixes fail before the request.",
+      "expected_output": "The answer installs @sendmux/cli, creates root and mailbox or sending profiles with profiles:set using secret-backed SENDMUX_API_KEY environment input rather than shell-expanded --api-key values, uses --json, explains smx_root_ for Management, smx_mbx_ or owner-approved Sending-resource smx_agent_ for Sending, smx_mbx_/scoped smx_agent_ for Mailbox, and says mismatched command/key prefixes fail before the request.",
       "files": [],
       "expectations": [
         "The output installs @sendmux/cli or exposes the sendmux binary.",
         "The output creates a root profile with profiles:set and an smx_root_ key.",
         "The output creates a sending profile with a send-capable smx_mbx_ key or owner-approved Sending-resource smx_agent_ token, and creates a mailbox profile with smx_mbx_ or explains scoped smx_agent_ is mailbox-compatible.",
         "The output uses --json for machine-readable output.",
-        "The output says wrong key types are rejected before a network request."
+        "The output says wrong key types are rejected before a network request.",
+        "Profile setup uses supported secret-backed environment input and never expands an API key into process arguments or asks for a key in chat."
       ]
     },
     {
@@ -38,7 +39,8 @@
         "The output uses mailbox:batch-get-messages with a JSON body.",
         "The output uses management:get-email-log with --path public_id=...",
         "The output includes --if-none-match or If-None-Match for caching.",
-        "The output uses --json on commands."
+        "The output uses --json on commands.",
+        "If the output compares command surfaces, profiles, or key kinds, it distinguishes the three Management/Mailbox/Sending surfaces from the CLI's two API-key kinds and does not claim Mailbox and Sending always need different key kinds."
       ]
     },
     {
@@ -67,7 +69,8 @@
         "Uses the surface get-connection command with --profile and --json without sending email.",
         "Explains protected local token storage, automatic refresh and a new login after an uncertain refresh.",
         "Uses auth:logout and keeps a failed revocation retryable.",
-        "Does not request tokens in chat or imply OAuth tokens work with SMTP."
+        "Does not request tokens in chat or imply OAuth tokens work with SMTP.",
+        "If the output recommends --no-browser or discusses headless or remote use, it says --no-browser only suppresses automatic browser launch and the OAuth callback still requires the browser flow on the CLI host; it does not claim the flag alone enables remote-machine authentication."
       ]
     }
   ]

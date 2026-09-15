@@ -47,13 +47,13 @@
     {
       "id": 3,
       "prompt": "My agent has no Sendmux key. It wants to create its own inbox, read incoming mail, and invite me as the owner so I can later approve sending. What sequence should it follow?",
-      "expected_output": "The answer installs @sendmux/cli if needed, registers with sendmux agent:register <profile>, optionally passes --owner-email, and relies on the CLI to persist the durable read credential before the request and wait for mailbox readiness. The agent reads through that profile without an expiry date while active, with 500 MiB of storage before owner approval. If needed it runs agent:invite-owner, then waits for owner acceptance and sending approval; approval raises storage to at least 5 GiB and Sending CLI commands automatically exchange and cache a one-hour delegated token.",
+      "expected_output": "The answer installs @sendmux/cli if needed, registers with sendmux agent:register <profile>, optionally passes --owner-email, and relies on the CLI to persist registration idempotency before the request, securely store the returned durable read credential without printing it, and wait for mailbox readiness. The agent reads through that profile without an expiry date while active, with 500 MiB of storage before owner approval. If needed it runs agent:invite-owner, then waits for owner acceptance and sending approval; approval raises storage to at least 5 GiB and Sending CLI commands automatically exchange and cache a one-hour delegated token.",
       "files": [],
       "expectations": [
         "The output installs @sendmux/cli when needed.",
         "The output runs sendmux agent:register with a profile name and optionally --owner-email.",
         "The output says no existing account, API key, challenge, or proof of work step is required.",
-        "The output says the CLI saves the credential before network use and never prints it.",
+        "The output says the CLI saves registration idempotency before the registration request, securely stores the returned durable credential in the local profile, and never prints the credential.",
         "The output says the profile can read and receive mail without an expiry date while the registration remains active.",
         "The output runs sendmux agent:invite-owner when an owner was not invited during registration.",
         "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
@@ -84,6 +84,20 @@
         "Route reading and drafts to sendmux-mailbox-agent with the authorised mailbox selected.",
         "Do not force self-registration or creation of a root or mailbox API key.",
         "Keep actual sending dependent on user-confirmed message details and granted permissions."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "connected-agent-attachment-routing",
+      "prompt": "My support agent already has Sendmux connected. It needs to reply to a customer with a local PDF after I approve the draft. Which Sendmux skills should own the reply and attachment parts, and what should the top-level workflow hand off? Keep this at routing level.",
+      "expected_output": "The answer routes the mailbox reply to the mailbox-agent skill and the local-file transfer to the attachment skill, preserves the approval boundary, and names supported byte-transfer categories without copying the detailed upload recipe into the router.",
+      "files": [],
+      "expectations": [
+        "The output routes reply preparation and the eventual mailbox-centred send to sendmux-mailbox-agent and routes local-PDF transfer mechanics to sendmux-attachments.",
+        "The output keeps the actual reply blocked until the user approves the exact recipient, subject, body, and attachment.",
+        "The output identifies MCP presign or CLI/SDK local-file helpers as the supported low-context transfer categories and does not claim MCP file_path, shared-root access, or real-file inline base64.",
+        "The output stays at routing level and hands off detailed upload inputs, headers, and commands rather than reproducing the attachment recipe.",
+        "The output does not claim that the draft, upload, or reply was performed."
       ]
     }
   ]

@@ -38,6 +38,7 @@ export const workflowPathRequirements = new Map([
       { path: "README.md", reader: "check-skill-drift publicSkillCorpusFiles/assertSkillsCatalogue" },
       { path: "skills.sh.json", reader: "check-skill-drift publicSkillCorpusFiles/assertSkillsCatalogue" },
       { path: "scripts/check-skill-drift.mjs", reader: "skill drift checker" },
+      { path: "scripts/check-skill-drift.test.mjs", reader: "skill drift checker tests" },
       { path: ".github/workflows/skill-drift.yml", reader: "skill drift workflow" },
     ],
   ],

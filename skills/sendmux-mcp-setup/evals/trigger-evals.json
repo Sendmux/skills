@@ -16,6 +16,14 @@
     "should_trigger": true
   },
   {
+    "query": "Atlassian's OAuth DCR registered the hosted Sendmux MCP server without a `resource` parameter. Is that valid, and where should the resource be bound?",
+    "should_trigger": true
+  },
+  {
+    "query": "Before I add Sendmux MCP to another agent client, which package and protocol versions are compatible, and will every credential see the whole tool catalogue?",
+    "should_trigger": true
+  },
+  {
     "query": "Use MCP to send a Sendmux email.",
     "should_trigger": false
   },

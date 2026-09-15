@@ -1,6 +1,6 @@
 ---
 name: sendmux-mcp-setup
-description: Configure Sendmux Model Context Protocol servers for AI agent clients, using hosted OAuth first when supported and secret-backed local env config otherwise. Use when the user wants to install sendmux-mcp, connect the hosted Sendmux MCP endpoint, run local stdio or HTTP MCP servers, set mailbox/management/sending key scopes, add bearer headers, or write MCP config for Claude Code, Cursor, Codex, VS Code/Copilot, Copilot CLI, Gemini CLI, Cline, or Windsurf/Cascade.
+description: "Set up, configure, and troubleshoot Sendmux Model Context Protocol (MCP) servers for AI agent clients. Use for installing sendmux-mcp, wiring the hosted OAuth endpoint, running local stdio/HTTP servers, setting mailbox/management/sending key scopes, adding bearer headers, and writing MCP server config (JSON/TOML) for Claude Code, Cursor, Codex, VS Code/Copilot, Copilot CLI, Gemini CLI, Cline, or Windsurf/Cascade. Also use for diagnosing MCP OAuth/DCR problems: dynamic client registration missing a `resource` parameter, `invalid_target` errors, or mismatches between the client's authorisation request, the granted scope, and the token audience/resource binding for `https://mcp.sendmux.ai/mcp`. Do not use this skill just because a client is already sending, searching, or reading email through Sendmux MCP tools — that is ordinary tool use, not server setup, connection, or auth configuration."
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -24,12 +24,15 @@ Use this skill to connect an agent client to Sendmux through MCP.
 - For local stdio or HTTP, pass Sendmux keys and owner-approved agent tokens through environment variables backed by the user's secret store; do not write raw tokens into checked-in MCP config.
 - Use local HTTP bearer only for local/private MCP servers; the bearer token protects the MCP endpoint and is separate from the Sendmux API key used upstream.
 - Use server-qualified names such as `sendmux-mailbox:mailbox_search_message_snippets` when a client needs fully-qualified tool names.
+- MCP configuration shapes are client-specific. If no client is selected, explain the endpoint and OAuth steps in prose instead of emitting a generic `mcpServers` object; provide configuration only for a named client.
 
 ## Install
 
 ```bash
 pip install sendmux-mcp
 ```
+
+This guide targets the unpublished `sendmux-mcp` 1.8.0 candidate for local compatibility testing; it is not a registry or release claim. The candidate speaks MCP protocol revisions `2025-11-25` and `2026-07-28` over stdio or Streamable HTTP. Its catalogue contains 54 tools: 26 Mailbox, 22 Management, and 6 Sending. Selected surfaces and OAuth grants determine which subset a credential can see.
 
 Console scripts:
 
@@ -51,6 +54,8 @@ Agent inbox registration is CLI-first. MCP is a runtime surface, not a registrat
 
 Hosted MCP OAuth and REST OAuth use separate resources; do not reuse a REST access token as the hosted MCP bearer.
 
+Standard dynamic client registration can omit `resource`; that produces a valid resource-neutral registration and is not by itself a reason to re-register. Check each later binding separately: the client authorisation request must target exactly `https://mcp.sendmux.ai/mcp`; the Sendmux OAuth authorisation server owns the approved grant and must store that exact resource restriction; and the token it issues must have that exact audience. A client such as Atlassian controls its requests and connection OAuth UI, but it cannot edit the grant stored by Sendmux. If the request fields are correct and `invalid_target` persists, investigate the Sendmux authorisation-server grant state before blaming the client or re-registering; do not claim any failure stage is more common without actual evidence. For Atlassian, use its connection OAuth UI, not a client-unspecified `/mcp auth` or another slash command. Configuration shapes and authentication commands elsewhere in this guide apply only to their named client. A REST bearer presented to the MCP resource server is still invalid for that audience, but do not predict the resource server's rejection shape from an authorisation-stage error.
+
 ## Local server surface map
 
 | Surface    | Key                                                                     | Tool count | Example tools                                                                                                                                         |
@@ -59,14 +64,17 @@ Hosted MCP OAuth and REST OAuth use separate resources; do not reuse a REST acce
 | Management | `smx_root_`                                                             |         22 | `management_create_domain`, `management_create_mailbox`, `management_create_mailbox_key`, `management_get_spend_summary`, `management_create_webhook` |
 | Sending    | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` |          6 | `sending_send_email`, `sending_send_email_batch`, `sending_upload_attachment`, `sending_create_attachment_upload`, `sending_get_attachment`            |
 
-Hosted tool visibility depends on the approved grant. For multi-mailbox grants, call `mailbox_list_granted_mailboxes` first and pass the returned `mailbox_id` to mailbox tools when targeting a mailbox.
+Compatibility notes must report the complete catalogue as 54 tools: 26 Mailbox, 22 Management, and 6 Sending. Do not describe a credential-visible subset as the catalogue.
+
+Hosted tool visibility depends on the approved grant. For multi-mailbox grants, call `mailbox_list_granted_mailboxes` first and pass the returned `mailbox_id` to mailbox tools when targeting a mailbox. Client examples in this guide are documented configurations, not claims that the client is certified compatible; verify the chosen client separately.
 
 Attachment upload mode depends on transport and send surface:
 
-- Local stdio can use `mailbox_upload_attachment` with `file_path` when the file is inside a client-shared filesystem root.
-- Hosted MCP cannot read local paths. Use `presign_upload_url=true`, upload with shell `curl`, then send with the returned `blob_id`.
-- Sending MCP uses `sending_upload_attachment` with `file_path` on local stdio, or `sending_create_attachment_upload` plus an external `PUT` for hosted/shell-capable agents, then sends with `attachment_id`.
-- Use `content_base64` only for tiny generated files. Mailbox upload modes cap each attachment at 7,500,000 bytes; Sending upload caps each file at 18 MiB; MCP inline base64 caps at 32 KiB decoded. See `sendmux-attachments`.
+- Local and hosted MCP do not accept `file_path` or shared filesystem roots. SDK and CLI file helpers remain the local-file convenience surfaces.
+- Use `content_base64` only for tiny agent-authored content up to 32,768 decoded bytes. Keep real-file bytes and larger content out of model context.
+- For a Mailbox real file, call `mailbox_upload_attachment` with `presign_upload_url=true`, `filename`, `content_type`, and exact `size_bytes`. Transfer the bytes externally with the exact returned method, URL, and headers, without a Sendmux bearer on that upload request; a successful upload supplies the `blob_id` for the Mailbox workflow. Mailbox upload modes accept at most 7,500,000 bytes.
+- For a Sending real file, call `sending_create_attachment_upload` with the same file metadata and treat its returned `max_size_bytes` as authoritative. If the file fits, transfer it with the exact returned method, URL, and headers, then use the successful upload's `attachment_id`, not its temporary `upload_id` or a Mailbox `blob_id`.
+- Signed URLs, upload tokens, returned secret headers, and API keys must not appear literally in child-process arguments or retained output. Pass ephemeral upload metadata through a stdin-fed config stream or another non-argv ephemeral channel and suppress successful capability-bearing responses. See `sendmux-attachments` for the complete transfer boundary.
 
 ## Local Servers
 
@@ -114,9 +122,9 @@ Authorization: Bearer $SENDMUX_MCP_HTTP_BEARER_TOKEN
 
 `/health` returns selected surfaces for local HTTP servers.
 
-## Common JSON Clients
+## Cursor JSON
 
-Use this shape for Cursor, Cline, and Windsurf/Cascade clients that read an `mcpServers` object.
+Cursor reads an `mcpServers` object and expands `${env:NAME}` from its launch environment.
 
 Local stdio, one mailbox server:
 
@@ -124,6 +132,7 @@ Local stdio, one mailbox server:
 {
   "mcpServers": {
     "sendmux-mailbox": {
+      "type": "stdio",
       "command": "sendmux-mcp-mailbox",
       "env": {
         "SENDMUX_API_KEY": "${env:SENDMUX_MBX_KEY}"
@@ -139,6 +148,7 @@ Local stdio, all three surfaces:
 {
   "mcpServers": {
     "sendmux": {
+      "type": "stdio",
       "command": "sendmux-mcp",
       "args": ["--surfaces", "mailbox,management,sending"],
       "env": {
@@ -181,10 +191,13 @@ Hosted remote OAuth:
 Client notes:
 
 - Cursor: put project config at `.cursor/mcp.json` or global config at `~/.cursor/mcp.json`; Cursor interpolates `${env:NAME}` in `command`, `args`, `env`, `url`, and `headers`.
-- Cline: use `~/.cline/mcp.json`, the Cline MCP UI, or `cline mcp`; remote setup can ask for URL and headers.
-- Windsurf/Cascade: use `~/.codeium/mcp_config.json` or **Settings** > **Tools** > **Windsurf Settings** > **Add Server**; HTTP config accepts `serverUrl` or `url`.
+- Cline IDE extension: open **Configure MCP Servers** and use literal `${env:NAME}` references in `env` or `headers`. For a remote Sendmux entry, set `type` to `streamableHttp`; omission defaults to legacy SSE.
+- Cline CLI: use the `cline mcp` wizard rather than assuming the IDE's config path or interpolation. The CLI does not expand `${env:NAME}` in MCP JSON, and a literal `env` value overrides the inherited environment. For local stdio, load the exact `SENDMUX_MAILBOX_API_KEY`, `SENDMUX_MANAGEMENT_API_KEY`, or `SENDMUX_SENDING_API_KEY` value from the secret store into Cline's environment and omit `env` from the server entry; keep `command` and `--surfaces` as needed. For hosted OAuth, use explicit `type: "streamableHttp"` and `url` with no bearer header. Do not configure a CLI local-HTTP bearer through an unexpanded secret reference.
+- Legacy Windsurf/Cascade settings: use `~/.codeium/windsurf/mcp_config.json` or **Settings** > **Tools** > **Windsurf Settings** > **Add Server**. Their HTTP config accepts `serverUrl` or `url`, and supports environment interpolation. This is not a Devin Local agent configuration.
 
 ## Claude Code
+
+Install the `sendmux-mcp` package first, then add the selected server to Claude Code.
 
 Hosted remote OAuth:
 
@@ -196,21 +209,38 @@ Then run `/mcp` and complete the sign-in flow if prompted.
 
 Local stdio:
 
-```bash
-claude mcp add --transport stdio \
-  --env SENDMUX_API_KEY="$SENDMUX_MBX_KEY" \
-  sendmux-mailbox -- sendmux-mcp-mailbox
+```json
+{
+  "mcpServers": {
+    "sendmux-mailbox": {
+      "type": "stdio",
+      "command": "sendmux-mcp-mailbox",
+      "args": [],
+      "env": {
+        "SENDMUX_API_KEY": "${SENDMUX_MBX_KEY}"
+      }
+    }
+  }
+}
 ```
 
 Local HTTP bearer:
 
-```bash
-claude mcp add --transport http \
-  sendmux-local-http http://127.0.0.1:8765/mcp \
-  --header "Authorization: Bearer $SENDMUX_MCP_HTTP_BEARER_TOKEN"
+```json
+{
+  "mcpServers": {
+    "sendmux-local-http": {
+      "type": "http",
+      "url": "http://127.0.0.1:8765/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SENDMUX_MCP_HTTP_BEARER_TOKEN}"
+      }
+    }
+  }
+}
 ```
 
-Project `.mcp.json` can also use `mcpServers` with `type`, `url` or `command`, `args`, `env`, and `headers`.
+Merge those entries into project `.mcp.json`. Load `SENDMUX_MBX_KEY` and `SENDMUX_MCP_HTTP_BEARER_TOKEN` from the user's secret store into Claude Code's launch environment. Claude Code expands `${VAR}` in `env` and `headers`; keep the values in that environment instead of expanding them into `claude mcp add` arguments.
 
 ## Codex
 
@@ -316,13 +346,35 @@ Hosted remote OAuth:
 }
 ```
 
-GitHub Copilot CLI can add servers interactively with `/mcp add` or non-interactively:
+GitHub Copilot CLI reads persistent servers from `~/.copilot/mcp-config.json`. Keep secret values in the Copilot launch environment and use literal variable references in the file:
 
-```bash
-copilot mcp add sendmux-mailbox -- sendmux-mcp-mailbox
-copilot mcp add --transport http sendmux https://mcp.sendmux.ai/mcp
-copilot mcp add --transport http sendmux-local-http http://127.0.0.1:8765/mcp \
-  --header "Authorization: Bearer $SENDMUX_MCP_HTTP_BEARER_TOKEN"
+```json
+{
+  "mcpServers": {
+    "sendmux-mailbox": {
+      "type": "local",
+      "command": "sendmux-mcp-mailbox",
+      "args": [],
+      "env": {
+        "SENDMUX_API_KEY": "${SENDMUX_MBX_KEY}"
+      },
+      "tools": ["*"]
+    },
+    "sendmux": {
+      "type": "http",
+      "url": "https://mcp.sendmux.ai/mcp",
+      "tools": ["*"]
+    },
+    "sendmux-local-http": {
+      "type": "http",
+      "url": "http://127.0.0.1:8765/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SENDMUX_MCP_HTTP_BEARER_TOKEN}"
+      },
+      "tools": ["*"]
+    }
+  }
+}
 ```
 
 ## Gemini CLI
@@ -391,7 +443,7 @@ After adding the server:
    - Sending: `sending_get_connection`; no email is sent.
    - These checks need no mailbox selector. Tool discovery alone does not validate the upstream credential.
 4. If local HTTP returns `401`, check the client `Authorization` header against `SENDMUX_MCP_HTTP_BEARER_TOKEN`.
-5. If the process exits before connecting, check the Sendmux key prefix for the selected surface.
+5. If the process exits before connecting, check the key family for the selected surface: Mailbox accepts `smx_mbx_` or appropriately scoped `smx_agent_`; Sending accepts send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_`; Management requires `smx_root_`.
 
 ## Routing
 
