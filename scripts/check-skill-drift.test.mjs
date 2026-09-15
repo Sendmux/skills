@@ -525,6 +525,156 @@ test("requires usable MCP contract fields without trusting compatibility aliases
   assert.equal(declaredTotalResult.status, 0, declaredTotalResult.stderr);
 });
 
+test("rejects a stale unsuffixed Go module after accepting the v2 producer", (t) => {
+  const fixture = makeContractFixture(t);
+  const baseline = runFixtureChecker(fixture);
+  assert.equal(baseline.status, 0, baseline.stderr);
+
+  replaceFixtureText(
+    path.join(fixture.sdkRoot, "go/go.mod"),
+    "module sendmux.ai/go/v2",
+    "module sendmux.ai/go",
+  );
+  const staleModule = runFixtureChecker(fixture);
+  assert.equal(staleModule.status, 1);
+  assert.match(
+    staleModule.stderr,
+    /Go module expected sendmux\.ai\/go\/v2, found sendmux\.ai\/go\n/,
+  );
+});
+
+test("requires consistent released package guidance in the setup guide and case 7", (t) => {
+  for (const location of ["guide", "expected_output", "expectations"]) {
+    const fixture = makeContractFixture(t);
+    const baseline = runFixtureChecker(fixture);
+    assert.equal(baseline.status, 0, `${location} baseline: ${baseline.stderr}`);
+
+    if (location === "guide") {
+      replaceFixtureText(
+        path.join(fixture.skillsRoot, "skills/sendmux-mcp-setup/SKILL.md"),
+        "targets the released",
+        "targets the unpublished",
+      );
+    } else {
+      mutateJson(
+        path.join(fixture.skillsRoot, "skills/sendmux-mcp-setup/evals/evals.json"),
+        (value) => {
+          const compatibility = value.evals.find((entry) => entry.id === 7);
+          if (location === "expected_output") {
+            compatibility.expected_output = compatibility.expected_output.replace(
+              "distinguishes the released",
+              "distinguishes the unpublished",
+            );
+          } else {
+            compatibility.expectations = compatibility.expectations.map((text) =>
+              text.replace(
+                "distinguishes the released",
+                "distinguishes the unpublished",
+              ),
+            );
+          }
+        },
+      );
+    }
+
+    const contradictedRelease = runFixtureChecker(fixture);
+    assert.equal(contradictedRelease.status, 1, location);
+    assert.match(
+      contradictedRelease.stderr,
+      /MCP package identity\/version guidance drift/,
+      location,
+    );
+  }
+});
+
+test("rejects substring matches for published contract values and sync fields", (t) => {
+  const escaped = [];
+  const mutations = [
+    ["prerelease version", "version", (value) => `${value}-rc.1`],
+    ["longer version", "version", (value) => `${value}0`],
+    ["package suffix", "identity", (value) => `${value}-extra`],
+    ["larger total", "total", (value) => `1${value}`],
+    ["fractional total", "total", (value) => `${value}.5`],
+    ["negative total", "total", (value) => `-${value}`],
+    ["exponential total", "total", (value) => `${value}e2`],
+    ["range total", "total", (value) => `${value}-${Number(value) + 1}`],
+  ];
+  for (const location of ["guide", "expected_output", "expectations"]) {
+    for (const [name, field, replace] of mutations) {
+      const fixture = makeContractFixture(t);
+      const baseline = runFixtureChecker(fixture);
+      assert.equal(baseline.status, 0, baseline.stderr);
+      const contract = JSON.parse(readFileSync(contractPath(fixture), "utf8"));
+      const values = {
+        ...contract.package,
+        total: Object.values(contract.tools.by_surface).flat().length,
+      };
+      const value = String(values[field]);
+      const replacement = replace(value);
+      const diagnostic = field === "total"
+        ? /MCP tool catalogue count guidance drift/
+        : /MCP package identity\/version guidance drift/;
+      if (location === "guide") {
+        const guidePath = path.join(
+          fixture.skillsRoot,
+          "skills/sendmux-mcp-setup/SKILL.md",
+        );
+        const original = readFileSync(guidePath, "utf8");
+        const changed = original.replace(/^This guide targets .+$/m, (line) =>
+          line.replaceAll(value, replacement),
+        );
+        assert.notEqual(changed, original);
+        writeFileSync(guidePath, changed);
+      } else {
+        mutateJson(
+          path.join(fixture.skillsRoot, "skills/sendmux-mcp-setup/evals/evals.json"),
+          (document) => {
+            const compatibility = document.evals.find((entry) => entry.id === 7);
+            if (location === "expected_output") {
+              compatibility.expected_output = compatibility.expected_output.replaceAll(
+                value,
+                replacement,
+              );
+            } else {
+              compatibility.expectations = compatibility.expectations.map((text) =>
+                text.replaceAll(value, replacement),
+              );
+            }
+          },
+        );
+      }
+      const result = runFixtureChecker(fixture);
+      if (result.status === 0) escaped.push(`${location}: ${name}`);
+      else {
+        assert.equal(result.status, 1, result.stderr);
+        assert.match(result.stderr, diagnostic, `${location}: ${name}`);
+      }
+    }
+  }
+  for (const surface of ["messages", "folders", "threads"]) {
+    const fixture = makeContractFixture(t);
+    const baseline = runFixtureChecker(fixture);
+    assert.equal(baseline.status, 0, baseline.stderr);
+    const field = `data.types.${surface}.new_state`;
+    replaceFixtureText(
+      path.join(fixture.skillsRoot, "skills/sendmux-token-efficient-usage/SKILL.md"),
+      field,
+      `${field}_extra`,
+    );
+    const result = runFixtureChecker(fixture);
+    if (result.status === 0) escaped.push(`sync field: ${surface}`);
+    else {
+      assert.equal(result.status, 1, result.stderr);
+      assert.match(result.stderr, /typed multi-resource sync guidance drift/);
+    }
+  }
+  assert.deepEqual(
+    escaped,
+    [],
+    "Different values must not pass as exact contract values",
+  );
+});
+
 test("matches MCP contract fields only at their publishing locations", (t) => {
   const mutations = [
     {

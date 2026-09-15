@@ -100,11 +100,11 @@
     {
       "id": 7,
       "prompt": "For a compatibility note, what protocol revisions can the Sendmux MCP package speak, and how is that different from its package version? Our setup guide lists mailbox, management, and sending tools, but a customer only sees some after OAuth—should they expect the whole catalogue? Also, are the clients named in the setup guide automatically certified?",
-      "expected_output": "The answer names protocol revisions 2025-11-25 and 2026-07-28, distinguishes the unpublished candidate sendmux-mcp 1.8.0 package version, gives the 54-tool catalogue split as 26 Mailbox, 22 Management, and 6 Sending while qualifying grant-visible subsets, and does not claim named clients are certified.",
+      "expected_output": "The answer names protocol revisions 2025-11-25 and 2026-07-28, distinguishes the released sendmux-mcp 2.0.0 package version, gives the 54-tool catalogue split as 26 Mailbox, 22 Management, and 6 Sending while qualifying grant-visible subsets, and does not claim named clients are certified.",
       "files": [],
       "expectations": [
         "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
-        "The answer distinguishes the sendmux-mcp package version 1.8.0 from protocol revisions and does not claim that the package version has been published or released.",
+        "The answer distinguishes the released sendmux-mcp package version 2.0.0 from protocol revisions.",
         "The answer identifies the contract catalogue as 54 tools (26 Mailbox, 22 Management, 6 Sending) and explains that OAuth grants and selected surfaces determine actual visible tools.",
         "The answer does not treat a client listed in setup guidance as automatically certified."
       ]

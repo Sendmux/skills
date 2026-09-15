@@ -375,9 +375,15 @@ function containsInOrder(text, values) {
   if (!Array.isArray(values)) return false;
   let offset = 0;
   for (const value of values) {
-    const index = text.indexOf(String(value), offset);
-    if (index === -1) return false;
-    offset = index + String(value).length;
+    const literal = escapeRegExp(String(value));
+    const pattern = typeof value === "number"
+      ? `(?<![\\w.,+-])${literal}(?!\\w|[.,]\\d|-[\\d.])`
+      : `(?<![\\w.+-])${literal}(?![\\w+-]|\\.[\\w])`;
+    const matcher = new RegExp(pattern, "g");
+    matcher.lastIndex = offset;
+    const match = matcher.exec(text);
+    if (!match) return false;
+    offset = matcher.lastIndex;
   }
   return true;
 }
@@ -416,19 +422,16 @@ function assertMcpContractPublishing(facts) {
     : "";
   const installLine = setupText
     .split("\n")
-    .find((line) => line.includes("unpublished")) || "";
+    .find((line) => line.startsWith("This guide targets ")) || "";
 
   const packageValues = [facts.packageIdentity, facts.packageVersion];
   const packageGuidanceValid =
     containsInOrder(installLine, packageValues) &&
-    /unpublished/i.test(installLine) &&
-    /not a registry or release claim/i.test(installLine) &&
+    /^This guide targets the released\b/i.test(installLine) &&
     containsInOrder(compatibilityExpected, packageValues) &&
-    /unpublished/i.test(compatibilityExpected) &&
+    /\bdistinguishes the released\b/i.test(compatibilityExpected) &&
     containsInOrder(compatibilityExpectations, packageValues) &&
-    /not claim[^\n]*(?:published|released)|does not claim[^\n]*(?:published|released)/i.test(
-      compatibilityExpectations,
-    );
+    /\bdistinguishes the released\b/i.test(compatibilityExpectations);
   if (!packageGuidanceValid) {
     fail("MCP package identity/version guidance drift");
   }
@@ -1397,8 +1400,8 @@ function assertSdkPackages() {
   const goModule = readText(goModPath).match(/^module\s+(\S+)/m)?.[1];
   if (!goModule) {
     fail(`Missing Go module declaration in ${goModPath}`);
-  } else if (goModule !== "sendmux.ai/go") {
-    fail(`Go module expected sendmux.ai/go, found ${goModule}`);
+  } else if (goModule !== "sendmux.ai/go/v2") {
+    fail(`Go module expected sendmux.ai/go/v2, found ${goModule}`);
   }
 }
 
