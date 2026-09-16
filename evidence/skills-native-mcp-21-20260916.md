@@ -18,3 +18,7 @@
 ## Status
 
 Local change only; no remote action, provider evaluation, release, archive/install acceptance, or publication was performed.
+
+## Retained validation evidence
+
+Original direct-console checks had no retained raw files or parent-PID receipts; they are qualified rather than treated as handle-verified evidence. The retained RED fixture is `.claude/artifacts/skills-native-mcp-21/owned-red-fixture-20260916-200436/`: it copies `HEAD`, changes only the guide's one and Case 7's two version tokens to `2.0.0`, and its raw checker log exits 1 with only `MCP package identity/version guidance drift`; PID `6515` was absent after wait. The retained absolute-path GREEN run is `.claude/artifacts/skills-native-mcp-21/owned-validation-20260916-200357-absolute/`: five check logs and the 38/38 test log are present; PIDs `5519`, `5525`, `5530`, `5535`, `5540`, and `5545` all exited 0 and were absent after wait; its owned TMPDIR was removed. The preceding relative-TMPDIR capture is retained as a harness-failure record, not evidence of product failure.
