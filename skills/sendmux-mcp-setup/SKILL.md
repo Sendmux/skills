@@ -32,7 +32,7 @@ Use this skill to connect an agent client to Sendmux through MCP.
 pip install sendmux-mcp
 ```
 
-This guide targets the released `sendmux-mcp` 2.0.0 package. The package speaks MCP protocol revisions `2025-11-25` and `2026-07-28` over stdio or Streamable HTTP. Its catalogue contains 54 tools: 26 Mailbox, 22 Management, and 6 Sending. Selected surfaces and OAuth grants determine which subset a credential can see.
+This guide targets the released `sendmux-mcp` 2.1.0 package. The package speaks MCP protocol revisions `2025-11-25` and `2026-07-28` over stdio or Streamable HTTP. Its catalogue contains 54 tools: 26 Mailbox, 22 Management, and 6 Sending. Selected surfaces and OAuth grants determine which subset a credential can see.
 
 Console scripts:
 
