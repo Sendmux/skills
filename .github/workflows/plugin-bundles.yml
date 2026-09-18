@@ -17,6 +17,13 @@ on:
       - "scripts/check-plugin-bundles.mjs"
       - "scripts/build-plugin-bundles.test.mjs"
       - "scripts/agent-storage-floor.test.mjs"
+      - "scripts/publish-openclaw-bundle.mjs"
+      - "scripts/publish-openclaw-bundle.test.mjs"
+      - "scripts/workflow-boundaries.test.mjs"
+      - "scripts/check-workflow-path-filters.mjs"
+      - ".github/workflows/openclaw-clawhub.yml"
+      - ".github/workflows/notify-site.yml"
+      - ".github/workflows/skill-drift.yml"
       - ".github/workflows/plugin-bundles.yml"
   push:
     branches:
@@ -36,6 +43,13 @@ on:
       - "scripts/check-plugin-bundles.mjs"
       - "scripts/build-plugin-bundles.test.mjs"
       - "scripts/agent-storage-floor.test.mjs"
+      - "scripts/publish-openclaw-bundle.mjs"
+      - "scripts/publish-openclaw-bundle.test.mjs"
+      - "scripts/workflow-boundaries.test.mjs"
+      - "scripts/check-workflow-path-filters.mjs"
+      - ".github/workflows/openclaw-clawhub.yml"
+      - ".github/workflows/notify-site.yml"
+      - ".github/workflows/skill-drift.yml"
       - ".github/workflows/plugin-bundles.yml"
   workflow_dispatch:
 
@@ -59,8 +73,15 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Test plugin bundle scripts
-        run: node --test scripts/build-plugin-bundles.test.mjs scripts/agent-storage-floor.test.mjs
+      - name: Test plugin bundle and workflow safeguards
+        run: |
+          node --test scripts/build-plugin-bundles.test.mjs \
+            scripts/agent-storage-floor.test.mjs \
+            scripts/publish-openclaw-bundle.test.mjs \
+            scripts/workflow-boundaries.test.mjs
+
+      - name: Check workflow path filters
+        run: node scripts/check-workflow-path-filters.mjs
 
       - name: Check generated plugin bundles
         run: node scripts/check-plugin-bundles.mjs

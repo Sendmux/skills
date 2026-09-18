@@ -65,6 +65,20 @@
         "States OAuth access tokens cannot be used as SMTP or IMAP passwords.",
         "Preserves explicit approval and message details before any actual send."
       ]
+    },
+    {
+      "id": 5,
+      "prompt": "My Sendmux MCP Sending connection is already set up. I have confirmed this email: from `releases@example.com` to `pat@example.net`, subject `Renewal summary`, HTML body `<p>Attached is the renewal summary.</p>`, and local PDF `./renewal-summary.pdf`; its exact byte size is available locally. I approve sending this one message. Which MCP calls and attachment flow should the agent use?",
+      "expected_output": "The answer uses the approved Sending presign flow for the real local PDF, safely transfers bytes outside model context, and sends the confirmed message with the resulting attachment_id and a stable idempotency key.",
+      "files": [],
+      "expectations": [
+        "The output calls sending_create_attachment_upload with the PDF's filename, content_type, and exact local size_bytes.",
+        "The output checks the response's max_size_bytes before transfer and does not replace it with a universal Sending presign limit.",
+        "The output transfers the PDF outside model context using the exact returned method, URL, and headers, without a Sendmux API bearer and without placing signed URL/header secrets in literal process arguments or retained output.",
+        "The output passes the successful upload's attachment_id to sending_send_email, not its upload_id or a Mailbox blob_id.",
+        "The output does not use MCP file_path or inline the real PDF as base64.",
+        "The output uses the confirmed sender, recipient, subject, body, and attachment without inventing message details, and includes one stable Idempotency-Key for the logical send."
+      ]
     }
   ]
 }

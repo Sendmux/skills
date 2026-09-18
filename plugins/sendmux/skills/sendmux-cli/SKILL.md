@@ -1,6 +1,6 @@
 ---
 name: sendmux-cli
-description: Use when a user wants Sendmux terminal commands for OAuth login/logout, connection checks, agent inbox registration, owner invites, profiles, key-scope preflight, JSON output, or Management, Mailbox, and Sending operations.
+description: Use when a user wants to run the Sendmux **CLI** (the `sendmux` terminal binary) — installing it, OAuth login/logout, connection checks, agent inbox registration and owner invites, managing API-key or OAuth profiles, key-scope preflight errors (e.g. root vs mailbox vs agent key), `--json` output, or invoking Management, Mailbox, and Sending operation commands (domains, mailboxes, webhooks, messages, search, sending email, attachments, delivery logs) via `sendmux COMMAND --flag` syntax. Trigger for "what sendmux command", "how do I run/install sendmux", CLI flag or error questions, and profile/credential setup in the terminal. Do NOT trigger for using Sendmux through MCP tools, the REST API directly from code, or general email-sending strategy questions unrelated to the CLI.
 license: Apache-2.0
 metadata:
   author: sendmux
@@ -40,7 +40,9 @@ sendmux auth:login work --scope mailbox.read --scope email.send
 sendmux mailbox:get-connection --profile work --json
 ```
 
-The CLI opens browser consent and receives the callback on the same computer. `--no-browser` prints the authorisation URL for manual opening. It preserves existing profiles and stores tokens with restricted file permissions. Expiring tokens refresh automatically with concurrent refreshes serialised; an uncertain refresh requires a new login.
+The CLI opens browser consent and receives the callback on the same computer. `--no-browser` only suppresses automatic browser launch and prints the authorisation URL; the OAuth callback still requires the browser flow on the CLI host, so the flag alone is not a remote-machine authentication transport. The CLI preserves existing profiles.
+
+When explaining the OAuth lifecycle, include all three storage and recovery facts: the CLI stores tokens locally with restricted file permissions; expiring tokens refresh automatically with concurrent refreshes serialised; and an uncertain refresh outcome requires authentication under a new profile name because `auth:login` preserves an occupied profile. To reuse the same name, first complete `sendmux auth:logout work`, then log in again.
 
 Use `sending:get-connection`, `mailbox:get-connection`, or `management:get-connection` for the selected surface. These checks require no mailbox selector and send no email. Use `data.label` for the connection name and `data.team.id` for its stable team identifier.
 
@@ -66,7 +68,7 @@ Add `--owner-email owner@example.com` to invite the owner during registration. O
 sendmux agent:invite-owner owner@example.com --profile my-agent --json
 ```
 
-The CLI persists registration idempotency before the network request, stores the durable credential in the local profile with restricted permissions, never prints it, reloads it from disk, and waits up to 10 minutes for readiness. Rerun registration with the same profile and options to resume safely.
+The CLI persists registration idempotency before the network request, stores the durable credential in the local profile with restricted permissions, never prints it, reloads it from disk, and waits up to 10 minutes for readiness. Rerun registration with the same profile and options to resume safely. Include this storage transition when explaining the onboarding lifecycle: the inbox is capped at 500 MiB before owner approval, and enabling owner-approved sending raises it to at least 5 GiB.
 
 Use the profile for later reads:
 
@@ -76,19 +78,21 @@ sendmux mailbox:messages:list --profile my-agent --query limit=25 --json
 
 Read/receive access has no expiry date while the registration remains active. Sending remains blocked until the owner accepts and approves it. After approval, a command such as `sending:send --profile my-agent` automatically exchanges the durable credential for a one-hour `email.send` token and caches it until near expiry. Full registration revocation removes read access and every delegated token.
 
-The inbox is capped at 500 MiB before approval. Enabling owner-approved sending first raises it to at least 5 GiB. Revoking sending does not itself change the current inbox storage allocation.
+Revoking sending does not itself change the current inbox storage allocation.
 
 ## Profiles
 
 Create separate profiles for root and mailbox keys.
 
 ```bash
-sendmux profiles:set default --api-key "$SENDMUX_ROOT_KEY" --default --json
-sendmux profiles:set mailbox --api-key "$SENDMUX_MBX_KEY" --json
-sendmux profiles:set sending --api-key "$SENDMUX_MBX_KEY" --json
+SENDMUX_API_KEY="$SENDMUX_ROOT_KEY" sendmux profiles:set default --default --json
+SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux profiles:set mailbox --json
+SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux profiles:set sending --json
 sendmux profiles:list --json
 sendmux profiles:show default --json
 ```
+
+`profiles:set` reads the key from `SENDMUX_API_KEY`; populate the source variables through the user's secret store. The direct `--api-key` flag remains supported and takes precedence over `SENDMUX_API_KEY`, but do not expand a secret into that flag because the resulting value is visible in process arguments.
 
 Profile reads mask stored API keys and never reveal agent credentials. `profiles:set` reports `key_kind` as `root` or `mailbox`; `agent:register` creates a discriminated agent profile.
 
@@ -169,6 +173,8 @@ Pass either `--body` or `--body-file`, not both.
 Use `sendmux-attachments` for attachment-heavy flows and size/token trade-offs.
 
 ## Examples
+
+For workflows spanning Sending, Mailbox, and Management, state the classification explicitly: they are three command surfaces and may use three profiles, but the CLI has only `root` and `mailbox` API-key kinds. A send-capable mailbox key may populate both the mailbox and sending profiles; do not call those profiles different key kinds.
 
 Create a domain:
 

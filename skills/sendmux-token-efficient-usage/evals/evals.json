@@ -29,14 +29,14 @@
     },
     {
       "id": 2,
-      "prompt": "Design a low-token Sendmux polling loop for a mailbox sync plus one outbound delivery log that I may read repeatedly.",
-      "expected_output": "The answer uses mailbox delta sync/state tokens, mentions query-message-changes or mailbox_get_changes, follows cursor pagination only when needed, and uses ETag/If-None-Match for the repeated log read.",
+      "prompt": "Design a low-token Sendmux polling loop that supports both full-mailbox sync and a filtered message view, plus one outbound delivery log that I may read repeatedly. Explain which sync route to use for each mode.",
+      "expected_output": "The answer uses mailbox_get_changes for full-mailbox delta sync and query-message-changes for filtered message sync, stores and reuses the appropriate state tokens, uses the selected resource's returned has_more and new_state for delta continuation while preserving filters and keeping next_cursor out of delta-sync requests, and uses ETag/If-None-Match for the repeated log read.",
       "files": [],
       "expectations": [
         "The output uses mailbox_get_changes, mailbox:get-changes, mailboxGetChanges, or /mailbox/changes for broad sync.",
         "The output mentions query-message-changes or mailboxQueryMessageChanges for filtered message sync.",
         "The output stores and reuses a state token such as since_state or since_query_state.",
-        "The output uses cursor pagination with next_cursor only while more data is needed.",
+        "The output uses the selected resource's returned has_more and new_state for delta continuation, preserving filters and keeping next_cursor out of delta-sync requests.",
         "The output uses ETag with If-None-Match or --if-none-match for the repeated delivery log read."
       ]
     },
@@ -65,6 +65,31 @@
         "Do not use public OpenAPI discovery as credential verification.",
         "Do not list customer resources or send email for the connection check.",
         "Keep OAuth restricted to its approved surface, scopes and mailboxes."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I need to send one local PDF in a one-off terminal task. Sendmux MCP is connected, the `sendmux` CLI is installed, and the application also has a Sendmux SDK. Which route uses the least model context? Compare MCP with CLI/SDK briefly, including how the file bytes are transferred, which upload limits apply, and where to find the detailed attachment procedure. Tell me whether the uploaded identifier changes if this is a mailbox reply instead of a Sending API message. Do not send anything.",
+      "expected_output": "The answer recommends the local CLI file helper for this one-off terminal task, keeps the SDK helper as the application-code route, and explains that connected MCP remains low-context through a presigned external transfer. It keeps all real file bytes outside model context and distinguishes Sending from Mailbox identifiers.",
+      "files": [],
+      "expectations": [
+        "The output routes attachment mechanics to sendmux-attachments and recommends CLI --attach for this one-off terminal task, with an SDK file helper as the application-code alternative.",
+        "The output explains that the connected MCP alternative uses a presigned upload and transfers the PDF outside model context rather than using MCP file_path or real-file base64.",
+        "The output says a Sending MCP presign must obey the upload intent response's max_size_bytes rather than a guessed global bound.",
+        "The output preserves attachment_id for Sending sends and blob_id for Mailbox sends and does not interchange them.",
+        "The output does not claim that any upload or send was performed."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "My script examines paginated Sendmux delivery-log summaries and stops after two matches to a local rule. The first page gave one match and says more pages are available. Describe the next request and the stopping conditions; keep the same filters, avoid message bodies, and don't run anything.",
+      "expected_output": "Continue the delivery-log list with its returned cursor, preserve filters and a small page size, stop when two matches are found or no more pages remain, and perform no requests.",
+      "files": [],
+      "expectations": [
+        "The output reads the returned pagination.next_cursor and passes it as cursor to the next delivery-log list request, rather than inventing an offset or using a delta state token.",
+        "The output preserves the same filters and uses a small bounded page size.",
+        "The output stops once two matches are found, including before the end of a page if enough matches are found, or when pagination.has_more is false; it does not fetch every page unnecessarily.",
+        "The output avoids message-body reads and does not claim any request was performed."
       ]
     }
   ]

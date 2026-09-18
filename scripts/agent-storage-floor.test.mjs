@@ -17,9 +17,10 @@ test("agent skills and evals describe 5 GiB as the owner-approved storage floor"
     const evals = await readFile(new URL(`../skills/${slug}/evals/evals.json`, import.meta.url), "utf8");
 
     assert.match(skill, /at least 5 GiB/, `${slug} skill must state the owner-approved storage floor`);
+    // Regression dba9ca4: revocation is not a promise of a permanent storage floor.
     assert.match(
       skill,
-      /Revoking sending does not itself change the current inbox storage allocation\./,
+      /(?:(?:Revoking sending|revocation) does not itself change the current inbox storage allocation\.|Revocation alone does not change the current storage allocation;)/,
       `${slug} skill must describe the direct effect of sending revocation without promising a permanent storage floor`,
     );
     assert.match(evals, /at least 5 GiB/, `${slug} evals must require the owner-approved storage floor`);

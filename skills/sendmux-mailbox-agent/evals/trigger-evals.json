@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "Mark these Sendmux message IDs as read and label them agent_triaged.",
+    "query": "In one batch, mark Sendmux message IDs msg_01, msg_02, and msg_03 as read and add the agent_triaged label.",
     "should_trigger": true
   },
   {

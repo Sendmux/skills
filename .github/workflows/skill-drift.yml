@@ -17,14 +17,20 @@ on:
   pull_request:
     paths:
       - "skills/**"
+      - "README.md"
+      - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
+      - "scripts/check-skill-drift.test.mjs"
       - ".github/workflows/skill-drift.yml"
   push:
     branches:
       - main
     paths:
       - "skills/**"
+      - "README.md"
+      - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
+      - "scripts/check-skill-drift.test.mjs"
       - ".github/workflows/skill-drift.yml"
   workflow_dispatch:
 
@@ -65,4 +71,6 @@ jobs:
           SENDMUX_SDK: ${{ github.workspace }}/_sdk
           SENDMUX_APP_OPENAPI: ${{ runner.temp }}/openapi-app.json
           SENDMUX_SENDING_OPENAPI: ${{ runner.temp }}/openapi-sending.json
-        run: node scripts/check-skill-drift.mjs
+        run: |
+          node --test scripts/check-skill-drift.test.mjs
+          node scripts/check-skill-drift.mjs

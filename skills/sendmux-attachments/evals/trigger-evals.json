@@ -22,5 +22,13 @@
   {
     "query": "Create a Sendmux domain and mailbox key.",
     "should_trigger": false
+  },
+  {
+    "query": "Our local Sendmux MCP config used `file_path` to attach PDFs. What should we migrate it to now?",
+    "should_trigger": true
+  },
+  {
+    "query": "My agent generated a tiny text attachment in memory. Can it send that through Sendmux MCP inline, and where is the size boundary?",
+    "should_trigger": true
   }
 ]

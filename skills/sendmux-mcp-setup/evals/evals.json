@@ -12,6 +12,7 @@
         "The output uses sendmux-mcp-mailbox.",
         "The output uses an smx_mbx_ mailbox key placeholder or environment variable.",
         "The output avoids pasted or hardcoded raw secrets and prefers secret-backed environment variables.",
+        "The output keeps the mailbox API key out of process arguments, including shell-expanded claude mcp add --env values.",
         "The output says mailbox-only should not expose management_* or sending_* tools."
       ]
     },
@@ -27,7 +28,8 @@
         "The output includes SENDMUX_MANAGEMENT_API_KEY.",
         "The output includes SENDMUX_SENDING_API_KEY.",
         "The output avoids writing raw tokens into checked-in MCP config.",
-        "The output maps management to smx_root_, mailbox to smx_mbx_ or scoped smx_agent_, and sending to smx_mbx_ or owner-approved Sending-resource smx_agent_."
+        "The output maps management to smx_root_, mailbox to smx_mbx_ or scoped smx_agent_, and sending to smx_mbx_ or owner-approved Sending-resource smx_agent_.",
+        "If the output supplies Cline guidance, it distinguishes Cline IDE environment interpolation from Cline CLI inherited-environment configuration and does not claim that Cline CLI expands ${env:NAME}; a Cursor-only answer need not discuss Cline."
       ]
     },
     {
@@ -42,6 +44,7 @@
         "The output includes the local HTTP URL http://127.0.0.1:8765/mcp.",
         "The output uses Authorization: Bearer for local HTTP bearer.",
         "The output avoids hardcoding the local bearer token in checked-in config.",
+        "The output keeps the local MCP bearer token out of process arguments, including shell-expanded --header values.",
         "The output distinguishes the MCP bearer token from Sendmux API keys."
       ]
     },
@@ -66,7 +69,44 @@
         "Use sending_get_connection as the harmless Sending credential check.",
         "Do not substitute tool discovery alone for credential validation.",
         "Distinguish hosted MCP OAuth from REST OAuth resources; do not reuse a REST token as the MCP bearer.",
-        "Do not send an email or request secrets in chat."
+        "Do not send an email or request secrets in chat.",
+        "Do not predict an authorisation-stage invalid_target response when a REST bearer is presented to the MCP resource server."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I'm adding our custom OAuth client to Atlassian for Sendmux MCP. We registered it without a resource field, then the hosted endpoint at https://mcp.sendmux.ai/mcp returned invalid_target. Should I redo the registration, and what should the later authorisation and token steps target? We already have a REST OAuth bearer token—can I put that in the MCP config instead?",
+      "expected_output": "The answer keeps the valid resource-neutral registration, binds later hosted MCP authorisation, grants, and token audience to exactly https://mcp.sendmux.ai/mcp, and does not reuse a REST OAuth bearer across that resource boundary.",
+      "files": [],
+      "expectations": [
+        "The answer treats omission of resource in standard DCR as a valid resource-neutral registration rather than rejecting it or requiring re-registration.",
+        "The answer binds later hosted MCP authorisation, grants, and token audience to exactly https://mcp.sendmux.ai/mcp.",
+        "The answer does not reuse a REST OAuth bearer as a hosted MCP bearer and explains the resource boundary.",
+        "The answer says the Sendmux OAuth authorisation server owns the approved grant resource restriction and issued token audience; Atlassian controls its requests and connection but cannot edit that stored grant.",
+        "The answer uses Atlassian's connection OAuth UI and does not invent a client-unspecified /mcp auth or other slash command."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "My local stdio agent has a 5 MB PDF called renewal-pack.pdf that I need available in a Sendmux mailbox workflow. Which MCP input should I use? I was going to pass file_path and add a shared root to the config, but I want to keep the PDF out of model context and avoid a giant base64 string.",
+      "expected_output": "The answer routes the PDF through mailbox_upload_attachment with presign_upload_url and file metadata, transfers bytes outside model context to the returned upload URL, uses the resulting blob_id, and rejects MCP file_path, shared roots, and large base64.",
+      "files": [],
+      "expectations": [
+        "The answer routes the existing 5 MB local PDF through Mailbox presign upload rather than inline content, using mailbox_upload_attachment with presign_upload_url and the file metadata needed for the upload intent.",
+        "The answer says to transfer the bytes outside model context to the returned upload URL and use the resulting blob_id in the mailbox workflow.",
+        "The answer rejects MCP file_path and shared-root configuration for this local agent request and does not recommend large base64 content."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "For a compatibility note, what protocol revisions can the Sendmux MCP package speak, and how is that different from its package version? Our setup guide lists mailbox, management, and sending tools, but a customer only sees some after OAuth—should they expect the whole catalogue? Also, are the clients named in the setup guide automatically certified?",
+      "expected_output": "The answer names protocol revisions 2025-11-25 and 2026-07-28, distinguishes the released sendmux-mcp 2.1.1 package version, gives the 54-tool catalogue split as 26 Mailbox, 22 Management, and 6 Sending while qualifying grant-visible subsets, and does not claim named clients are certified.",
+      "files": [],
+      "expectations": [
+        "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
+        "The answer distinguishes the released sendmux-mcp package version 2.1.1 from protocol revisions.",
+        "The answer identifies the contract catalogue as 54 tools (26 Mailbox, 22 Management, 6 Sending) and explains that OAuth grants and selected surfaces determine actual visible tools.",
+        "The answer does not treat a client listed in setup guidance as automatically certified."
       ]
     }
   ]

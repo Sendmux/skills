@@ -59,7 +59,7 @@ jobs:
         run: node scripts/check-openclaw-bundle.mjs
 
       - name: Install ClawHub CLI
-        run: npm install -g clawhub
+        run: npm install -g clawhub@0.23.3
 
       - name: Dry-run ClawHub publish
         run: node scripts/publish-openclaw-bundle.mjs --dry-run
@@ -87,14 +87,68 @@ jobs:
         run: node scripts/check-openclaw-bundle.mjs
 
       - name: Install ClawHub CLI
-        run: npm install -g clawhub
+        run: npm install -g clawhub@0.23.3
 
-      - name: Authenticate ClawHub CLI
+      - name: Publish ClawHub skills
         env:
           CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
         run: |
-          test -n "$CLAWHUB_TOKEN"
-          clawhub login --token "$CLAWHUB_TOKEN"
+          set -euo pipefail
+          if [ -z "${CLAWHUB_TOKEN:-}" ]; then
+            echo "CLAWHUB_TOKEN is required for ClawHub publication." >&2
+            exit 1
+          fi
 
-      - name: Publish ClawHub skills
-        run: node scripts/publish-openclaw-bundle.mjs
+          umask 077
+          credential_dir=""
+          config_path=""
+          publisher_pid=""
+          cleanup() {
+            status=$?
+            trap - EXIT HUP INT TERM
+            if [ -n "$config_path" ]; then
+              rm -f -- "$config_path"
+            fi
+            if [ -n "$credential_dir" ]; then
+              rmdir -- "$credential_dir"
+            fi
+            exit "$status"
+          }
+          stop_publisher() {
+            signal="$1"
+            status="$2"
+            trap - HUP INT TERM
+            if [ -n "$publisher_pid" ] && kill -0 "$publisher_pid" 2>/dev/null; then
+              kill -s "$signal" "$publisher_pid" 2>/dev/null || true
+              wait "$publisher_pid" || true
+            fi
+            exit "$status"
+          }
+          trap cleanup EXIT
+          trap 'stop_publisher HUP 129' HUP
+          trap 'stop_publisher INT 130' INT
+          trap 'stop_publisher TERM 143' TERM
+
+          credential_dir="$(mktemp -d "${RUNNER_TEMP:?}/sendmux-clawhub.XXXXXX")"
+          config_path="$credential_dir/config.json"
+          chmod 700 "$credential_dir"
+          export CLAWHUB_CONFIG_PATH="$config_path"
+          node --input-type=module <<'NODE'
+          import { writeFileSync } from "node:fs";
+
+          const config = {
+            registry: "https://clawhub.ai",
+            token: process.env.CLAWHUB_TOKEN,
+          };
+          writeFileSync(
+            process.env.CLAWHUB_CONFIG_PATH,
+            `${JSON.stringify(config)}\n`,
+            { encoding: "utf8", flag: "wx", mode: 0o600 },
+          );
+          NODE
+          chmod 600 "$CLAWHUB_CONFIG_PATH"
+          unset CLAWHUB_TOKEN
+
+          node scripts/publish-openclaw-bundle.mjs &
+          publisher_pid=$!
+          wait "$publisher_pid"

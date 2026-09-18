@@ -73,6 +73,21 @@
         "List granted mailboxes and pass the selected mailbox_id for mailbox operations.",
         "Do not request tokens in chat or create a root key."
       ]
+    },
+    {
+      "id": 6,
+      "name": "local-attachment-approved-reply",
+      "prompt": "A customer's message is open in my Sendmux mailbox. I have a local `signed-quote.pdf`, know its exact byte size, and want the agent to draft a reply with it attached. Do not send until I approve the exact recipient, subject, body, and attachment. The agent is connected through MCP; what workflow should it prepare?",
+      "expected_output": "The answer keeps the task mailbox-centred, routes the local PDF through the Mailbox presign flow, and prepares but does not send the reply before approval. A later Mailbox send uses the upload's blob_id and an idempotency key.",
+      "files": [],
+      "expectations": [
+        "The output keeps the reply in sendmux-mailbox-agent and routes attachment byte handling to sendmux-attachments.",
+        "For the connected MCP path, the output uses mailbox_upload_attachment with presign_upload_url, filename, content_type, and exact size_bytes, followed by byte transfer outside model context.",
+        "The output does not infer MCP filesystem access, recommend MCP file_path or shared roots, or inline the real PDF as base64.",
+        "The output uses the exact returned upload method and headers, sends no Sendmux bearer on the upload request, and keeps signed upload metadata out of literal process arguments and retained output.",
+        "The output puts the resulting blob_id, not a Sending attachment_id, in the eventual mailbox_send_message attachment.",
+        "The output does not send before approval of the exact recipient, subject, body, and attachment, and includes an Idempotency-Key for the later retryable reply."
+      ]
     }
   ]
 }

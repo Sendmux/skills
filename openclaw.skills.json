@@ -2,7 +2,7 @@
   "owner": "sendmux.ai",
   "outputRoot": "dist/clawhub/skills",
   "homepage": "https://github.com/Sendmux/skills",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "releaseTags": ["latest"],
   "manualListing": {
     "license": "MIT-0",
@@ -34,7 +34,7 @@
   "skills": {
     "sendmux-attachments": {
       "displayName": "Sendmux Attachments",
-      "description": "Move email attachments through Sendmux without putting file bytes in model context, using file paths, presigned URLs, CLI, SDKs, or MCP.",
+      "description": "Move email attachments through Sendmux without putting file bytes in model context, using presigned URLs through MCP or file paths through CLI and SDK helpers.",
       "categories": ["Communication", "Developer Tools", "Automation"],
       "topics": ["sendmux", "email", "attachments", "mcp", "cli", "file-upload"]
     },

@@ -159,10 +159,17 @@ const requiredCorpusTokens = [
   ["sending delegated upload endpoint", /\/emails\/attachment-uploads/],
 ];
 
+const allowedNegativeProofOfWorkGuidance =
+  /\bno\s+(?:existing account,\s*)?(?:API key,\s*)?(?:challenge\s+or\s+)?(?:proof_of_work|proof-of-work|proof of work)(?:\s+step)?\s+is\s+(?:required|needed)\b|\b(?:proof_of_work|proof-of-work|proof of work)\b:\*{0,2}\s*neither\s+(?:step|one)\s+is\s+(?:required|needed)\b/gi;
+
 const forbiddenAgentOnboardingPatterns = [
   ["ALTCHA", /\bALTCHA\b/i],
   ["registration challenge", /\/identity\/challenge|registration challenge/i],
-  ["proof of work", /proof_of_work|proof-of-work|proof of work/i],
+  [
+    "proof of work",
+    /proof_of_work|proof-of-work|proof of work/i,
+    allowedNegativeProofOfWorkGuidance,
+  ],
   ["identity assertion", /identity_assertion|identity assertion/i],
   ["claim token", /claim_token|claim token/i],
   ["pre-claim credential", /pre-claim/i],
@@ -199,6 +206,153 @@ function readJson(filePath) {
   }
 }
 
+function isObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isNonEmptyString(value) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isPositiveInteger(value) {
+  return Number.isInteger(value) && value > 0;
+}
+
+function readMcpContractFacts() {
+  const initialFailureCount = failures.length;
+  const contractPath = fullPath(
+    sdkRoot,
+    "packages/python/mcp/sendmux_mcp/mcp-contract.json",
+  );
+  const contract = readJson(contractPath);
+  if (!isObject(contract)) {
+    fail("MCP contract is missing or unusable");
+    return null;
+  }
+
+  const requiredObjects = [
+    ["package", contract.package],
+    ["hosted", contract.hosted],
+    ["tools", contract.tools],
+    ["uploads", contract.uploads],
+    ["uploads.mailbox", contract.uploads?.mailbox],
+    ["uploads.sending", contract.uploads?.sending],
+  ];
+  for (const [field, value] of requiredObjects) {
+    if (!isObject(value)) {
+      fail(`MCP contract ${field} is missing or unusable`);
+    }
+  }
+
+  const facts = {
+    packageIdentity: contract.package?.identity,
+    packageVersion: contract.package?.version,
+    protocols: contract.protocols,
+    hostedResource: contract.hosted?.resource,
+    hostedTransports: contract.hosted?.transports,
+    toolsBySurface: contract.tools?.by_surface,
+    uploads: contract.uploads,
+  };
+
+  const requiredStrings = [
+    ["package.identity", facts.packageIdentity],
+    ["package.version", facts.packageVersion],
+    ["hosted.resource", facts.hostedResource],
+    ["uploads.mailbox.inline_property", facts.uploads?.mailbox?.inline_property],
+    ["uploads.mailbox.tool", facts.uploads?.mailbox?.tool],
+    ["uploads.sending.inline_property", facts.uploads?.sending?.inline_property],
+    ["uploads.sending.limit_authority", facts.uploads?.sending?.limit_authority],
+    ["uploads.sending.presigned_tool", facts.uploads?.sending?.presigned_tool],
+    ["uploads.sending.tool", facts.uploads?.sending?.tool],
+  ];
+  for (const [field, value] of requiredStrings) {
+    if (!isNonEmptyString(value)) {
+      fail(`MCP contract ${field} is missing or unusable`);
+    }
+  }
+  if (
+    isNonEmptyString(facts.packageVersion) &&
+    !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(
+      facts.packageVersion,
+    )
+  ) {
+    fail("MCP contract package.version is missing or unusable");
+  }
+
+  const requiredStringArrays = [
+    ["protocols", facts.protocols],
+    ["hosted.transports", facts.hostedTransports],
+    ["uploads.mailbox.modes", facts.uploads?.mailbox?.modes],
+  ];
+  for (const [field, value] of requiredStringArrays) {
+    if (
+      !Array.isArray(value) ||
+      value.length === 0 ||
+      value.some((item) => !isNonEmptyString(item))
+    ) {
+      fail(`MCP contract ${field} is missing or unusable`);
+    }
+  }
+
+  const requiredPositiveIntegers = [
+    ["uploads.inline_decoded_max_bytes", facts.uploads?.inline_decoded_max_bytes],
+    ["uploads.mailbox.presigned_max_bytes", facts.uploads?.mailbox?.presigned_max_bytes],
+    ["uploads.mailbox.request_schema_max_bytes", facts.uploads?.mailbox?.request_schema_max_bytes],
+  ];
+  for (const [field, value] of requiredPositiveIntegers) {
+    if (!isPositiveInteger(value)) {
+      fail(`MCP contract ${field} is missing or unusable`);
+    }
+  }
+  if (
+    facts.uploads?.sending?.request_schema_max_bytes !== null &&
+    !isPositiveInteger(facts.uploads?.sending?.request_schema_max_bytes)
+  ) {
+    fail(
+      "MCP contract uploads.sending.request_schema_max_bytes is missing or unusable",
+    );
+  }
+
+  if (!isObject(facts.toolsBySurface)) {
+    fail("MCP contract tools.by_surface is missing or unusable");
+  } else {
+    const requiredSurfaces = ["mailbox", "management", "sending"];
+    const extraSurfaces = Object.keys(facts.toolsBySurface).filter(
+      (surface) => !requiredSurfaces.includes(surface),
+    );
+    if (extraSurfaces.length > 0) {
+      fail(
+        `MCP contract tools.by_surface has unexpected surface ${extraSurfaces.join(", ")}`,
+      );
+    }
+    for (const surface of requiredSurfaces) {
+      const tools = facts.toolsBySurface[surface];
+      if (!Array.isArray(tools) || tools.length === 0) {
+        fail(`MCP contract tools.by_surface.${surface} is missing or unusable`);
+        continue;
+      }
+      for (const [index, tool] of tools.entries()) {
+        if (
+          !isObject(tool) ||
+          !isNonEmptyString(tool.name) ||
+          !isNonEmptyString(tool.title) ||
+          !isNonEmptyString(tool.description) ||
+          !isObject(tool.annotations) ||
+          !isObject(tool.input_schema) ||
+          !Object.hasOwn(tool, "output_schema") ||
+          (tool.output_schema !== null && !isObject(tool.output_schema))
+        ) {
+          fail(
+            `MCP contract tools.by_surface.${surface}[${index}] is incomplete or unusable`,
+          );
+        }
+      }
+    }
+  }
+
+  return failures.length === initialFailureCount ? facts : null;
+}
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -214,6 +368,573 @@ function compareSets(label, actual, expected) {
   }
   if (extra.length > 0) {
     fail(`${label} has unexpected entries: ${extra.join(", ")}`);
+  }
+}
+
+function containsInOrder(text, values) {
+  if (!Array.isArray(values)) return false;
+  let offset = 0;
+  for (const value of values) {
+    const literal = escapeRegExp(String(value));
+    const pattern = typeof value === "number"
+      ? `(?<![\\w.,+-])${literal}(?!\\w|[.,]\\d|-[\\d.])`
+      : `(?<![\\w.+-])${literal}(?![\\w+-]|\\.[\\w])`;
+    const matcher = new RegExp(pattern, "g");
+    matcher.lastIndex = offset;
+    const match = matcher.exec(text);
+    if (!match) return false;
+    offset = matcher.lastIndex;
+  }
+  return true;
+}
+
+function sameOrderedValues(actual, expected) {
+  return (
+    Array.isArray(actual) &&
+    Array.isArray(expected) &&
+    actual.length === expected.length &&
+    actual.every((value, index) => value === expected[index])
+  );
+}
+
+function formattedInteger(value) {
+  return new Intl.NumberFormat("en-US").format(value);
+}
+
+function assertMcpContractPublishing(facts) {
+  if (!facts) return;
+
+  const setupText = readText(
+    fullPath(skillsRoot, "skills/sendmux-mcp-setup/SKILL.md"),
+  );
+  const setupEvalsPath = fullPath(
+    skillsRoot,
+    "skills/sendmux-mcp-setup/evals/evals.json",
+  );
+  const setupEvals = readJson(setupEvalsPath);
+  const evalList = Array.isArray(setupEvals) ? setupEvals : setupEvals?.evals;
+  const compatibilityEval = Array.isArray(evalList)
+    ? evalList.find((entry) => entry?.id === 7)
+    : null;
+  const compatibilityExpected = compatibilityEval?.expected_output || "";
+  const compatibilityExpectations = Array.isArray(compatibilityEval?.expectations)
+    ? compatibilityEval.expectations.join("\n")
+    : "";
+  const installLine = setupText
+    .split("\n")
+    .find((line) => line.startsWith("This guide targets ")) || "";
+
+  const packageValues = [facts.packageIdentity, facts.packageVersion];
+  const packageGuidanceValid =
+    containsInOrder(installLine, packageValues) &&
+    /^This guide targets the released\b/i.test(installLine) &&
+    containsInOrder(compatibilityExpected, packageValues) &&
+    /\bdistinguishes the released\b/i.test(compatibilityExpected) &&
+    containsInOrder(compatibilityExpectations, packageValues) &&
+    /\bdistinguishes the released\b/i.test(compatibilityExpectations);
+  if (!packageGuidanceValid) {
+    fail("MCP package identity/version guidance drift");
+  }
+
+  const publishedProtocolLists = [
+    installLine,
+    compatibilityExpected,
+    compatibilityExpectations,
+  ].map((text) => text.match(/\b\d{4}-\d{2}-\d{2}\b/g) || []);
+  if (
+    publishedProtocolLists.some(
+      (protocols) => !sameOrderedValues(protocols, facts.protocols),
+    )
+  ) {
+    fail("MCP protocol guidance drift");
+  }
+
+  const counts = Object.fromEntries(
+    ["mailbox", "management", "sending"].map((surface) => [
+      surface,
+      facts.toolsBySurface?.[surface]?.length,
+    ]),
+  );
+  const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+  const countValues = [
+    total,
+    counts.mailbox,
+    counts.management,
+    counts.sending,
+  ];
+  const tableHasCounts = [
+    ["Mailbox", counts.mailbox],
+    ["Management", counts.management],
+    ["Sending", counts.sending],
+  ].every(([surface, count]) =>
+    new RegExp(`^\\|\\s*${surface}\\s*\\|[^\\n]*\\|\\s*${count}\\s*\\|`, "m").test(
+      setupText,
+    ),
+  );
+  if (
+    !containsInOrder(installLine, countValues) ||
+    !tableHasCounts ||
+    !containsInOrder(compatibilityExpected, countValues) ||
+    !containsInOrder(compatibilityExpectations, countValues) ||
+    !/grant-visible|visible tools/i.test(
+      `${setupText}\n${compatibilityExpected}\n${compatibilityExpectations}`,
+    ) ||
+    !/not[^\n]*certified/i.test(
+      `${setupText}\n${compatibilityExpected}\n${compatibilityExpectations}`,
+    )
+  ) {
+    fail("MCP tool catalogue count guidance drift");
+  }
+
+  if (!setupText.includes(facts.hostedResource)) {
+    fail("MCP hosted resource guidance drift");
+  }
+  const transportNames = (facts.hostedTransports || []).map((transport) =>
+    transport === "streamable-http" ? "Streamable HTTP" : transport,
+  );
+  if (!transportNames.every((transport) => installLine.includes(transport))) {
+    fail("MCP hosted transport guidance drift");
+  }
+
+  const attachmentTexts = [
+    "sendmux-mcp-setup",
+    "sendmux-attachments",
+    "sendmux-mailbox-agent",
+    "sendmux-send-email",
+    "sendmux-token-efficient-usage",
+  ].map((skillName) =>
+    readText(fullPath(skillsRoot, `skills/${skillName}/SKILL.md`)),
+  );
+  const attachmentCorpus = attachmentTexts.join("\n");
+  const inlineMaximum = formattedInteger(facts.uploads?.inline_decoded_max_bytes);
+  if (
+    !attachmentTexts
+      .filter((_, index) => index !== 2)
+      .every((text) => text.includes(inlineMaximum) && /decoded/i.test(text))
+  ) {
+    fail("MCP inline decoded bound guidance drift");
+  }
+
+  const mailboxModeLines = attachmentCorpus
+    .split("\n")
+    .filter(
+      (line) =>
+        line.includes("mailbox_upload_attachment") ||
+        /MCP inline `?[a-z][a-z0-9_]*_base64/i.test(line),
+    );
+  const publishedMailboxModes = [
+    ...new Set(
+      mailboxModeLines.flatMap((line) =>
+        line.match(/\b[a-z][a-z0-9_]*(?:_base64|_upload_url)\b/g) || [],
+      ),
+    ),
+  ];
+  const contractMailboxModes = Array.isArray(facts.uploads?.mailbox?.modes)
+    ? facts.uploads.mailbox.modes
+    : [];
+  if (
+    publishedMailboxModes.length !== contractMailboxModes.length ||
+    contractMailboxModes.some((mode) => !publishedMailboxModes.includes(mode))
+  ) {
+    fail("MCP Mailbox upload modes guidance drift");
+  }
+
+  const mailboxPresignedMaximum = formattedInteger(
+    facts.uploads?.mailbox?.presigned_max_bytes,
+  );
+  if (
+    ![attachmentTexts[0], attachmentTexts[1], attachmentTexts[2], attachmentTexts[4]].every(
+      (text) => text.includes(mailboxPresignedMaximum),
+    )
+  ) {
+    fail("MCP Mailbox presigned maximum guidance drift");
+  }
+  const mailboxRequestMaximum = formattedInteger(
+    facts.uploads?.mailbox?.request_schema_max_bytes,
+  );
+  if (!attachmentCorpus.includes(mailboxRequestMaximum)) {
+    fail("MCP Mailbox request-schema maximum guidance drift");
+  }
+
+  const sendingAuthorityPublishingGuidance = [
+    ["sendmux-mcp-setup", attachmentTexts[0]],
+    ["sendmux-attachments", attachmentTexts[1]],
+    ["sendmux-send-email", attachmentTexts[3]],
+    ["sendmux-token-efficient-usage", attachmentTexts[4]],
+  ];
+  const sendingGuidance = sendingAuthorityPublishingGuidance
+    .map(([, text]) => text)
+    .join("\n");
+  const sendingLimitAuthority = String(
+    facts.uploads?.sending?.limit_authority,
+  );
+  const sendingAuthorityMatch = sendingLimitAuthority.match(
+    /^upload intent response ([A-Za-z0-9_]+)$/,
+  );
+  if (!sendingAuthorityMatch) {
+    fail("MCP Sending limit authority guidance drift");
+  } else {
+    const authorityField = escapeRegExp(sendingAuthorityMatch[1]);
+    const presignedTool = escapeRegExp(facts.uploads.sending.presigned_tool);
+    const authorityPattern = new RegExp(
+      `(?:upload intent(?:'s)?|${presignedTool})[^\\n.]*\\breturned\\s+\`${authorityField}\``,
+      "i",
+    );
+    const contradictoryAuthorityPattern = new RegExp(
+      `(?:upload intent(?:'s)?|${presignedTool})[^\\n.]*\\brequest(?:ed)?\\s+\`${authorityField}\``,
+      "i",
+    );
+    for (const [skillName, text] of sendingAuthorityPublishingGuidance) {
+      if (
+        !authorityPattern.test(text) ||
+        contradictoryAuthorityPattern.test(text)
+      ) {
+        fail(`MCP Sending limit authority guidance drift in ${skillName}`);
+      }
+    }
+  }
+  const sendingRequestMaximum = facts.uploads?.sending?.request_schema_max_bytes;
+  if (
+    sendingRequestMaximum === null
+      ? !/no universal MCP Sending presign limit/i.test(sendingGuidance)
+      : !sendingGuidance.includes(formattedInteger(sendingRequestMaximum))
+  ) {
+    fail("MCP Sending request-schema maximum guidance drift");
+  }
+}
+
+function assertMcpFilePathGuidance(facts) {
+  if (!facts?.toolsBySurface) return;
+
+  const guidance = [
+    [
+      "sendmux-attachments",
+      /MCP tools do not accept `file_path` or read shared filesystem roots/i,
+    ],
+    [
+      "sendmux-mcp-setup",
+      /Local and hosted MCP do not accept `file_path` or shared filesystem roots/i,
+    ],
+    [
+      "sendmux-mailbox-agent",
+      /Do not give MCP a local `file_path`[^\n]*CLI[^\n]*SDK file helpers/i,
+    ],
+    [
+      "sendmux-send-email",
+      /MCP does not receive a local `file_path`/i,
+    ],
+    [
+      "sendmux-token-efficient-usage",
+      /Never use MCP `file_path`/i,
+    ],
+  ].map(([skillName, negativePattern]) => ({
+    skillName,
+    negativePattern,
+    text: readText(fullPath(skillsRoot, `skills/${skillName}/SKILL.md`)),
+  }));
+  const contractAcceptsFilePath = Object.values(facts.toolsBySurface)
+    .flat()
+    .some((tool) =>
+      Object.hasOwn(tool?.input_schema?.properties || {}, "file_path"),
+    );
+  const hasNegativeGuidance = guidance.some(({ text, negativePattern }) =>
+    negativePattern.test(text),
+  );
+  const allNegativeGuidancePresent = guidance.every(({ text, negativePattern }) =>
+    negativePattern.test(text),
+  );
+  const hasPositiveRecommendation = guidance.some(({ text }) =>
+    text
+      .split("\n")
+      .some((line) =>
+        /\bMCP(?: tools?)?\s+(?:accepts?|supports?|recommends?|uses?|receives?)[^.\n]*`?file_path`?/i.test(
+          line,
+        ),
+      ),
+  );
+
+  if (
+    (contractAcceptsFilePath && hasNegativeGuidance) ||
+    (!contractAcceptsFilePath &&
+      (!allNegativeGuidancePresent || hasPositiveRecommendation))
+  ) {
+    fail("MCP file_path guidance drift");
+  }
+}
+
+function textBetween(text, start, end) {
+  const startIndex = text.indexOf(start);
+  if (startIndex === -1) return "";
+  const endIndex = text.indexOf(end, startIndex + start.length);
+  return endIndex === -1 ? text.slice(startIndex) : text.slice(startIndex, endIndex);
+}
+
+function assertSyncGuidance() {
+  const text = readText(
+    fullPath(skillsRoot, "skills/sendmux-token-efficient-usage/SKILL.md"),
+  );
+  const broad = textBetween(
+    text,
+    "Broad mailbox sync:",
+    "For a message-only continuation",
+  );
+  if (
+    !/```bash[\s\S]*?sendmux mailbox:get-changes[\s\S]*?--query types=messages,folders,threads/.test(
+      broad,
+    ) ||
+    !containsInOrder(broad, [
+      "data.types.messages.new_state",
+      "data.types.folders.new_state",
+      "data.types.threads.new_state",
+    ])
+  ) {
+    fail("typed multi-resource sync guidance drift");
+  }
+
+  const continuation = textBetween(
+    text,
+    "For a message-only continuation",
+    "Filtered message sync:",
+  );
+  if (
+    !continuation.includes("--query types=messages") ||
+    !continuation.includes("data.types.messages.new_state") ||
+    !continuation.includes("data.types.messages.has_more") ||
+    /next_cursor/.test(continuation)
+  ) {
+    fail("typed continuation guidance drift");
+  }
+
+  const filtered = textBetween(
+    text,
+    "Filtered message sync:",
+    "A polling-loop answer",
+  );
+  if (
+    !filtered.includes("data.new_query_state") ||
+    !filtered.includes("data.has_more") ||
+    /next_cursor/.test(filtered)
+  ) {
+    fail("filtered sync guidance drift");
+  }
+
+  const listGuidance = text
+    .split("\n")
+    .find((line) => line.startsWith("- For filtered summary pages")) || "";
+  if (
+    !listGuidance.includes("pagination.next_cursor") ||
+    !listGuidance.includes("next `cursor` input")
+  ) {
+    fail("list pagination guidance drift");
+  }
+}
+
+function assertSdkExampleGuidance() {
+  const sendingText = readText(
+    fullPath(skillsRoot, "skills/sendmux-send-email/SKILL.md"),
+  );
+  const gettingStartedText = readText(
+    fullPath(skillsRoot, "skills/sendmux-getting-started/SKILL.md"),
+  );
+  const sdkSection = textBetween(
+    sendingText,
+    "## TypeScript SDK",
+    "## Direct HTTP",
+  );
+  const singleExample = textBetween(sdkSection, "One email:", "Batch:");
+  const batchExample = textBetween(sdkSection, "Batch:", "## Direct HTTP");
+  const openApiExample = textBetween(
+    gettingStartedText,
+    "sendingGetOpenApiSpec",
+    "## Error handling",
+  );
+
+  if (
+    !singleExample.includes("response.data.data.message_id") ||
+    !singleExample.includes("response.data.data.status") ||
+    !batchExample.includes("response.data.data.results") ||
+    !openApiExample.includes("response.data.info")
+  ) {
+    fail("Sending SDK response envelope guidance drift");
+  }
+  if (
+    !singleExample.includes("throwOnError: true") ||
+    !batchExample.includes("throwOnError: true") ||
+    !openApiExample.includes("throwOnError: true")
+  ) {
+    fail("throwOnError guidance drift");
+  }
+}
+
+function assertRecipientBounds() {
+  const sendingSpec = readJson(sendingOpenApi);
+  const sendRequest = sendingSpec?.components?.schemas?.EmailSendRequest;
+  const batchRequest = sendingSpec?.components?.schemas?.BatchSendRequest;
+  const ccMaximum = sendRequest?.properties?.cc?.maxItems;
+  const bccMaximum = sendRequest?.properties?.bcc?.maxItems;
+  const combinedMatches = [
+    sendRequest?.properties?.cc?.description,
+    sendRequest?.properties?.bcc?.description,
+  ].map((description) => String(description || "").match(/subject to (\d+) total/i));
+  const combinedMaximum = Number(combinedMatches[0]?.[1]);
+  const batchMaximum = batchRequest?.properties?.messages?.maxItems;
+  const sendEmailText = readText(
+    fullPath(skillsRoot, "skills/sendmux-send-email/SKILL.md"),
+  );
+
+  if (
+    !isPositiveInteger(ccMaximum) ||
+    ccMaximum !== bccMaximum ||
+    !isPositiveInteger(combinedMaximum) ||
+    combinedMatches.some((match) => Number(match?.[1]) !== combinedMaximum) ||
+    !isPositiveInteger(batchMaximum) ||
+    !sendEmailText.includes(
+      `max ${ccMaximum} each and subject to ${combinedMaximum} total`,
+    ) ||
+    !sendEmailText.includes(`up to ${batchMaximum} independently confirmed messages`)
+  ) {
+    fail("Sending recipient bounds guidance drift");
+  }
+}
+
+function findOpenApiOperation(spec, operationId) {
+  for (const pathItem of Object.values(spec?.paths || {})) {
+    for (const operation of Object.values(pathItem || {})) {
+      if (operation?.operationId === operationId) return operation;
+    }
+  }
+  return null;
+}
+
+function resolveLocalSchema(spec, schema) {
+  const reference = schema?.$ref;
+  if (!reference?.startsWith("#/components/schemas/")) return schema;
+  return spec?.components?.schemas?.[reference.split("/").at(-1)];
+}
+
+function assertManagementCreateMailboxKeyBody() {
+  const appSpec = readJson(appOpenApi);
+  const operation = findOpenApiOperation(appSpec, "managementCreateMailboxKey");
+  const schema = operation?.requestBody?.content?.["application/json"]?.schema;
+  if (!isObject(schema?.properties) || !Array.isArray(schema.required)) {
+    fail("managementCreateMailboxKey OpenAPI request body is missing or unusable");
+    return;
+  }
+
+  const managementText = readText(
+    fullPath(skillsRoot, "skills/sendmux-management/SKILL.md"),
+  );
+  const bodyText = managementText.match(
+    /sendmux management:create-mailbox-key[\s\S]{0,500}?--body\s+'([^']+)'/,
+  )?.[1];
+  let body;
+  try {
+    body = JSON.parse(bodyText);
+  } catch {
+    fail("management:create-mailbox-key example has missing or invalid JSON body");
+    return;
+  }
+  if (!isObject(body)) {
+    fail("management:create-mailbox-key example has missing or invalid JSON body");
+    return;
+  }
+
+  for (const requiredField of schema.required) {
+    if (!Object.hasOwn(body, requiredField)) {
+      fail(
+        `management:create-mailbox-key request body missing required field ${requiredField}`,
+      );
+    }
+  }
+  if (schema.additionalProperties === false) {
+    for (const field of Object.keys(body)) {
+      if (!Object.hasOwn(schema.properties, field)) {
+        fail(
+          `management:create-mailbox-key request body uses unsupported field ${field}`,
+        );
+      }
+    }
+  }
+}
+
+function assertAdjacentSdkExamples() {
+  const tokenEfficientText = readText(
+    fullPath(skillsRoot, "skills/sendmux-token-efficient-usage/SKILL.md"),
+  );
+  const conditionalRead = textBetween(
+    tokenEfficientText,
+    "For the first metadata-bearing read",
+    "The terminal delivery statuses",
+  );
+  const conditionalCall = textBetween(
+    conditionalRead,
+    "managementGetEmailLog({",
+    "if (result.response",
+  );
+  if (
+    !conditionalRead.includes("createManagementClient") ||
+    !conditionalRead.includes(
+      "createManagementClient({ apiKey: process.env.SENDMUX_API_KEY! })",
+    ) ||
+    !conditionalCall.includes("client,")
+  ) {
+    fail("conditional Management SDK client guidance drift");
+  }
+  if (!conditionalCall.includes("throwOnError: false")) {
+    fail("conditional Management SDK throwOnError guidance drift");
+  }
+  if (
+    !conditionalCall.includes(
+      'headers: priorEtag ? { "If-None-Match": priorEtag } : {},',
+    )
+  ) {
+    fail("conditional Management SDK headers guidance drift");
+  }
+
+  const mailboxAgentText = readText(
+    fullPath(skillsRoot, "skills/sendmux-mailbox-agent/SKILL.md"),
+  );
+  const mailboxSdk = textBetween(mailboxAgentText, "SDK:", "## Triage and mutation");
+  const snippetsCall = textBetween(
+    mailboxSdk,
+    "mailboxSearchMessageSnippets({",
+    "const ids",
+  );
+  if (!snippetsCall.includes("throwOnError: true")) {
+    fail("Mailbox snippet throwOnError guidance drift");
+  }
+  if (!mailboxSdk.includes("snippets.data.data.snippets.map")) {
+    fail("Mailbox snippet SDK response guidance drift");
+  }
+
+  const appSpec = readJson(appOpenApi);
+  const batchGetOperation = findOpenApiOperation(
+    appSpec,
+    "mailboxBatchGetMessages",
+  );
+  const batchGetSchema = resolveLocalSchema(
+    appSpec,
+    batchGetOperation?.requestBody?.content?.["application/json"]?.schema,
+  );
+  const idsMinimum = batchGetSchema?.properties?.ids?.minItems;
+  if (!isPositiveInteger(idsMinimum)) {
+    fail("Mailbox batch-get ids minItems is missing or unusable");
+    return;
+  }
+  const expectedGuard =
+    idsMinimum === 1
+      ? "if (ids.length > 0) {"
+      : `if (ids.length >= ${idsMinimum}) {`;
+  if (
+    !mailboxSdk.includes(
+      "const ids = snippets.data.data.snippets.map((item) => item.message_id);",
+    ) ||
+    !mailboxSdk.includes(expectedGuard) ||
+    !/if \(ids\.length[^\n]*\) \{[\s\S]*?mailboxBatchGetMessages\(\{[\s\S]*?body: \{\s*ids,/m.test(
+      mailboxSdk,
+    )
+  ) {
+    fail("Mailbox snippet empty-result guard guidance drift");
   }
 }
 
@@ -334,8 +1055,11 @@ function assertSkillCorpusTokens() {
     }
   }
 
-  for (const [label, pattern] of forbiddenAgentOnboardingPatterns) {
-    if (pattern.test(corpusText)) {
+  for (const [label, pattern, allowedNegativePattern] of forbiddenAgentOnboardingPatterns) {
+    const textToCheck = allowedNegativePattern
+      ? corpusText.replace(allowedNegativePattern, "")
+      : corpusText;
+    if (pattern.test(textToCheck)) {
       fail(`Skill corpus still contains obsolete ${label} guidance (${pattern})`);
     }
   }
@@ -377,22 +1101,104 @@ function assertAgentStorageTransitions() {
   }
 }
 
+function directUploadCurlEvidence(command, curlConfig) {
+  const hasBinaryBody =
+    /(?:^|\n)\s*--data-binary(?:=|\s+)@[^\s\\]+(?=\s|\\|$)/.test(
+      command,
+    );
+  const argvHasPostAndEndpoint =
+    /(?:^|\s)(?:-X|--request)(?:=|\s+)["']?POST["']?\s+["']?https:\/\/smtp\.sendmux\.ai\/api\/v1\/emails\/attachments(?:\?[^"'\s\\]*)?["']?(?=\s|\\|$)/.test(
+      command,
+    );
+  const argvHasContentLength =
+    /(?:^|\s)(?:-H|--header)(?:=|\s+)["']Content-Length\s*:[^"']*["']/i.test(
+      command,
+    );
+  const configHasPostAndEndpoint =
+    /^\s*request\s*=\s*["']POST["']\s*$/m.test(curlConfig) &&
+    /^\s*url\s*=\s*["']https:\/\/smtp\.sendmux\.ai\/api\/v1\/emails\/attachments(?:\?[^"']*)?["']\s*$/m.test(
+      curlConfig,
+    );
+  const configHasContentLength =
+    /^\s*header\s*=\s*["']Content-Length\s*:[^"']*["']\s*$/im.test(
+      curlConfig,
+    );
+
+  const argvIsComplete =
+    hasBinaryBody && argvHasPostAndEndpoint && argvHasContentLength;
+  const configIsComplete =
+    hasBinaryBody && configHasPostAndEndpoint && configHasContentLength;
+  return {
+    complete: argvIsComplete || configIsComplete,
+    missingOnlyContentLength:
+      hasBinaryBody &&
+      ((argvHasPostAndEndpoint && !argvHasContentLength) ||
+        (configHasPostAndEndpoint && !configHasContentLength)),
+  };
+}
+
+function curlExamplesFromFencedShellBlocks(skillText) {
+  const examples = [];
+  const shellBlocks = skillText.matchAll(
+    /^```(?:bash|sh)\s*\n([\s\S]*?)^```/gm,
+  );
+
+  for (const blockMatch of shellBlocks) {
+    const lines = blockMatch[1].split("\n");
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+      if (!/^\s*curl(?:\s|$)/.test(lines[lineIndex])) continue;
+
+      const commandLines = [lines[lineIndex]];
+      while (/\\\s*$/.test(commandLines.at(-1)) && lineIndex + 1 < lines.length) {
+        lineIndex += 1;
+        commandLines.push(lines[lineIndex]);
+      }
+
+      const command = commandLines.join("\n");
+      const heredocMarker = command.match(
+        /<<-?\s*["']?([A-Za-z_][A-Za-z0-9_]*)["']?\s*$/,
+      )?.[1];
+      let curlConfig = "";
+      if (
+        heredocMarker &&
+        /--config(?:=|\s+)-(?=\s|\\|$)/.test(command)
+      ) {
+        const markerIndex = lines.findIndex(
+          (line, index) =>
+            index > lineIndex && line.trim() === heredocMarker,
+        );
+        if (markerIndex !== -1) {
+          curlConfig = lines.slice(lineIndex + 1, markerIndex).join("\n");
+        }
+      }
+
+      examples.push(directUploadCurlEvidence(command, curlConfig));
+    }
+  }
+
+  return examples;
+}
+
 function assertAttachmentSkillContentLengthGuidance() {
   const skillPath = fullPath(
     skillsRoot,
     "skills/sendmux-attachments/SKILL.md",
   );
   const skillText = readText(skillPath);
-  const directUploadExample = skillText.match(
-    /curl -X POST "https:\/\/smtp\.sendmux\.ai\/api\/v1\/emails\/attachments[\s\S]*?--data-binary @\.\/report\.pdf/,
-  )?.[0];
+  const directUploadExamples = curlExamplesFromFencedShellBlocks(skillText);
+  const completeExample = directUploadExamples.some(
+    (example) => example.complete,
+  );
+  const missingOnlyContentLength = directUploadExamples.some(
+    (example) => example.missingOnlyContentLength,
+  );
 
-  if (!directUploadExample) {
-    fail("sendmux-attachments missing Direct HTTP Sending direct upload curl example");
-  } else if (!/Content-Length/.test(directUploadExample)) {
+  if (missingOnlyContentLength && !completeExample) {
     fail(
       "sendmux-attachments Direct HTTP Sending upload example must include Content-Length",
     );
+  } else if (!completeExample) {
+    fail("sendmux-attachments missing Direct HTTP Sending direct upload curl example");
   }
 
   if (
@@ -453,6 +1259,54 @@ function assertCliPackage() {
       if (!pattern.test(source)) {
         fail(`${contract.path} missing required flag ${flag}`);
       }
+    }
+  }
+}
+
+function readCliOperationCounts() {
+  const operationsPath = fullPath(
+    sdkRoot,
+    "packages/ts/cli/src/generated/operations.ts",
+  );
+  const source = readText(operationsPath);
+  const match = source.match(
+    /export const operations = ([\s\S]*?) as const satisfies/,
+  );
+  if (!match) {
+    fail(`CLI generated operations manifest is missing or unusable in ${operationsPath}`);
+    return null;
+  }
+
+  // The manifest comes from a separately checked-out repository, so count the
+  // JSON-encoded "surface" property of each generated operation as text and
+  // never execute it.
+  const counts = { mailbox: 0, management: 0, sending: 0 };
+  const surfacePattern =
+    /(?<!\\)"surface"\s*:\s*"(mailbox|management|sending)"(?=\s*[,}])/g;
+  for (const [, surface] of match[1].matchAll(surfacePattern)) {
+    counts[surface] += 1;
+  }
+  if (Object.values(counts).every((count) => count === 0)) {
+    fail(`CLI generated operations manifest is missing or unusable in ${operationsPath}`);
+    return null;
+  }
+  return counts;
+}
+
+function assertCliCommandCounts() {
+  const counts = readCliOperationCounts();
+  if (!counts) return;
+  const cliSkillText = readText(
+    fullPath(skillsRoot, "skills/sendmux-cli/SKILL.md"),
+  );
+  for (const [surface, count] of Object.entries(counts)) {
+    const label = `${surface[0].toUpperCase()}${surface.slice(1)}`;
+    if (
+      !new RegExp(`^\\|\\s*${label}\\s*\\|\\s*${count}\\s*\\|`, "m").test(
+        cliSkillText,
+      )
+    ) {
+      fail(`CLI ${label} command count guidance drift`);
     }
   }
 }
@@ -545,14 +1399,17 @@ function assertSdkPackages() {
   const goModule = readText(goModPath).match(/^module\s+(\S+)/m)?.[1];
   if (!goModule) {
     fail(`Missing Go module declaration in ${goModPath}`);
-  } else if (goModule !== "sendmux.ai/go") {
-    fail(`Go module expected sendmux.ai/go, found ${goModule}`);
+  } else if (goModule !== "sendmux.ai/go/v2") {
+    fail(`Go module expected sendmux.ai/go/v2, found ${goModule}`);
   }
 }
+
+const mcpContractFacts = readMcpContractFacts();
 
 assertOpenApiPaths("Sending OpenAPI", sendingOpenApi, requiredSendingPaths);
 assertOpenApiPaths("App OpenAPI mailbox surface", appOpenApi, requiredMailboxPaths);
 assertCliPackage();
+assertCliCommandCounts();
 assertMcpSources();
 assertClaimedMcpToolsExist();
 assertOfficialSendmuxEnvOnly();
@@ -562,6 +1419,13 @@ assertSkillCorpusTokens();
 assertUntrustedInboundContentBoundaries();
 assertAgentStorageTransitions();
 assertAttachmentSkillContentLengthGuidance();
+assertMcpContractPublishing(mcpContractFacts);
+assertMcpFilePathGuidance(mcpContractFacts);
+assertSyncGuidance();
+assertSdkExampleGuidance();
+assertRecipientBounds();
+assertManagementCreateMailboxKeyBody();
+assertAdjacentSdkExamples();
 
 if (failures.length > 0) {
   console.error("Sendmux skill drift check failed:");
