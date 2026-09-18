@@ -308,6 +308,16 @@ async function recoverShell(running) {
   assert.equal(isProcessGroupRunning(running.pid), false, `workflow process group ${running.pid} must exit`);
 }
 
+async function attemptCleanup(t, label, cleanup) {
+  try {
+    await cleanup();
+    return undefined;
+  } catch (error) {
+    t.diagnostic(`${label} cleanup failed: ${error.message}`);
+    return error;
+  }
+}
+
 test("ClawHub publish reads an owner-only ephemeral config without secret argv", async (t) => {
   const fixture = makeClawhubFixture();
   t.after(() => rmSync(fixture.root, { recursive: true, force: true }));
@@ -400,6 +410,7 @@ test("ClawHub publish removes its exact config directory on workflow SIGHUP, SIG
     let result;
     let descendantsBeforeRecovery;
 
+    let cleanupError;
     try {
       assert.equal(
         await waitForPathToExist(fixture.ready),
@@ -435,19 +446,22 @@ test("ClawHub publish removes its exact config directory on workflow SIGHUP, SIG
       assert.equal(descendantsBeforeRecovery.publisher, false, "publisher must stop before fixture recovery");
       assert.equal(descendantsBeforeRecovery.child, false, "ClawHub child must stop before fixture recovery");
     } finally {
-      if (receipt) {
-        await terminateFixturePid(receipt.pid);
-        await terminateFixturePid(receipt.parentPid);
-      } else {
-        try {
-          process.kill(-running.pid, "SIGKILL");
-        } catch (error) {
-          if (error.code !== "ESRCH") throw error;
+      cleanupError = await attemptCleanup(t, `${signal} workflow`, async () => {
+        if (receipt) {
+          await terminateFixturePid(receipt.pid);
+          await terminateFixturePid(receipt.parentPid);
+        } else {
+          try {
+            process.kill(-running.pid, "SIGKILL");
+          } catch (error) {
+            if (error.code !== "ESRCH") throw error;
+          }
         }
-      }
-      if (isPidRunning(running.pid)) await terminateFixturePid(running.pid);
-      result = await settleWithin(running.closed, `${signal} workflow stdio close`, 2000);
+        if (isPidRunning(running.pid)) await terminateFixturePid(running.pid);
+        result = await settleWithin(running.closed, `${signal} workflow stdio close`, 2000);
+      });
     }
+    if (cleanupError) throw cleanupError;
 
     assertSecretAbsent(result);
     assert.equal(isPidRunning(running.pid), false);
@@ -487,6 +501,7 @@ if (process.argv[1]?.endsWith("/scripts/publish-openclaw-bundle.mjs")) {
   let result;
   let stateBeforeRecovery;
 
+  let cleanupError;
   try {
     assert.equal(
       await waitForPathToExist(preloadReady),
@@ -524,9 +539,12 @@ if (process.argv[1]?.endsWith("/scripts/publish-openclaw-bundle.mjs")) {
     });
     assert.deepEqual(readdirSync(fixture.runnerTemp), []);
   } finally {
-    if (publisherPid && isPidRunning(publisherPid)) await terminateFixturePid(publisherPid);
-    if (isPidRunning(running.pid) || isProcessGroupRunning(running.pid)) await recoverShell(running);
+    cleanupError = await attemptCleanup(t, "startup cancellation", async () => {
+      if (publisherPid && isPidRunning(publisherPid)) await terminateFixturePid(publisherPid);
+      if (isPidRunning(running.pid) || isProcessGroupRunning(running.pid)) await recoverShell(running);
+    });
   }
+  if (cleanupError) throw cleanupError;
 
   assertSecretAbsent(result);
   assert.equal(isPidRunning(running.pid), false);
@@ -547,6 +565,7 @@ test("ClawHub cancellation interrupts a rate-limit wait before another publicati
   let receipt;
   let result;
 
+  let cleanupError;
   try {
     assert.equal(await waitForPathToExist(fixture.ready), true, "publisher must enter its retry wait");
     receipt = readReceipt(fixture);
@@ -561,16 +580,19 @@ test("ClawHub cancellation interrupts a rate-limit wait before another publicati
     assert.equal(existsSync(path.dirname(receipt.configPath)), false);
     assert.equal(readFileSync(fixture.attempts, "utf8"), "1", "cancellation must prevent another publish attempt");
   } finally {
-    if (receipt && isPidRunning(receipt.parentPid)) await terminateFixturePid(receipt.parentPid);
-    if (isPidRunning(running.pid)) {
-      try {
-        process.kill(-running.pid, "SIGKILL");
-      } catch (error) {
-        if (error.code !== "ESRCH") throw error;
+    cleanupError = await attemptCleanup(t, "rate-limit cancellation", async () => {
+      if (receipt && isPidRunning(receipt.parentPid)) await terminateFixturePid(receipt.parentPid);
+      if (isPidRunning(running.pid)) {
+        try {
+          process.kill(-running.pid, "SIGKILL");
+        } catch (error) {
+          if (error.code !== "ESRCH") throw error;
+        }
+        await waitForPidToExit(running.pid);
       }
-      await waitForPidToExit(running.pid);
-    }
+    });
   }
+  if (cleanupError) throw cleanupError;
 
   assertSecretAbsent(result);
   assert.equal(isPidRunning(running.pid), false);
@@ -589,6 +611,7 @@ test("runShell timeout recovers its exact owned shell and child before fixture r
   let childPid;
   t.after(() => rmSync(root, { recursive: true, force: true }));
 
+  let cleanupError;
   try {
     await assert.rejects(
       runShell(
@@ -624,18 +647,21 @@ test("runShell timeout recovers its exact owned shell and child before fixture r
     assert.equal(isPidRunning(running.pid), false, "timed-out shell must be recovered by runShell");
     assert.equal(isPidRunning(childPid), false, "timed-out child must be recovered by runShell");
   } finally {
-    if (!childPid && existsSync(ready)) childPid = Number(readFileSync(ready, "utf8"));
-    if (childPid) t.diagnostic(`timeout owned child PID ${childPid}`);
-    if (childPid && isPidRunning(childPid)) await terminateFixturePid(childPid);
-    if (running && isPidRunning(running.pid)) {
-      try {
-        process.kill(-running.pid, "SIGKILL");
-      } catch (error) {
-        if (error.code !== "ESRCH") throw error;
+    cleanupError = await attemptCleanup(t, "timeout recovery", async () => {
+      if (!childPid && existsSync(ready)) childPid = Number(readFileSync(ready, "utf8"));
+      if (childPid) t.diagnostic(`timeout owned child PID ${childPid}`);
+      if (childPid && isPidRunning(childPid)) await terminateFixturePid(childPid);
+      if (running && isPidRunning(running.pid)) {
+        try {
+          process.kill(-running.pid, "SIGKILL");
+        } catch (error) {
+          if (error.code !== "ESRCH") throw error;
+        }
+        await waitForPidToExit(running.pid);
       }
-      await waitForPidToExit(running.pid);
-    }
+    });
   }
+  if (cleanupError) throw cleanupError;
   t.diagnostic(`timeout recovery verified shell/process-group PID ${running.pid} and child PID ${childPid} absent`);
 });
 

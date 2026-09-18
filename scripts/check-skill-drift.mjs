@@ -1277,21 +1277,20 @@ function readCliOperationCounts() {
     return null;
   }
 
-  try {
-    const operations = Function(`"use strict"; return (${match[1]});`)();
-    const counts = { mailbox: 0, management: 0, sending: 0 };
-    for (const operation of Object.values(operations)) {
-      if (Object.hasOwn(counts, operation?.surface)) {
-        counts[operation.surface] += 1;
-      }
-    }
-    return counts;
-  } catch (error) {
-    fail(
-      `CLI generated operations manifest is missing or unusable in ${operationsPath}: ${error.message}`,
-    );
+  // The manifest comes from a separately checked-out repository, so count the
+  // JSON-encoded "surface" property of each generated operation as text and
+  // never execute it.
+  const counts = { mailbox: 0, management: 0, sending: 0 };
+  const surfacePattern =
+    /(?<!\\)"surface"\s*:\s*"(mailbox|management|sending)"(?=\s*[,}])/g;
+  for (const [, surface] of match[1].matchAll(surfacePattern)) {
+    counts[surface] += 1;
+  }
+  if (Object.values(counts).every((count) => count === 0)) {
+    fail(`CLI generated operations manifest is missing or unusable in ${operationsPath}`);
     return null;
   }
+  return counts;
 }
 
 function assertCliCommandCounts() {

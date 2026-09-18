@@ -982,6 +982,33 @@ test("derives CLI surface counts separately from the generated operations manife
   assert.doesNotMatch(result.stderr, /MCP tool catalogue count guidance drift/);
 });
 
+test("counts CLI surfaces without executing the generated operations manifest", (t) => {
+  const fixture = makeContractFixture(t);
+  const operationsPath = path.join(
+    fixture.sdkRoot,
+    "packages/ts/cli/src/generated/operations.ts",
+  );
+  const sentinel = "drift checker executed the generated operations manifest";
+  replaceFixtureText(
+    operationsPath,
+    "export const operations = {",
+    `export const operations = (process.stderr.write(${JSON.stringify(`${sentinel}\n`)}), {`,
+  );
+  replaceFixtureText(
+    operationsPath,
+    "} as const satisfies",
+    "}) as const satisfies",
+  );
+
+  const result = runFixtureChecker(fixture);
+  assert.doesNotMatch(
+    result.stderr,
+    new RegExp(sentinel),
+    "the checker must read the manifest as text instead of executing it",
+  );
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("guards the documented sync, SDK envelope, throwing, and recipient semantics", (t) => {
   const skillPath = (fixture, skillName) =>
     path.join(fixture.skillsRoot, `skills/${skillName}/SKILL.md`);
