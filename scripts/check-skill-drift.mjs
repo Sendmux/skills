@@ -1399,8 +1399,8 @@ function assertSdkPackages() {
   const goModule = readText(goModPath).match(/^module\s+(\S+)/m)?.[1];
   if (!goModule) {
     fail(`Missing Go module declaration in ${goModPath}`);
-  } else if (goModule !== "sendmux.ai/go/v2") {
-    fail(`Go module expected sendmux.ai/go/v2, found ${goModule}`);
+  } else if (goModule !== "sendmux.ai/go/v3") {
+    fail(`Go module expected sendmux.ai/go/v3, found ${goModule}`);
   }
 }
 

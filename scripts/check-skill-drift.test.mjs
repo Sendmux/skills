@@ -525,21 +525,21 @@ test("requires usable MCP contract fields without trusting compatibility aliases
   assert.equal(declaredTotalResult.status, 0, declaredTotalResult.stderr);
 });
 
-test("rejects a stale unsuffixed Go module after accepting the v2 producer", (t) => {
+test("rejects a stale v2 Go module after accepting the v3 producer", (t) => {
   const fixture = makeContractFixture(t);
   const baseline = runFixtureChecker(fixture);
   assert.equal(baseline.status, 0, baseline.stderr);
 
   replaceFixtureText(
     path.join(fixture.sdkRoot, "go/go.mod"),
+    "module sendmux.ai/go/v3",
     "module sendmux.ai/go/v2",
-    "module sendmux.ai/go",
   );
   const staleModule = runFixtureChecker(fixture);
   assert.equal(staleModule.status, 1);
   assert.match(
     staleModule.stderr,
-    /Go module expected sendmux\.ai\/go\/v2, found sendmux\.ai\/go\n/,
+    /Go module expected sendmux\.ai\/go\/v3, found sendmux\.ai\/go\/v2\n/,
   );
 });
 
