@@ -8,6 +8,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..");
 
+if (process.argv.length > 2) {
+  try {
+    const { main } = await import("./skill-compatibility.mjs");
+    main();
+  } catch (error) {
+    console.error(`Skill compatibility failed: ${error.message}`);
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
 const skillsRoot = process.env.SENDMUX_SKILLS_ROOT || repoRoot;
 const docsRoot =
   process.env.SENDMUX_DOCS || "/Users/rj/Desktop/GIT-REPOS/sendmux-docs";
@@ -20,6 +31,8 @@ const sendingOpenApi =
   path.join(docsRoot, "openapi-sending.json");
 
 const expectedSkills = [
+  "agent-email-inbox",
+  "email-for-ai-agents",
   "sendmux-cli",
   "sendmux-attachments",
   "sendmux-email-for-agents",

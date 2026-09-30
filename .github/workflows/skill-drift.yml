@@ -1,17 +1,6 @@
 name: Skill drift
 
-# Guards the canonical skills against the real product surfaces. scripts/
-# check-skill-drift.mjs asserts every OpenAPI path, SDK/MCP package name, CLI
-# topic, and MCP tool the skills claim actually exists in source. Runs on every
-# change to the skills or the checker.
-#
-# No secrets required: Sendmux/sendmux-sdk is public (checked out with the
-# default GITHUB_TOKEN) and the OpenAPI specs are fetched from public URLs.
-# If the OpenAPI must instead come from sendmux-docs, swap the "Fetch public
-# OpenAPI" step for a checkout of that repo and point SENDMUX_APP_OPENAPI /
-# SENDMUX_SENDING_OPENAPI at its files. If the SDK layout changes
-# (packages/ts/*, packages/python/mcp/*, go/go.mod, …) reconcile
-# check-skill-drift.mjs there.
+# Acceptance uses immutable public source exports and explicit skill reviews.
 
 on:
   pull_request:
@@ -21,6 +10,10 @@ on:
       - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - "scripts/check-skill-drift.test.mjs"
+      - "scripts/skill-compatibility.mjs"
+      - "scripts/skill-compatibility.test.mjs"
+      - "skill-compatibility.json"
+      - "evidence/skill-compatibility/**"
       - ".github/workflows/skill-drift.yml"
   push:
     branches:
@@ -31,14 +24,19 @@ on:
       - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - "scripts/check-skill-drift.test.mjs"
+      - "scripts/skill-compatibility.mjs"
+      - "scripts/skill-compatibility.test.mjs"
+      - "skill-compatibility.json"
+      - "evidence/skill-compatibility/**"
       - ".github/workflows/skill-drift.yml"
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: skill-drift-${{ github.ref }}
+  group: skill-drift-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -48,29 +46,52 @@ jobs:
     steps:
       - name: Check out sendmux-skills
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read pinned public source inputs
+        id: source
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, appendFileSync } from "node:fs";
+          const inputs = JSON.parse(readFileSync("skill-compatibility.json")).releaseInputs;
+          if (!/^[0-9a-f]{40}$/.test(inputs?.sdkRevision ?? "")) throw new Error("Missing immutable SDK release input");
+          appendFileSync(process.env.GITHUB_OUTPUT, `sdk_revision=${inputs.sdkRevision}\napp_openapi=${inputs.app.openapi}\nsending_openapi=${inputs.sending.openapi}\n`);
+          JS
 
       - name: Check out sendmux-sdk (public)
         uses: actions/checkout@v4
         with:
           repository: Sendmux/sendmux-sdk
+          ref: ${{ steps.source.outputs.sdk_revision }}
           path: _sdk
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Fetch public OpenAPI specs
-        run: |
-          curl -fsSL https://app.sendmux.ai/api/v1/openapi.json -o "$RUNNER_TEMP/openapi-app.json"
-          curl -fsSL https://smtp.sendmux.ai/api/v1/openapi.json -o "$RUNNER_TEMP/openapi-sending.json"
-
-      - name: Check skill drift
+      - name: Check static claims and candidate compatibility
         env:
           SENDMUX_SKILLS_ROOT: ${{ github.workspace }}
           SENDMUX_SDK: ${{ github.workspace }}/_sdk
-          SENDMUX_APP_OPENAPI: ${{ runner.temp }}/openapi-app.json
-          SENDMUX_SENDING_OPENAPI: ${{ runner.temp }}/openapi-sending.json
+          SENDMUX_APP_OPENAPI: ${{ github.workspace }}/${{ steps.source.outputs.app_openapi }}
+          SENDMUX_SENDING_OPENAPI: ${{ github.workspace }}/${{ steps.source.outputs.sending_openapi }}
+          SKILLS_REVISION: ${{ github.sha }}
+          SDK_REVISION: ${{ steps.source.outputs.sdk_revision }}
         run: |
-          node --test scripts/check-skill-drift.test.mjs
+          node --test scripts/check-skill-drift.test.mjs scripts/skill-compatibility.test.mjs
           node scripts/check-skill-drift.mjs
+          node scripts/skill-compatibility.mjs --prepare-candidate "$RUNNER_TEMP/skill-candidate.json" \
+            --skills-root "$GITHUB_WORKSPACE" --revision "$SKILLS_REVISION" \
+            --sdk-root "$GITHUB_WORKSPACE/_sdk" --sdk-revision "$SDK_REVISION"
+          node scripts/check-skill-drift.mjs --candidate "$RUNNER_TEMP/skill-candidate.json" \
+            --receipt "$RUNNER_TEMP/acceptance.json" --source skills --revision "$SKILLS_REVISION"
+
+      - name: Preserve exact skill acceptance
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-acceptance-${{ github.sha }}
+          path: ${{ runner.temp }}/acceptance.json
+          if-no-files-found: error
