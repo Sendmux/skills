@@ -1,0 +1,63 @@
+{
+  "expectations": [
+    {
+      "text": "Computes the exact local file byte length, rather than a character count or an estimated value.",
+      "passed": true,
+      "evidence": "counts raw bytes, not characters \u2014 Measures bytes; no character estimate."
+    },
+    {
+      "text": "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+      "passed": true,
+      "evidence": "--header Content-Length=\"$SIZE_BYTES\" \u2014 Correct measured header on command after its name."
+    },
+    {
+      "text": "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+      "passed": true,
+      "evidence": "--body-file ./report.pdf \u2014 Includes both query parameters and --json."
+    },
+    {
+      "text": "Uses the existing work profile without printing or requesting credentials.",
+      "passed": true,
+      "evidence": "--profile work \u2014 Uses existing profile without exposing a secret."
+    },
+    {
+      "text": "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+      "passed": true,
+      "evidence": "This command only uploads. \u2014 No actual send or --attach command proposed."
+    },
+    {
+      "text": "Does not claim an attachment_id or completed upload without a real result.",
+      "passed": true,
+      "evidence": "These commands have not been run \u2014 Does not fabricate a result."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "output_chars": 1664,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "total_tokens": 6748,
+    "duration_ms": 11741,
+    "total_duration_seconds": 12.90631058299914
+  },
+  "evaluation_method": "Full response manually reviewed against assertions; command-order failure additionally reproduced against actual CLI using an intentionally incompatible fake root key, before network. All runs isolated, without tools/MCP; no live workflow.",
+  "claims": [
+    {
+      "claim": "No email or attachment API call occurred in this evaluation",
+      "type": "process",
+      "verified": true,
+      "evidence": "Isolated no-tools/no-MCP receipt."
+    }
+  ],
+  "eval_feedback": {
+    "overall": "Focused standalone upload example coverage, one model run per arm; not a live integration or statistical guarantee.",
+    "suggestions": []
+  }
+}

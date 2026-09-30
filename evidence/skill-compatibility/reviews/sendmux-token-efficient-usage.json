@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-token-efficient-usage",
+  "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
+  "contractDigest": "7f9e2fab17885b7e0b1e7c478a2a349d13bb4da5e71d868e8a73b9ace69d636e",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
+  "rationale": "Per-resource state and filtered new_query_state remain distinct. JSON-only CLI results and SDK responseEtag/conditional/idempotency/pagination/retry helpers match selected declarations. Generic routing capability names and attachment/delegation policy inputs are selected without changing product behaviour.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/sendmux-token-efficient-usage/SKILL.md",
+      "sha256": "dc71d5b01735a0a1c4f6d9577c719f8302f5411a66ea173e50db2c2091ed8458"
+    }
+  ]
+}

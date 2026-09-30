@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-send-email",
+  "skillDigest": "60fcef4c782addf56f3e67cc770e74a5e980aca007ab25b0bb3cab679776b6f7",
+  "contractDigest": "9117a9f34bbf6c56373c4929fd6e172c3e3e87697bbeb6159fb04b0dcd7d0c16",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
+  "rationale": "Required send fields, limits, successful response fields and idempotency replay semantics match selected send/batch operations. External completion, CLI file convenience/delegation and MCP upload policy are selected. Credential callbacks remain application-owned; no delivery guarantee is added.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/sendmux-send-email/SKILL.md",
+      "sha256": "0cefbfeddcf22dd0b0cd1f5c7677edcfc88a2dfc391655cdafe4232b9965d3a3"
+    }
+  ]
+}

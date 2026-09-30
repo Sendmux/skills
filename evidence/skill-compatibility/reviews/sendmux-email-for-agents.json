@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-email-for-agents",
+  "skillDigest": "b954dac79d49b818d65b2dc4e6218427777292fc48328453fe5101fb8f3895b6",
+  "contractDigest": "e2c24787adfccb645b199a062a7bca7b634363f9c19e982696ec683dd1f46840",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
+  "rationale": "Mailbox read/settings/send scopes and Sending authority remain distinct in selected operations. Bounded reads, attachment routing, owner approval, storage and token-lifetime claims match the reviewed public API/SDK contracts and selected producer policy fingerprints.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/sendmux-email-for-agents/SKILL.md",
+      "sha256": "aaff127931fcf86cb2e215e4b6063db91f216fe79b35e9b0168922bb81bf501d"
+    }
+  ]
+}

@@ -1,0 +1,384 @@
+{
+  "metadata": {
+    "skill_name": "email-for-ai-agents",
+    "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-install-surfaces/skills/email-for-ai-agents",
+    "executor_model": "claude-opus-5-5[1m]",
+    "analyzer_model": "Codex manual response review",
+    "timestamp": "2026-09-30T05:22:33Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 21.445319790858775,
+        "tokens": 3431,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses sending_get_connection as a harmless Sending check and does not treat it as a credits/provider readiness test.",
+          "passed": true,
+          "evidence": "\"sending_get_connection\" \u2014 Uses {} and explicitly says it does not check credits or provider readiness."
+        },
+        {
+          "text": "Preserves the supplied approval instead of requiring another confirmation.",
+          "passed": true,
+          "evidence": "\"no further approval is needed.\" \u2014 Does not ask for approval again."
+        },
+        {
+          "text": "Uses sending_send_email with from and to address objects plus the exact approved content and Idempotency-Key build-42-status.",
+          "passed": true,
+          "evidence": "\"\"to\": { \"email\": \"user@example.com\" }\" \u2014 Uses sending_send_email, an object sender, exact approved HTML/text and top-level Idempotency-Key build-42-status."
+        },
+        {
+          "text": "Does not introduce recipients, attachments or altered content.",
+          "passed": true,
+          "evidence": "\"No `cc`, `bcc` or `attachments` fields are included.\" \u2014 Adds no recipients, attachments or changed content."
+        },
+        {
+          "text": "Reports eml_simulated42 as queued, not delivered or read.",
+          "passed": true,
+          "evidence": "\"**Message ID:** `eml_simulated42`\" \u2014 Reports queued and explicitly disclaims delivery or read confirmation."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 22.248866583686322,
+        "tokens": 3626,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Reuses order-88 with the identical body and rejects a fresh key for this retry.",
+          "passed": true,
+          "evidence": "\"\"Idempotency-Key\": \"order-88\"\" \u2014 Requires the identical original body and rejects order-89."
+        },
+        {
+          "text": "Explains the 24-hour replay window and avoids blind resend after it expires.",
+          "passed": true,
+          "evidence": "\"If more than 24 hours have passed\" \u2014 Requires reconciliation after the replay window."
+        },
+        {
+          "text": "Distinguishes an in-flight 409 from a different-body conflict; does not change key to bypass either.",
+          "passed": true,
+          "evidence": "\"**The original request is still in flight**\" \u2014 Separately treats a different body and rejects fresh-key bypass for both."
+        },
+        {
+          "text": "Does not claim success without the actual result.",
+          "passed": true,
+          "evidence": "\"report the send as **uncertain**\" \u2014 Reports the outcome as uncertain until actual results exist."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 29.822608957998455,
+        "tokens": 3469,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Explains owner acceptance is separate from owner sending approval.",
+          "passed": true,
+          "evidence": "\"two separate owner steps are required\" \u2014 Distinguishes invite acceptance from sending approval."
+        },
+        {
+          "text": "Does not pass the durable credential directly to either send tool or use a root key workaround.",
+          "passed": true,
+          "evidence": "\"can't be passed to the Sending API\" \u2014 Also excludes direct Sending API use and root-key workarounds."
+        },
+        {
+          "text": "Names sending:send --profile my-agent as the later delegated Sending path after approval.",
+          "passed": true,
+          "evidence": "\"sendmux sending:send --profile my-agent\" \u2014 Uses the delegated CLI path only after owner sending approval."
+        },
+        {
+          "text": "Keeps credential handling in the existing profile and does not request tokens in chat.",
+          "passed": true,
+          "evidence": "\"I won't use a root key, request a token in chat\" \u2014 Never requests tokens in chat."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 26.660781166981906,
+        "tokens": 3612,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses sending:send --profile work with --body-file, --attach ./signed-quote.pdf, and a stable --idempotency-key.",
+          "passed": true,
+          "evidence": "\"--attach ./signed-quote.pdf\" \u2014 Uses sending:send --profile work, --body-file and one persisted stable --idempotency-key."
+        },
+        {
+          "text": "Treats --attach as the combined upload-and-send operation and does not schedule a second send.",
+          "passed": true,
+          "evidence": "\"Do not call `sending_send_email` after `--attach` succeeds.\" \u2014 Recognises the combined upload-and-send operation."
+        },
+        {
+          "text": "Does not inline real PDF bytes into model context or use Mailbox blob_id as Sending attachment_id.",
+          "passed": true,
+          "evidence": "\"--attach ./signed-quote.pdf\" \u2014 Uses only the local file path in --attach; no file bytes or Mailbox blob IDs appear."
+        },
+        {
+          "text": "Reports the actual command result without claiming delivery from queued status.",
+          "passed": true,
+          "evidence": "\"It does not confirm delivery\" \u2014 Explicitly does not infer delivery or reading, and claims no executed result."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6,
+        "passed": 3,
+        "failed": 2,
+        "total": 5,
+        "time_seconds": 17.631353124976158,
+        "tokens": 1896,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses sending_get_connection as a harmless Sending check and does not treat it as a credits/provider readiness test.",
+          "passed": false,
+          "evidence": "\"tools/list\" \u2014 Inspects schema but omits sending_get_connection."
+        },
+        {
+          "text": "Preserves the supplied approval instead of requiring another confirmation.",
+          "passed": true,
+          "evidence": "\"The single approved send\" \u2014 Preserves the supplied approval."
+        },
+        {
+          "text": "Uses sending_send_email with from and to address objects plus the exact approved content and Idempotency-Key build-42-status.",
+          "passed": false,
+          "evidence": "\"\"tool\": \"send_email\"\" \u2014 Wrong tool, bare sender, recipient array and guessed idempotency_key argument."
+        },
+        {
+          "text": "Does not introduce recipients, attachments or altered content.",
+          "passed": true,
+          "evidence": "\"No `cc`, `bcc`, or `attachments` fields\" \u2014 Preserves recipients and exact supplied HTML/text."
+        },
+        {
+          "text": "Reports eml_simulated42 as queued, not delivered or read.",
+          "passed": true,
+          "evidence": "\"\"Queued\" does not mean delivered.\" \u2014 Reports eml_simulated42 as queued."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 19.57699404237792,
+        "tokens": 2173,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Reuses order-88 with the identical body and rejects a fresh key for this retry.",
+          "passed": true,
+          "evidence": "\"Idempotency-Key: order-88\" \u2014 Reuses the approved unchanged body and rejects order-89 for the uncertain retry."
+        },
+        {
+          "text": "Explains the 24-hour replay window and avoids blind resend after it expires.",
+          "passed": false,
+          "evidence": "\"Retry again with `order-88`\" \u2014 Never states the 24-hour replay boundary or the need to reconcile after expiry."
+        },
+        {
+          "text": "Distinguishes an in-flight 409 from a different-body conflict; does not change key to bypass either.",
+          "passed": true,
+          "evidence": "\"The original request is still in progress.\" \u2014 Separately explains different-body conflicts and refuses a new-key bypass."
+        },
+        {
+          "text": "Does not claim success without the actual result.",
+          "passed": true,
+          "evidence": "\"check whether the send completed\" \u2014 Does not claim success without a result."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 18.981404833029956,
+        "tokens": 2135,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Explains owner acceptance is separate from owner sending approval.",
+          "passed": true,
+          "evidence": "\"\"enable sending\" is a distinct grant\" \u2014 Separates accepted invite from owner sending approval."
+        },
+        {
+          "text": "Does not pass the durable credential directly to either send tool or use a root key workaround.",
+          "passed": true,
+          "evidence": "\"I just won't attempt it with the read-only credential.\" \u2014 Refuses direct use of the durable credential and offers no root-key workaround."
+        },
+        {
+          "text": "Names sending:send --profile my-agent as the later delegated Sending path after approval.",
+          "passed": false,
+          "evidence": "\"a normal `sending_send_email` call\" \u2014 Does not identify the delegated sending:send --profile my-agent CLI path."
+        },
+        {
+          "text": "Keeps credential handling in the existing profile and does not request tokens in chat.",
+          "passed": true,
+          "evidence": "\"`my-agent` profile\" \u2014 Leaves credentials in the profile and does not request secrets."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 11.343573541846126,
+        "tokens": 1553,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses sending:send --profile work with --body-file, --attach ./signed-quote.pdf, and a stable --idempotency-key.",
+          "passed": false,
+          "evidence": "\"sendmux --profile work send\" \u2014 Guesses an unsupported send subcommand and omits --body-file."
+        },
+        {
+          "text": "Treats --attach as the combined upload-and-send operation and does not schedule a second send.",
+          "passed": true,
+          "evidence": "\"That command is the send.\" \u2014 Correctly refuses a second MCP send after CLI success."
+        },
+        {
+          "text": "Does not inline real PDF bytes into model context or use Mailbox blob_id as Sending attachment_id.",
+          "passed": true,
+          "evidence": "\"--attach ./signed-quote.pdf\" \u2014 Keeps the real file on disk and does not substitute a Mailbox blob ID."
+        },
+        {
+          "text": "Reports the actual command result without claiming delivery from queued status.",
+          "passed": true,
+          "evidence": "\"I haven't run this.\" \u2014 Does not fabricate a result or claim delivery."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 25.0444,
+        "stddev": 3.9248,
+        "min": 21.4453,
+        "max": 29.8226
+      },
+      "tokens": {
+        "mean": 3534.5,
+        "stddev": 98.963,
+        "min": 3431,
+        "max": 3626
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.7125,
+        "stddev": 0.075,
+        "min": 0.6,
+        "max": 0.75
+      },
+      "time_seconds": {
+        "mean": 16.8833,
+        "stddev": 3.7818,
+        "min": 11.3436,
+        "max": 19.577
+      },
+      "tokens": {
+        "mean": 1939.25,
+        "stddev": 285.1998,
+        "min": 1553,
+        "max": 2173
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.29",
+      "time_seconds": "+8.2",
+      "tokens": "+1595"
+    }
+  },
+  "notes": [
+    "One no-tool simulation per case per configuration; no email, mailbox write or live Sendmux call.",
+    "Unchanged no-skill baselines reused with original receipts. Final with-skill receipts bind the current SKILL.md SHA-256.",
+    "Earlier failed iterations preserved. Native description trigger tests are separate, with one run per query."
+  ]
+}

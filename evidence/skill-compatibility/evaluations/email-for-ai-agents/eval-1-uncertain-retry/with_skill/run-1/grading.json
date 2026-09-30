@@ -1,0 +1,49 @@
+{
+  "expectations": [
+    {
+      "text": "Reuses order-88 with the identical body and rejects a fresh key for this retry.",
+      "passed": true,
+      "evidence": "\"\"Idempotency-Key\": \"order-88\"\" \u2014 Requires the identical original body and rejects order-89."
+    },
+    {
+      "text": "Explains the 24-hour replay window and avoids blind resend after it expires.",
+      "passed": true,
+      "evidence": "\"If more than 24 hours have passed\" \u2014 Requires reconciliation after the replay window."
+    },
+    {
+      "text": "Distinguishes an in-flight 409 from a different-body conflict; does not change key to bypass either.",
+      "passed": true,
+      "evidence": "\"**The original request is still in flight**\" \u2014 Separately treats a different body and rejects fresh-key bypass for both."
+    },
+    {
+      "text": "Does not claim success without the actual result.",
+      "passed": true,
+      "evidence": "\"report the send as **uncertain**\" \u2014 Reports the outcome as uncertain until actual results exist."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "output_chars": 3125,
+    "errors_encountered": 0
+  },
+  "timing": {},
+  "evaluation_method": "Iteration 4 complete response manually reviewed against unchanged assertions; quotes refreshed from this run. No live Sendmux calls.",
+  "claims": [
+    {
+      "claim": "This evaluation executed no email or mailbox action.",
+      "type": "process",
+      "verified": true,
+      "evidence": "Isolated safe-mode CLI receipt; no tools or MCP servers."
+    }
+  ],
+  "eval_feedback": {
+    "overall": "Covers bounded reads, missing evidence and injection, or approved sending, retries, permission separation and attachment single-send. One run per case; this is a content evaluation, not a live integration test.",
+    "suggestions": []
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-mailbox-agent",
+  "skillDigest": "7caa769e30408f23404ead3b3f427368ca715a09d8bc6c38d61e92ea23a2e3d3",
+  "contractDigest": "ca5dea4893d8af1fff5c90a8ed8d10021cc09ac0f51ddba6fd62f1c2ceef79f9",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
+  "rationale": "Batch ids, clean_json, max_body_chars, resource state and filtered query state match their operations. Identity and mailbox recipient arrays are correct. Attachment paths and negative MCP capability claims are selected; sending authority is reviewed without asserting registration/token lifetime.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/sendmux-mailbox-agent/SKILL.md",
+      "sha256": "62c6b3a920f5480f4454260f86d4182f066f5baee05e5dfdedfdc4a168f5587a"
+    }
+  ]
+}

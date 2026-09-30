@@ -1,0 +1,11 @@
+{
+  "eval_id": 3,
+  "eval_name": "local-attachment-one-send",
+  "prompt": "I have an authorised Sendmux CLI profile work. I approve from sender@example.com to user@example.com, subject Signed quote, body Attached quote., with exactly ./signed-quote.pdf. The CLI is available. Prepare the retry-safe command. After --attach succeeds, should you call sending_send_email too so the message is sent?",
+  "assertions": [
+    "Uses sending:send --profile work with --body-file, --attach ./signed-quote.pdf, and a stable --idempotency-key.",
+    "Treats --attach as the combined upload-and-send operation and does not schedule a second send.",
+    "Does not inline real PDF bytes into model context or use Mailbox blob_id as Sending attachment_id.",
+    "Reports the actual command result without claiming delivery from queued status."
+  ]
+}
