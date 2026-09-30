@@ -3,14 +3,14 @@
   "kind": "compatibility",
   "skill": "sendmux-getting-started",
   "skillDigest": "5029bf05c88abc8c25680cbd4a1cb7e311668752478c295f984f491a4781d556",
-  "contractDigest": "3eaaef5a2066fb9ab4f31d15ae00bf273d9f8c6d684ecfae1b3e5c98794ec9d1",
+  "contractDigest": "fa99413a1edc268536adb4739d5a1a6952e49af80987f10d8295f3086f45f53b",
   "sourceRevisions": {
     "app": "043544c168faf3124893358bacb0d54042af238b",
     "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
     "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
   },
-  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
-  "rationale": "Selector-free connection checks, first-call response metadata, factories and public discovery paths match selected API/MCP/CLI contracts and entry points. Registration/readiness/profile credential behaviour and producer policy groups match the reviewed inputs.",
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Selector-free connection checks, first-call response metadata, factories and public discovery paths match selected API/MCP/CLI contracts and entry points. Registration/readiness/profile credential behaviour and producer policy groups match the reviewed inputs. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
   "evidence": [
     {
       "path": "evidence/skill-compatibility/review-notes.md",
@@ -19,6 +19,10 @@
     {
       "path": "skills/sendmux-getting-started/SKILL.md",
       "sha256": "d705868beeb1275d912c2cf81c879ae53457db04f65561c17c304562b443c6ac"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
     }
   ]
 }

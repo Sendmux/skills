@@ -3,14 +3,14 @@
   "kind": "compatibility",
   "skill": "email-for-ai-agents",
   "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
-  "contractDigest": "ae71c563aebc145793114bc9666b56f12d0b186a1a6f4e0a0cdb83461b11f4cc",
+  "contractDigest": "d7fd02d55bc40033d337b5deefa16ced40499e0e2969e03838ee54b2bc457f67",
   "sourceRevisions": {
     "app": "043544c168faf3124893358bacb0d54042af238b",
     "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
     "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
   },
-  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
-  "rationale": "Scoped email.send permission, address-object recipients and top-level MCP Idempotency-Key match the Sending/MCP/CLI contracts. Attachment upload and delegated-token paths are selected; retries keep identical payload/reference identities. Four content cases and native routing checks passed.",
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Scoped email.send permission, address-object recipients and top-level MCP Idempotency-Key match the Sending/MCP/CLI contracts. Attachment upload and delegated-token paths are selected; retries keep identical payload/reference identities. Four content cases and native routing checks passed. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
   "evidence": [
     {
       "path": "evidence/skill-compatibility/review-notes.md",
@@ -87,6 +87,10 @@
     {
       "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-3-local-attachment-one-send/with_skill/run-1/outputs/response.md",
       "sha256": "c75a624db32c6d03c69de5ce335faa8cc8511f5ddfc4b4a583b9cb2fe28ced14"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
     }
   ]
 }

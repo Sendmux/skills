@@ -3,14 +3,14 @@
   "kind": "workflow",
   "skill": "sendmux-cli",
   "skillDigest": "ba1e4cc36d503b7e4e0b58c30e91d08d30b420c261ec6b3f10e41e62c9420060",
-  "contractDigest": "c5db6dbb585f35284cc00a2051a200d143df3d4c09e26b9387c774ac1f10ae08",
+  "contractDigest": "69c883f1f6b54b5d6f0eb44b144c2fb16dd930c0db5e703bb93c04f435e50019",
   "sourceRevisions": {
     "app": "043544c168faf3124893358bacb0d54042af238b",
     "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
     "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
   },
-  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
-  "rationale": "Corrected standalone uploader now supplies the required measured Content-Length and retains command-first profile syntax. Actual CLI parsing passes for text/binary and rejects empty input. Credential precedence, profile persistence, registration readiness, delegation and command identities match selected public contracts. Published broken instructions are superseded.",
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Corrected standalone uploader now supplies the required measured Content-Length and retains command-first profile syntax. Actual CLI parsing passes for text/binary and rejects empty input. Credential precedence, profile persistence, registration readiness, delegation and command identities match selected public contracts. Published broken instructions are superseded. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
   "evidence": [
     {
       "path": "evidence/skill-compatibility/review-notes.md",
@@ -39,6 +39,10 @@
     {
       "path": "evidence/skill-compatibility/evaluations/sendmux-cli/eval-0-standalone-upload-byte-length/with_skill/run-1/outputs/response.md",
       "sha256": "43d4cf6d3e97c723611681bff2c1d5952228e608fb4c4d566da482635282da94"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
     }
   ],
   "previousSkillDigest": "276b34a4d99df580fe1322117feba5bfda96bf86a6ba755766d2fe4d8f975510"

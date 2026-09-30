@@ -3,14 +3,14 @@
   "kind": "compatibility",
   "skill": "sendmux-email-for-agents",
   "skillDigest": "b954dac79d49b818d65b2dc4e6218427777292fc48328453fe5101fb8f3895b6",
-  "contractDigest": "e2c24787adfccb645b199a062a7bca7b634363f9c19e982696ec683dd1f46840",
+  "contractDigest": "d8a03a3678e5ffb1c788796160bcd7dbcf0b9f5efc4099331bb58302e0bd848d",
   "sourceRevisions": {
     "app": "043544c168faf3124893358bacb0d54042af238b",
     "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
     "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
   },
-  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
-  "rationale": "Mailbox read/settings/send scopes and Sending authority remain distinct in selected operations. Bounded reads, attachment routing, owner approval, storage and token-lifetime claims match the reviewed public API/SDK contracts and selected producer policy fingerprints.",
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Mailbox read/settings/send scopes and Sending authority remain distinct in selected operations. Bounded reads, attachment routing, owner approval, storage and token-lifetime claims match the reviewed public API/SDK contracts and selected producer policy fingerprints. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
   "evidence": [
     {
       "path": "evidence/skill-compatibility/review-notes.md",
@@ -19,6 +19,10 @@
     {
       "path": "skills/sendmux-email-for-agents/SKILL.md",
       "sha256": "aaff127931fcf86cb2e215e4b6063db91f216fe79b35e9b0168922bb81bf501d"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
     }
   ]
 }

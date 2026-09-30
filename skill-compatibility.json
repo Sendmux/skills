@@ -1741,9 +1741,9 @@
     {
       "skill": "email-for-ai-agents",
       "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
-      "contractDigest": "ae71c563aebc145793114bc9666b56f12d0b186a1a6f4e0a0cdb83461b11f4cc",
+      "contractDigest": "d7fd02d55bc40033d337b5deefa16ced40499e0e2969e03838ee54b2bc457f67",
       "record": "evidence/skill-compatibility/reviews/email-for-ai-agents.json",
-      "sha256": "de13d20711126145249bc68dff5e9c64b9dceb965ca394e3d5fb29ddf70b5e6a"
+      "sha256": "f2423ecf87ad768016d5dccddec775e823ac1307305e16993f4854f01aa1341c"
     },
     {
       "skill": "sendmux-attachments",
@@ -1755,58 +1755,58 @@
     {
       "skill": "sendmux-cli",
       "skillDigest": "ba1e4cc36d503b7e4e0b58c30e91d08d30b420c261ec6b3f10e41e62c9420060",
-      "contractDigest": "c5db6dbb585f35284cc00a2051a200d143df3d4c09e26b9387c774ac1f10ae08",
+      "contractDigest": "69c883f1f6b54b5d6f0eb44b144c2fb16dd930c0db5e703bb93c04f435e50019",
       "record": "evidence/skill-compatibility/reviews/sendmux-cli.json",
-      "sha256": "d521bd91975a4db8092918de9f46ba4488757c91f65463c46a4104f326f3b554"
+      "sha256": "b126b3a309eca29e1fdb5b2e043b125b56a220ac801db6320ea7f6619edcfa56"
     },
     {
       "skill": "sendmux-email-for-agents",
       "skillDigest": "b954dac79d49b818d65b2dc4e6218427777292fc48328453fe5101fb8f3895b6",
-      "contractDigest": "e2c24787adfccb645b199a062a7bca7b634363f9c19e982696ec683dd1f46840",
+      "contractDigest": "d8a03a3678e5ffb1c788796160bcd7dbcf0b9f5efc4099331bb58302e0bd848d",
       "record": "evidence/skill-compatibility/reviews/sendmux-email-for-agents.json",
-      "sha256": "88760bfbe1e40959f4a5fbafcfde1ed8174fcb44d5a583d531714afbc6f8d138"
+      "sha256": "961cbc35fc153237df0f4dce320cde8e35a42160527f9c06bad1e1d038840254"
     },
     {
       "skill": "sendmux-getting-started",
       "skillDigest": "5029bf05c88abc8c25680cbd4a1cb7e311668752478c295f984f491a4781d556",
-      "contractDigest": "3eaaef5a2066fb9ab4f31d15ae00bf273d9f8c6d684ecfae1b3e5c98794ec9d1",
+      "contractDigest": "fa99413a1edc268536adb4739d5a1a6952e49af80987f10d8295f3086f45f53b",
       "record": "evidence/skill-compatibility/reviews/sendmux-getting-started.json",
-      "sha256": "be1dd99dce91bc09b0731f7b1b20f7fe4a06cfa061788e76364b21fbd651f4c0"
+      "sha256": "8d19ecc127e3692ca2c5407033286961f2241368c728f947851c9878f67fc73c"
     },
     {
       "skill": "sendmux-mailbox-agent",
       "skillDigest": "7caa769e30408f23404ead3b3f427368ca715a09d8bc6c38d61e92ea23a2e3d3",
-      "contractDigest": "ca5dea4893d8af1fff5c90a8ed8d10021cc09ac0f51ddba6fd62f1c2ceef79f9",
+      "contractDigest": "004356c579c89caf2887875573b260a87eaf7d048498990c92a4621578b9697f",
       "record": "evidence/skill-compatibility/reviews/sendmux-mailbox-agent.json",
-      "sha256": "2150ef8c2dd8b8a6ca15dd6f4548fc11221994ea28f560bee4ef7ed8e3dfa5a5"
+      "sha256": "240e91f6dcbc26be4b631dc0e555f07c2aa1c1e911aa8ce5220ce60bf18bdc19"
     },
     {
       "skill": "sendmux-management",
       "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
-      "contractDigest": "6ccba60a679c304869985759cc09d84de4ee275fb2367690c9152c6739f049fe",
+      "contractDigest": "51e7bff500e371b6a0a97152051a308c7689346a2c739d520c4a214c5b613cda",
       "record": "evidence/skill-compatibility/reviews/sendmux-management.json",
-      "sha256": "9b28ea4bf91463566b65ea6e0bae73a74e703be492901615a8934b62b6d700a0"
+      "sha256": "09b9b055357d9f7238130899f12be84cb39b0d9511c07efa60a2c48ab2df3efe"
     },
     {
       "skill": "sendmux-mcp-setup",
       "skillDigest": "330558950dc6569b802ab1c642b61927ca369d9fe3c151025a7643c0cfc9bf06",
-      "contractDigest": "95b2b5e986fd48b91c8d3325c82775322cbfa9d41f854682ba871e723ad52c06",
+      "contractDigest": "8da82d198597d8259b611be4b510a31700eb213d4715f6b979a72b089d84b6be",
       "record": "evidence/skill-compatibility/reviews/sendmux-mcp-setup.json",
-      "sha256": "c41e1e768a81f5020d6c6589516483787984eb8ff7903761f11b0deac200dd20"
+      "sha256": "0ad80eb687f51662fbb21a6acdbe96b0f057fe82a715e7f826bc41eebb28131d"
     },
     {
       "skill": "sendmux-send-email",
       "skillDigest": "60fcef4c782addf56f3e67cc770e74a5e980aca007ab25b0bb3cab679776b6f7",
-      "contractDigest": "9117a9f34bbf6c56373c4929fd6e172c3e3e87697bbeb6159fb04b0dcd7d0c16",
+      "contractDigest": "2d358b1ebec7165fc889c7217218c19ae13f58e51dbb5b8d89b985e0421812a5",
       "record": "evidence/skill-compatibility/reviews/sendmux-send-email.json",
-      "sha256": "1fac39d92983845003cf2ad8c649dd6097de9d0118eec40268eb31adcc3bfe71"
+      "sha256": "07173cd83bfe303fa4e78a530b9e1287c138ef041457e96e6641bf363e012a96"
     },
     {
       "skill": "sendmux-token-efficient-usage",
       "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
-      "contractDigest": "7f9e2fab17885b7e0b1e7c478a2a349d13bb4da5e71d868e8a73b9ace69d636e",
+      "contractDigest": "ebc0852b0a585af0b82701534938bd4b5e25a2b93c835159646d418ee19dc228",
       "record": "evidence/skill-compatibility/reviews/sendmux-token-efficient-usage.json",
-      "sha256": "a701fa877e6451e3b2639103fa25f7b06294c20798752c6bff1900c87fad9093"
+      "sha256": "f442135d015c4b41bfbe0fab7b483c795c8576ad6268895ef773ef420f665b7b"
     }
   ],
   "releaseInputs": {

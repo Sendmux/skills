@@ -3,14 +3,14 @@
   "kind": "compatibility",
   "skill": "sendmux-send-email",
   "skillDigest": "60fcef4c782addf56f3e67cc770e74a5e980aca007ab25b0bb3cab679776b6f7",
-  "contractDigest": "9117a9f34bbf6c56373c4929fd6e172c3e3e87697bbeb6159fb04b0dcd7d0c16",
+  "contractDigest": "2d358b1ebec7165fc889c7217218c19ae13f58e51dbb5b8d89b985e0421812a5",
   "sourceRevisions": {
     "app": "043544c168faf3124893358bacb0d54042af238b",
     "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
     "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
   },
-  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
-  "rationale": "Required send fields, limits, successful response fields and idempotency replay semantics match selected send/batch operations. External completion, CLI file convenience/delegation and MCP upload policy are selected. Credential callbacks remain application-owned; no delivery guarantee is added.",
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Required send fields, limits, successful response fields and idempotency replay semantics match selected send/batch operations. External completion, CLI file convenience/delegation and MCP upload policy are selected. Credential callbacks remain application-owned; no delivery guarantee is added. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
   "evidence": [
     {
       "path": "evidence/skill-compatibility/review-notes.md",
@@ -19,6 +19,10 @@
     {
       "path": "skills/sendmux-send-email/SKILL.md",
       "sha256": "0cefbfeddcf22dd0b0cd1f5c7677edcfc88a2dfc391655cdafe4232b9965d3a3"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
     }
   ]
 }

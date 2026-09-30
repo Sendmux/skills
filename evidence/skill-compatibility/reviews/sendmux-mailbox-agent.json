@@ -3,14 +3,14 @@
   "kind": "compatibility",
   "skill": "sendmux-mailbox-agent",
   "skillDigest": "7caa769e30408f23404ead3b3f427368ca715a09d8bc6c38d61e92ea23a2e3d3",
-  "contractDigest": "ca5dea4893d8af1fff5c90a8ed8d10021cc09ac0f51ddba6fd62f1c2ceef79f9",
+  "contractDigest": "004356c579c89caf2887875573b260a87eaf7d048498990c92a4621578b9697f",
   "sourceRevisions": {
     "app": "043544c168faf3124893358bacb0d54042af238b",
     "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
     "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
   },
-  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
-  "rationale": "Batch ids, clean_json, max_body_chars, resource state and filtered query state match their operations. Identity and mailbox recipient arrays are correct. Attachment paths and negative MCP capability claims are selected; sending authority is reviewed without asserting registration/token lifetime.",
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Batch ids, clean_json, max_body_chars, resource state and filtered query state match their operations. Identity and mailbox recipient arrays are correct. Attachment paths and negative MCP capability claims are selected; sending authority is reviewed without asserting registration/token lifetime. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
   "evidence": [
     {
       "path": "evidence/skill-compatibility/review-notes.md",
@@ -19,6 +19,10 @@
     {
       "path": "skills/sendmux-mailbox-agent/SKILL.md",
       "sha256": "62c6b3a920f5480f4454260f86d4182f066f5baee05e5dfdedfdc4a168f5587a"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
     }
   ]
 }

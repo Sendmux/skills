@@ -8,13 +8,13 @@
       "runtime": "9f15d58d5b20b72cbb6ba171802854295aac48d92d4e434e7201f93551279580"
     },
     "durable-mailbox-read": {
-      "code": "c1ab4c1ea37ad53ccd831cbcdb60e989ed91602bc324630478fea6cb592934eb"
+      "code": "8c9ba4500fdb232558196f6b73afbe11df2c0a3a9b51f01941192acd884366ec"
     },
     "mailbox-storage": {
       "code": "18290abef5a9a528c8079ec0e74fe5a415a0604e774bdfb35c7a5f5291b14a9a"
     },
     "delegated-sending": {
-      "code": "69cb21c1d1cdadb7bcf01b0d92a82508a323efa758d0ca932ada4181b1ad3196"
+      "code": "478259b6ba2566c5aa25fd71bf7b04a8ffe2e81e56b03217b078ef37b922225c"
     }
   },
   "runtime": {
