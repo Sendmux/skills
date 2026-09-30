@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Send the exact approved status update through the existing Sendmux Sending connection and tell me the returned result.",
+    "should_trigger": true
+  },
+  {
+    "query": "My agent has an authorised Sendmux Sending profile. Prepare one notification for my approval before sending it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Retry that approved Sendmux email after a timeout, keeping the same logical send rather than creating a duplicate.",
+    "should_trigger": true
+  },
+  {
+    "query": "The owner approved Sending for my Sendmux agent profile. Send this approved message through that profile.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use the Sendmux CLI to send the approved quote with its local PDF attached; make the request safe to retry.",
+    "should_trigger": true
+  },
+  {
+    "query": "The Sendmux send returned queued and a message ID. Explain the actual outcome to me without guessing delivery.",
+    "should_trigger": true
+  },
+  {
+    "query": "My Sendmux owner invite is accepted but sending is not enabled. I have a message ready; work out the safe next action.",
+    "should_trigger": true
+  },
+  {
+    "query": "An approved Sendmux send returned idempotency_conflict. Reconcile the existing request before doing anything else.",
+    "should_trigger": true
+  },
+  {
+    "query": "I approve the supplied sender, recipient, subject, HTML and uploaded attachment ID. Use Sendmux for this single outbound email.",
+    "should_trigger": true
+  },
+  {
+    "query": "Prepare a retry-safe Sendmux send from this existing connection; the draft lacks a confirmed recipient, so obtain the missing approval.",
+    "should_trigger": true
+  },
+  {
+    "query": "Search unread invoices in my existing Sendmux mailbox and prepare reply drafts without sending.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create an inbox for a new agent and configure ownership; no message needs sending yet.",
+    "should_trigger": false
+  },
+  {
+    "query": "Plan a multi-agent email architecture and choose a provisioning strategy.",
+    "should_trigger": false
+  },
+  {
+    "query": "Send these one hundred individually approved transactional emails as a Sendmux batch.",
+    "should_trigger": false
+  },
+  {
+    "query": "Connect the Sendmux MCP server to Cursor and validate its tool list.",
+    "should_trigger": false
+  },
+  {
+    "query": "Use Gmail to send this approved reply from my personal Google account.",
+    "should_trigger": false
+  },
+  {
+    "query": "Download a PDF attachment from a Sendmux message without sending anything.",
+    "should_trigger": false
+  },
+  {
+    "query": "Register a custom sending domain, verify DNS and create a Sendmux root API key.",
+    "should_trigger": false
+  },
+  {
+    "query": "Install @sendmux/cli and configure an OAuth profile; do not send a message.",
+    "should_trigger": false
+  },
+  {
+    "query": "Inspect my Sendmux delivery logs to determine whether a previously queued message reached its destination.",
+    "should_trigger": false
+  }
+]

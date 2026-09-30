@@ -71,6 +71,8 @@ The catalogue is built item by item from the local API, SDK, CLI, and MCP source
 
 | Skill                           | Use when                                                                                                |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `agent-email-inbox`              | Reviewing an authorised inbox and preparing reply drafts without changing messages or sending.          |
+| `email-for-ai-agents`            | Sending one approved outbound email and reconciling retries with a stable idempotency key.               |
 | `sendmux-getting-started`       | Choosing a Sendmux surface, setting up auth, or making a first verified call.                           |
 | `sendmux-send-email`            | Sending single or batch transactional email.                                                            |
 | `sendmux-attachments`           | Uploading, downloading, or sending attachments without wasting context on base64.                       |
