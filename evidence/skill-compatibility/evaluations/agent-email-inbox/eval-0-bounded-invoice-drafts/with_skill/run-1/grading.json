@@ -1,0 +1,54 @@
+{
+  "expectations": [
+    {
+      "text": "Uses mailbox_get_connection without mailbox_id to validate permissions and granted mailboxes.",
+      "passed": true,
+      "evidence": "\"mailbox_get_connection\" \u2014 Uses {} with no selector, and checks mailbox.read and the authorised IDs."
+    },
+    {
+      "text": "Selects mbx_support from granted mailboxes and passes mailbox_id on scoped reads.",
+      "passed": true,
+      "evidence": "\"\"mailbox_id\": \"mbx_support\"\" \u2014 Scopes search, batch read and identity to the requested granted mailbox."
+    },
+    {
+      "text": "Uses mailbox_search_message_snippets with q invoice, is_unread true and limit 10; does not encode unread as a q operator.",
+      "passed": true,
+      "evidence": "\"\"is_unread\": true\" \u2014 Uses mailbox_search_message_snippets with q invoice and limit 10."
+    },
+    {
+      "text": "Uses mailbox_batch_get_messages only for returned selected IDs with clean_json and a finite max_body_chars.",
+      "passed": true,
+      "evidence": "\"\"ids\": [\"<returned message IDs selected from step 2, max 10>\"]\" \u2014 Uses only returned IDs with clean_json and max_body_chars 4000."
+    },
+    {
+      "text": "Returns message-linked triage and unsent reply drafts; proposes no send or message mutation.",
+      "passed": true,
+      "evidence": "\"**Next action** is one of: human review, a further bounded read, or an unsent draft.\" \u2014 Returns message-linked triage and unsent text; explicitly excludes mailbox writes and sends."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "output_chars": 4262,
+    "errors_encountered": 0
+  },
+  "timing": {},
+  "evaluation_method": "Iteration 4 complete response manually reviewed against unchanged assertions; quotes refreshed from this run. No live Sendmux calls.",
+  "claims": [
+    {
+      "claim": "This evaluation executed no email or mailbox action.",
+      "type": "process",
+      "verified": true,
+      "evidence": "Isolated safe-mode CLI receipt; no tools or MCP servers."
+    }
+  ],
+  "eval_feedback": {
+    "overall": "Covers bounded reads, missing evidence and injection, or approved sending, retries, permission separation and attachment single-send. One run per case; this is a content evaluation, not a live integration test.",
+    "suggestions": []
+  }
+}

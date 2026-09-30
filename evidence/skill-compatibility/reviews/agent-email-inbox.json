@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "agent-email-inbox",
+  "skillDigest": "74d2bc70ac8f182249bd78caec0dbd213ef7f9357541cbdacdc17167219abbf7",
+  "contractDigest": "f573c17c9d0d4fd2663127724b09e35ca9ce7f7f35650bcba9852a9592f85757",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace",
+  "rationale": "Selector-free connection, authorized mailbox scope, bounded snippet search and batch ids match the API/MCP/CLI contracts. Workflow produces unsent drafts and does not require mailbox writes. Four content cases and native routing checks passed against unchanged final skill bytes.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/agent-email-inbox/SKILL.md",
+      "sha256": "2a5be98e2eaeb92707b3d20e2a6a9bb81d4e20e212a7b22856f73dedb0d31b1a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/benchmark.json",
+      "sha256": "1c7f40c47040abc70b7790ce0c1f137c8a490190800934f58e71348fdc7f7b8a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-0-bounded-invoice-drafts/eval_metadata.json",
+      "sha256": "dd7b2f87c64d710249862c9ac9354ba1b7e4659bd1ae1bdd68a77248bc4c2fe8"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-0-bounded-invoice-drafts/with_skill/run-1/receipt.json",
+      "sha256": "1aa537d5cda9d61e75055ac6e7b79abe9c1379b74917917994dd490733a43012"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-0-bounded-invoice-drafts/with_skill/run-1/grading.json",
+      "sha256": "987938b1f745a30e08f070cd0fc041bac0feb0d8f7f379b488c22302af2c7213"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-0-bounded-invoice-drafts/with_skill/run-1/outputs/response.md",
+      "sha256": "14172b1d128ecea36d2ab961b7e33e52b17271e854a258bede52a5bf04d4438d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-1-untrusted-message/eval_metadata.json",
+      "sha256": "d4f17884376b008d97014ac6764b12000f5ca6dc3900b65df2d64d3518d9bf9b"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-1-untrusted-message/with_skill/run-1/receipt.json",
+      "sha256": "688743e7a74cfaf3dada415a7713a567044c83e74832058def7234f33b0ec075"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-1-untrusted-message/with_skill/run-1/grading.json",
+      "sha256": "743ec2b6762c10c4d728f01f4c5477bc17796308ace1ce44648fd9de8c206f14"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-1-untrusted-message/with_skill/run-1/outputs/response.md",
+      "sha256": "05ac9b4fe58f7cd2dfebf59c8f6f355ed864cbe9b25a2942fc2d6b1b61bf9497"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-2-empty-search/eval_metadata.json",
+      "sha256": "ffa3d6cf554802c42dba2b399dbef8cb1adb81e7c0c16c22784ae53539e2038b"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-2-empty-search/with_skill/run-1/receipt.json",
+      "sha256": "7098c93d8f363626d7e18eb21091b70099b9b095144ae9ca0d2407f31a3796ae"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-2-empty-search/with_skill/run-1/grading.json",
+      "sha256": "0381afd9e40e0c752b7fa8147e9ad9081c930ace066d50ed9ccb1d056f08746d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-2-empty-search/with_skill/run-1/outputs/response.md",
+      "sha256": "51a55ca18901ccc4d3bc51069d3d4c7c26e20718128edfac93464724efb81dc1"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-3-incomplete-read/eval_metadata.json",
+      "sha256": "7a8cfd0891674a29a6afc02c9008bd863c9ee60782a251fea58767c73b0e07f7"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-3-incomplete-read/with_skill/run-1/receipt.json",
+      "sha256": "c4d3dcba3110299fdec2cc4375093d2f8f3665717e25cff5a4c93ea9428b16d5"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-3-incomplete-read/with_skill/run-1/grading.json",
+      "sha256": "e30e58a530976b42da1dfb3f4fd8dc5b3d3d887f6e46aed17f815bf97d5d990b"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/agent-email-inbox/eval-3-incomplete-read/with_skill/run-1/outputs/response.md",
+      "sha256": "b58284fbeebe3ae7ff5f1273f3ba45b57cfed63f97394f281883e24a6ad647d8"
+    }
+  ]
+}

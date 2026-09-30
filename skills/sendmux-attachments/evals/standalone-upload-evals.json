@@ -1,0 +1,18 @@
+{
+  "skill_name": "sendmux-attachments",
+  "evals": [
+    {
+      "id": 0,
+      "name": "standalone-upload-byte-length",
+      "prompt": "I have an existing Sending-capable Sendmux CLI profile named work and a non-empty local binary file ./report.pdf. Give the exact terminal commands to upload that file as a Sending attachment with filename report.pdf and application/pdf, but do not send an email. Measure the local byte length rather than estimating from the filename or text character count. Keep credentials in the existing profile. No commands have been run in this evaluation; do not invent an upload result.",
+      "expectations": [
+        "Computes the exact local file byte length, rather than a character count or an estimated value.",
+        "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+        "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+        "Uses the existing work profile without printing or requesting credentials.",
+        "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+        "Does not claim an attachment_id or completed upload without a real result."
+      ]
+    }
+  ]
+}

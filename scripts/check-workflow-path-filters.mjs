@@ -39,7 +39,23 @@ export const workflowPathRequirements = new Map([
       { path: "skills.sh.json", reader: "check-skill-drift publicSkillCorpusFiles/assertSkillsCatalogue" },
       { path: "scripts/check-skill-drift.mjs", reader: "skill drift checker" },
       { path: "scripts/check-skill-drift.test.mjs", reader: "skill drift checker tests" },
+      { path: "scripts/skill-compatibility.mjs", reader: "exact-candidate compatibility checker" },
+      { path: "scripts/skill-compatibility.test.mjs", reader: "compatibility CLI regression fixtures" },
+      { path: "skill-compatibility.json", reader: "reviewed compatibility map and source pins" },
+      { path: "evidence/skill-compatibility/**", reader: "verified public exports and workflow review evidence" },
       { path: ".github/workflows/skill-drift.yml", reader: "skill drift workflow" },
+    ],
+  ],
+  [
+    ".github/workflows/openclaw-clawhub.yml",
+    [
+      { path: "skills/**", reader: "published OpenClaw skill instructions" },
+      { path: "scripts/check-skill-drift.mjs", reader: "required freshness workflow" },
+      { path: "scripts/skill-compatibility.mjs", reader: "required exact-candidate compatibility check" },
+      { path: "scripts/skill-compatibility.test.mjs", reader: "compatibility regression fixtures" },
+      { path: "skill-compatibility.json", reader: "reviewed compatibility map and source pins" },
+      { path: "evidence/skill-compatibility/**", reader: "verified public exports and workflow review evidence" },
+      { path: ".github/workflows/skill-drift.yml", reader: "required freshness job" },
     ],
   ],
 ]);

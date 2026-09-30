@@ -1,0 +1,10 @@
+{
+  "eval_id": 2,
+  "eval_name": "empty-search",
+  "prompt": "The authorised Sendmux mailbox snippet search returned ok true, data.snippets [], data.not_found [], for q invoice, is_unread true, limit 10. I asked for invoice triage and reply drafts. What is the next action and what can you report?",
+  "assertions": [
+    "Does not call batch-get with empty IDs or read the entire inbox.",
+    "States zero matches for the applied filters rather than claiming the inbox itself is empty.",
+    "Produces no invented message IDs, classifications or reply content."
+  ]
+}

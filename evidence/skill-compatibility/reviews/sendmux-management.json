@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-management",
+  "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+  "contractDigest": "51e7bff500e371b6a0a97152051a308c7689346a2c739d520c4a214c5b613cda",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Mailbox/key/webhook scopes, connection metadata and conditional/idempotency headers match public contracts. Generic lifecycle capabilities bind their operation-name identities, while concrete commands bind full schemas and auth declarations. Negative MCP capability claims bind its catalogue. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/sendmux-management/SKILL.md",
+      "sha256": "04719fe232f6f06a2bea78bac953f4b3fb1738776e1928e5142065e9d430a080"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
+    }
+  ]
+}

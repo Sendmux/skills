@@ -2,7 +2,7 @@
   "owner": "sendmux.ai",
   "outputRoot": "dist/clawhub/skills",
   "homepage": "https://github.com/Sendmux/skills",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "releaseTags": ["latest"],
   "manualListing": {
     "license": "MIT-0",
@@ -113,6 +113,18 @@
       "description": "Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency.",
       "categories": ["Developer Tools", "Automation", "Communication"],
       "topics": ["sendmux", "token-efficiency", "mcp", "cli", "batching", "email"]
+    },
+    "agent-email-inbox": {
+      "displayName": "Agent Email Inbox",
+      "description": "Use when an AI agent needs read-only triage of an existing Sendmux inbox or unsent reply text from its messages. Trigger for bounded inbox reviews, unread invoice or support searches, and draft-only replies, including agent inbox requests without the Sendmux name. Mailbox mutations and sending are outside this workflow.",
+      "categories": ["Communication", "Automation", "Developer Tools"],
+      "topics": ["sendmux", "email", "agent-inbox", "triage", "drafts", "mcp"]
+    },
+    "email-for-ai-agents": {
+      "displayName": "Email for AI Agents",
+      "description": "Use when an AI agent needs to send one outbound email through Sendmux with human approval, including a status notification or delegated agent send. Trigger when preparing the exact message for approval, executing an approved send, or reconciling an uncertain retry. Use only for a single-message workflow; bulk and batch sends are outside its scope.",
+      "categories": ["Communication", "Automation", "Developer Tools"],
+      "topics": ["sendmux", "email", "outbound-email", "human-approval", "idempotency", "mcp"]
     }
   }
 }

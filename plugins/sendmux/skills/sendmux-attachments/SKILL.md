@@ -164,12 +164,17 @@ SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux sending:send \
 Upload a Sending attachment first, then send by `attachment_id`:
 
 ```bash
+SIZE_BYTES="$(wc -c < ./report.pdf | tr -d '[:space:]')"
+
 SENDMUX_API_KEY="$SENDMUX_MBX_KEY" sendmux sending:upload-attachment \
   --body-file ./report.pdf \
+  --header Content-Length="$SIZE_BYTES" \
   --query filename=report.pdf \
   --query content_type=application/pdf \
   --json
 ```
+
+With an existing CLI profile, omit the `SENDMUX_API_KEY` assignment and put `--profile <profile>` after `sending:upload-attachment`.
 
 Presigned mailbox upload from a local file:
 

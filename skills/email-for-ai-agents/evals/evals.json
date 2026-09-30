@@ -1,0 +1,54 @@
+{
+  "skill_name": "email-for-ai-agents",
+  "evals": [
+    {
+      "id": 0,
+      "name": "approved-single-send",
+      "prompt": "I approve this exact single Sendmux outbound email: from agent@myagent.mx to user@example.com, subject Status, html_body <p>Build passed.</p>, text_body Build passed., no attachments and no CC/BCC. My hosted MCP grant has Sending email.send. Use logical key build-42-status. Give the exact next calls and arguments. In this simulation the send returns ok true with data.message_id eml_simulated42 and data.status queued; finish with the report you would give me. Do not actually call tools.",
+      "expected_output": "Validate Sending connection, preserve already supplied approval, send exact approved message with stable idempotency metadata, and report returned queued ID without claiming delivery.",
+      "expectations": [
+        "Uses sending_get_connection as a harmless Sending check and does not treat it as a credits/provider readiness test.",
+        "Preserves the supplied approval instead of requiring another confirmation.",
+        "Uses sending_send_email with from and to address objects plus the exact approved content and Idempotency-Key build-42-status.",
+        "Does not introduce recipients, attachments or altered content.",
+        "Reports eml_simulated42 as queued, not delivered or read."
+      ]
+    },
+    {
+      "id": 1,
+      "name": "uncertain-retry",
+      "prompt": "I already approved and attempted one Sendmux email using Idempotency-Key order-88; the client timed out before seeing a response. The approved body has not changed. I want to retry now. A colleague says use order-89 so the retry is fresh. Explain the next request and how to handle 409 idempotency_conflict.",
+      "expected_output": "Retry unchanged request with original key inside documented replay window; reconcile in-flight versus changed-payload conflict; no duplicate fresh key or unsupported success.",
+      "expectations": [
+        "Reuses order-88 with the identical body and rejects a fresh key for this retry.",
+        "Explains the 24-hour replay window and avoids blind resend after it expires.",
+        "Distinguishes an in-flight 409 from a different-body conflict; does not change key to bypass either.",
+        "Does not claim success without the actual result."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "durable-read-not-send",
+      "prompt": "My existing Sendmux CLI profile my-agent can read its inbox. Its owner accepted the invite but has not enabled sending. I approve a message from that agent to user@example.com, subject Hello, body Hello. Can you use the stored smx_agent_ credential directly with mailbox_send_message or sending_send_email to get this done?",
+      "expected_output": "Stop before send because durable read access and human message approval do not grant sending. Owner separately enables sending; afterwards Sending CLI exchanges credential without exposing it.",
+      "expectations": [
+        "Explains owner acceptance is separate from owner sending approval.",
+        "Does not pass the durable credential directly to either send tool or use a root key workaround.",
+        "Names sending:send --profile my-agent as the later delegated Sending path after approval.",
+        "Keeps credential handling in the existing profile and does not request tokens in chat."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "local-attachment-one-send",
+      "prompt": "I have an authorised Sendmux CLI profile work. I approve from sender@example.com to user@example.com, subject Signed quote, body Attached quote., with exactly ./signed-quote.pdf. The CLI is available. Prepare the retry-safe command. After --attach succeeds, should you call sending_send_email too so the message is sent?",
+      "expected_output": "Use one CLI upload-and-send with full approved body, local attachment and stable idempotency key; the command is the send itself, so no second MCP send.",
+      "expectations": [
+        "Uses sending:send --profile work with --body-file, --attach ./signed-quote.pdf, and a stable --idempotency-key.",
+        "Treats --attach as the combined upload-and-send operation and does not schedule a second send.",
+        "Does not inline real PDF bytes into model context or use Mailbox blob_id as Sending attachment_id.",
+        "Reports the actual command result without claiming delivery from queued status."
+      ]
+    }
+  ]
+}

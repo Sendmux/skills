@@ -1,0 +1,49 @@
+{
+  "expectations": [
+    {
+      "text": "Uses sending:send --profile work with --body-file, --attach ./signed-quote.pdf, and a stable --idempotency-key.",
+      "passed": true,
+      "evidence": "\"--attach ./signed-quote.pdf\" \u2014 Uses sending:send --profile work, --body-file and one persisted stable --idempotency-key."
+    },
+    {
+      "text": "Treats --attach as the combined upload-and-send operation and does not schedule a second send.",
+      "passed": true,
+      "evidence": "\"Do not call `sending_send_email` after `--attach` succeeds.\" \u2014 Recognises the combined upload-and-send operation."
+    },
+    {
+      "text": "Does not inline real PDF bytes into model context or use Mailbox blob_id as Sending attachment_id.",
+      "passed": true,
+      "evidence": "\"--attach ./signed-quote.pdf\" \u2014 Uses only the local file path in --attach; no file bytes or Mailbox blob IDs appear."
+    },
+    {
+      "text": "Reports the actual command result without claiming delivery from queued status.",
+      "passed": true,
+      "evidence": "\"It does not confirm delivery\" \u2014 Explicitly does not infer delivery or reading, and claims no executed result."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "output_chars": 2661,
+    "errors_encountered": 0
+  },
+  "timing": {},
+  "evaluation_method": "Iteration 4 complete response manually reviewed against unchanged assertions; quotes refreshed from this run. No live Sendmux calls.",
+  "claims": [
+    {
+      "claim": "This evaluation executed no email or mailbox action.",
+      "type": "process",
+      "verified": true,
+      "evidence": "Isolated safe-mode CLI receipt; no tools or MCP servers."
+    }
+  ],
+  "eval_feedback": {
+    "overall": "Covers bounded reads, missing evidence and injection, or approved sending, retries, permission separation and attachment single-send. One run per case; this is a content evaluation, not a live integration test.",
+    "suggestions": []
+  }
+}

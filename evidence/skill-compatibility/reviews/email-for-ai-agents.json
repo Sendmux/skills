@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "email-for-ai-agents",
+  "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
+  "contractDigest": "d7fd02d55bc40033d337b5deefa16ced40499e0e2969e03838ee54b2bc457f67",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "5c08efe9194081e67b0167a556ce46e6369fe549"
+  },
+  "reviewer": "Codex root; independent skills source review and exact producer-policy trace; Codex skills_surfaces: focused full-registration-revocation source review",
+  "rationale": "Scoped email.send permission, address-object recipients and top-level MCP Idempotency-Key match the Sending/MCP/CLI contracts. Attachment upload and delegated-token paths are selected; retries keep identical payload/reference identities. Four content cases and native routing checks passed. Additional source review traced full registration revocation, durable-read and derived-token invalidation, and pending invitation cancellation. Existing authority/lifetime claims remain compatible; instruction and evaluation bytes are unchanged.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/email-for-ai-agents/SKILL.md",
+      "sha256": "00166b24a755bb9af2492e567be94ee0340b19007293cbc6cbcc02042326b46e"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/benchmark.json",
+      "sha256": "2415609ba9c504fdbce0baf9549a497c992c1eeaf8a46f2e45354020706f384b"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-0-approved-single-send/eval_metadata.json",
+      "sha256": "95051f81a3030d40ffdaec546e751669161e9bf02a8f9149a8f5eea0a2bf6501"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-0-approved-single-send/with_skill/run-1/receipt.json",
+      "sha256": "f9f8f947eac7eb6caf289bea4d06e80e1c999f77018287f068e998210555fe1d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-0-approved-single-send/with_skill/run-1/grading.json",
+      "sha256": "e4a91c48c9cd007ad9019fbf3531b0ba1287a064280a2dd078b4697c8ed72e66"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-0-approved-single-send/with_skill/run-1/outputs/response.md",
+      "sha256": "c384f850ae2d87b261f7db2ac454769b09182e0a754c67f261f516c5642116f1"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-1-uncertain-retry/eval_metadata.json",
+      "sha256": "ff9fcfba73599eecfbd86b46820420f3d17f35edcbb3c2662bf3e6c309a33c25"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-1-uncertain-retry/with_skill/run-1/receipt.json",
+      "sha256": "3403c93f5541c598c2c2116cb5d94faac332c7f79d4764e0ec15cc41346cd1e2"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-1-uncertain-retry/with_skill/run-1/grading.json",
+      "sha256": "c64f7e19911f8f6f563523b5688ddaae98df8a0875670dad8c3840389a62c9e0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-1-uncertain-retry/with_skill/run-1/outputs/response.md",
+      "sha256": "e2ec42ba5b628de3e3950747d72d6c993e8ce8839e6675cb6fdca43aaa469a4e"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-2-durable-read-not-send/eval_metadata.json",
+      "sha256": "7626e2d7b87dd79ee2aafeb10aba8d37187060f6afbbe43b66e6c602e324a381"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-2-durable-read-not-send/with_skill/run-1/receipt.json",
+      "sha256": "c6bf99a2c0e82c07d00bab6ad0f669772d035a3e17c7af50e89e35bbb18ee7a7"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-2-durable-read-not-send/with_skill/run-1/grading.json",
+      "sha256": "769859b641c5e980a7a46b08001ebc31d1a8b1424f0764a03850a00d7e65b0ed"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-2-durable-read-not-send/with_skill/run-1/outputs/response.md",
+      "sha256": "473819f36e410706392a1cfcc5b66f38a3a7ceb9151acdc0eeb871e2b9f29ba1"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-3-local-attachment-one-send/eval_metadata.json",
+      "sha256": "b2961bb2b9721cb7ff584dc83eede991bbe642e4e63537abb6ecd1153697b8d4"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-3-local-attachment-one-send/with_skill/run-1/receipt.json",
+      "sha256": "5f9c8f3e3d685c72082703380b6342f1a5c1c8af4c0956129dba8ed161e4c468"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-3-local-attachment-one-send/with_skill/run-1/grading.json",
+      "sha256": "88a7118113dc5bf153061beeb82245eba5697bc106f6fe3ee7574e996f7fcd7a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/email-for-ai-agents/eval-3-local-attachment-one-send/with_skill/run-1/outputs/response.md",
+      "sha256": "c75a624db32c6d03c69de5ce335faa8cc8511f5ddfc4b4a583b9cb2fe28ced14"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
+    }
+  ]
+}

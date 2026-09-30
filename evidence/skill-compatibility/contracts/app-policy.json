@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "producer": "app",
+  "revision": "043544c168faf3124893358bacb0d54042af238b",
+  "fingerprints": {
+    "agent-registration": {
+      "code": "574254028bfece85ad351261ff5012ed9363fc8924c64e23d59b6688c80eeea4",
+      "runtime": "9f15d58d5b20b72cbb6ba171802854295aac48d92d4e434e7201f93551279580"
+    },
+    "durable-mailbox-read": {
+      "code": "8c9ba4500fdb232558196f6b73afbe11df2c0a3a9b51f01941192acd884366ec"
+    },
+    "mailbox-storage": {
+      "code": "18290abef5a9a528c8079ec0e74fe5a415a0604e774bdfb35c7a5f5291b14a9a"
+    },
+    "delegated-sending": {
+      "code": "478259b6ba2566c5aa25fd71bf7b04a8ffe2e81e56b03217b078ef37b922225c"
+    }
+  },
+  "runtime": {
+    "valuesSha256": "9f15d58d5b20b72cbb6ba171802854295aac48d92d4e434e7201f93551279580",
+    "snapshotSha256": "8e6ddddcf5c3bb3b298583a0b09aed48ec305593c1ea28878fd3ae6ff4da8d50"
+  }
+}

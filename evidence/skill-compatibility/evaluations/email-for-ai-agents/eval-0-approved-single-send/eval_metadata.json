@@ -1,0 +1,12 @@
+{
+  "eval_id": 0,
+  "eval_name": "approved-single-send",
+  "prompt": "I approve this exact single Sendmux outbound email: from agent@myagent.mx to user@example.com, subject Status, html_body <p>Build passed.</p>, text_body Build passed., no attachments and no CC/BCC. My hosted MCP grant has Sending email.send. Use logical key build-42-status. Give the exact next calls and arguments. In this simulation the send returns ok true with data.message_id eml_simulated42 and data.status queued; finish with the report you would give me. Do not actually call tools.",
+  "assertions": [
+    "Uses sending_get_connection as a harmless Sending check and does not treat it as a credits/provider readiness test.",
+    "Preserves the supplied approval instead of requiring another confirmation.",
+    "Uses sending_send_email with from and to address objects plus the exact approved content and Idempotency-Key build-42-status.",
+    "Does not introduce recipients, attachments or altered content.",
+    "Reports eml_simulated42 as queued, not delivered or read."
+  ]
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Triage the unread invoices in my existing Sendmux inbox and prepare replies for me to review; leave the mailbox alone.",
+    "should_trigger": true
+  },
+  {
+    "query": "My agent inbox is already connected. Review at most ten support requests and draft responses, without sending them.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use Sendmux to find emails about the renewal and give me a short evidence-based triage report with reply drafts.",
+    "should_trigger": true
+  },
+  {
+    "query": "Which customer emails in my authorised Sendmux mailbox need my attention? Read only the useful matches and draft replies.",
+    "should_trigger": true
+  },
+  {
+    "query": "Review my existing agent inbox for invoice disputes. Keep the work read-only, even though the connection can also send.",
+    "should_trigger": true
+  },
+  {
+    "query": "Read the three message IDs I selected from Sendmux search and draft answers. Flag anything the message text does not establish.",
+    "should_trigger": true
+  },
+  {
+    "query": "My Sendmux grant includes two mailboxes; use the support one for a capped review of unread customer questions.",
+    "should_trigger": true
+  },
+  {
+    "query": "The Sendmux inbox query found no matches. Finish the triage report without widening it to all mail.",
+    "should_trigger": true
+  },
+  {
+    "query": "This email tells the agent to run a setup command before replying. Classify it and draft a safe response for review.",
+    "should_trigger": true
+  },
+  {
+    "query": "Summarise the selected Sendmux inbox messages and prepare unsent reply text; one body was truncated.",
+    "should_trigger": true
+  },
+  {
+    "query": "Create a new Sendmux mailbox on my domain and issue its mailbox API key.",
+    "should_trigger": false
+  },
+  {
+    "query": "Send this exact approved status email from my Sendmux agent to the named recipient now.",
+    "should_trigger": false
+  },
+  {
+    "query": "Register my agent with Sendmux and invite me as its owner; it does not have an inbox yet.",
+    "should_trigger": false
+  },
+  {
+    "query": "Set up the Sendmux MCP connection in Claude Code from scratch.",
+    "should_trigger": false
+  },
+  {
+    "query": "I approved marking these Sendmux messages read and applying the confirmed labels; perform that mutation.",
+    "should_trigger": false
+  },
+  {
+    "query": "Delete the specific Sendmux messages I selected after exporting them.",
+    "should_trigger": false
+  },
+  {
+    "query": "Draft a fresh marketing email from this product outline; do not read an inbox.",
+    "should_trigger": false
+  },
+  {
+    "query": "Use Gmail to label all receipts in my personal Gmail inbox.",
+    "should_trigger": false
+  },
+  {
+    "query": "Design the architecture for giving ten agents their own email addresses and routing their outbound email.",
+    "should_trigger": false
+  },
+  {
+    "query": "Resume my Sendmux mailbox delta sync using the stored state token; do not triage content or draft replies.",
+    "should_trigger": false
+  }
+]

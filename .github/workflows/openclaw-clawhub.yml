@@ -4,6 +4,12 @@ on:
   pull_request:
     paths:
       - "skills/**"
+      - "scripts/check-skill-drift.mjs"
+      - "scripts/skill-compatibility.mjs"
+      - "scripts/skill-compatibility.test.mjs"
+      - "skill-compatibility.json"
+      - "evidence/skill-compatibility/**"
+      - ".github/workflows/skill-drift.yml"
       - "openclaw.skills.json"
       - "scripts/build-openclaw-bundle.mjs"
       - "scripts/check-openclaw-bundle.mjs"
@@ -15,6 +21,12 @@ on:
       - main
     paths:
       - "skills/**"
+      - "scripts/check-skill-drift.mjs"
+      - "scripts/skill-compatibility.mjs"
+      - "scripts/skill-compatibility.test.mjs"
+      - "skill-compatibility.json"
+      - "evidence/skill-compatibility/**"
+      - ".github/workflows/skill-drift.yml"
       - "openclaw.skills.json"
       - "scripts/build-openclaw-bundle.mjs"
       - "scripts/check-openclaw-bundle.mjs"
@@ -37,6 +49,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  freshness:
+    uses: ./.github/workflows/skill-drift.yml
+
   validate:
     name: Build and dry-run OpenClaw bundle
     runs-on: ubuntu-latest
@@ -67,7 +82,7 @@ jobs:
   publish:
     name: Publish OpenClaw bundle
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
-    needs: validate
+    needs: [validate, freshness]
     runs-on: ubuntu-latest
     environment: clawhub
     timeout-minutes: 90

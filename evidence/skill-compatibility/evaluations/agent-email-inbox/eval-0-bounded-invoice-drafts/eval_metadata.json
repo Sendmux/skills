@@ -1,0 +1,12 @@
+{
+  "eval_id": 0,
+  "eval_name": "bounded-invoice-drafts",
+  "prompt": "Use my existing Sendmux connection to triage unread invoice messages and prepare reply drafts. The connection grants mbx_support and mbx_sales; I mean mbx_support. Start with at most 10 matches. Tell me the exact first calls and arguments, then the output you will give me. Do not actually call tools in this evaluation.",
+  "assertions": [
+    "Uses mailbox_get_connection without mailbox_id to validate permissions and granted mailboxes.",
+    "Selects mbx_support from granted mailboxes and passes mailbox_id on scoped reads.",
+    "Uses mailbox_search_message_snippets with q invoice, is_unread true and limit 10; does not encode unread as a q operator.",
+    "Uses mailbox_batch_get_messages only for returned selected IDs with clean_json and a finite max_body_chars.",
+    "Returns message-linked triage and unsent reply drafts; proposes no send or message mutation."
+  ]
+}

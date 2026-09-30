@@ -1,0 +1,24 @@
+{
+  "arm": "with_skill",
+  "skill_sha256": "00166b24a755bb9af2492e567be94ee0340b19007293cbc6cbcc02042326b46e",
+  "prompt_sha256": "3e860be7c01be7f2b6a6e3ca931d431092f01a210e5231214f626b06bda9ef19",
+  "model_usage": {
+    "claude-opus-5-5[1m]": {
+      "inputTokens": 2,
+      "outputTokens": 991,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 2476,
+      "webSearchRequests": 0,
+      "costUSD": 0.039636,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 181,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "tools": [],
+  "mcp_servers": [],
+  "external_actions": false
+}

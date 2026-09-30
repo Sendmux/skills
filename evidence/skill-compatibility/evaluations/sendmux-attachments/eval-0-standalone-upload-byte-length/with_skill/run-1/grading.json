@@ -1,0 +1,63 @@
+{
+  "expectations": [
+    {
+      "text": "Computes the exact local file byte length, rather than a character count or an estimated value.",
+      "passed": true,
+      "evidence": "wc -c < ./report.pdf \u2014 Counts on-disk bytes; includes positive-size guard."
+    },
+    {
+      "text": "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+      "passed": true,
+      "evidence": "--header Content-Length=\"$SIZE_BYTES\" \u2014 Measured header passed to correctly ordered sending:upload-attachment command."
+    },
+    {
+      "text": "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+      "passed": true,
+      "evidence": "--body-file ./report.pdf \u2014 Both query fields and --json are present."
+    },
+    {
+      "text": "Uses the existing work profile without printing or requesting credentials.",
+      "passed": true,
+      "evidence": "sendmux sending:upload-attachment --profile work \u2014 Profile follows command; no key printing/request."
+    },
+    {
+      "text": "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+      "passed": true,
+      "evidence": "They do not send an email. \u2014 Only standalone upload executes; future sends remain explanatory."
+    },
+    {
+      "text": "Does not claim an attachment_id or completed upload without a real result.",
+      "passed": true,
+      "evidence": "I have not run them \u2014 No completed upload or attachment ID fabricated."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "output_chars": 1725,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "total_tokens": 7080,
+    "duration_ms": 10072,
+    "total_duration_seconds": 10.859478583093733
+  },
+  "evaluation_method": "Full response manually reviewed against assertions; command-order failure additionally reproduced against actual CLI using an intentionally incompatible fake root key, before network. All runs isolated, without tools/MCP; no live workflow.",
+  "claims": [
+    {
+      "claim": "No email or attachment API call occurred in this evaluation",
+      "type": "process",
+      "verified": true,
+      "evidence": "Isolated no-tools/no-MCP receipt."
+    }
+  ],
+  "eval_feedback": {
+    "overall": "Focused standalone upload example coverage, one model run per arm; not a live integration or statistical guarantee.",
+    "suggestions": []
+  }
+}
