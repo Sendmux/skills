@@ -245,9 +245,12 @@ sendmux sending:send \
 Upload a Sending attachment separately:
 
 ```bash
+SIZE_BYTES="$(wc -c < ./report.pdf | tr -d '[:space:]')"
+
 sendmux sending:upload-attachment \
   --profile sending \
   --body-file ./report.pdf \
+  --header Content-Length="$SIZE_BYTES" \
   --query filename=report.pdf \
   --query content_type=application/pdf \
   --json
