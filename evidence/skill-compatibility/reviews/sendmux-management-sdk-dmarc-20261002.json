@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-management",
+  "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+  "contractDigest": "67df3dd4257544a338f3f7db22518455e0fd628eb2e892a56014bc77f6ab226f",
+  "sourceRevisions": {
+    "app": "043544c168faf3124893358bacb0d54042af238b",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "46e3f02ce325af651073d85e8156a4459bff36e0"
+  },
+  "reviewer": "Codex root and independent release candidate reviewer",
+  "rationale": "The selected SDK contract changes one DMARC result description. The management skill teaches verification calls without claiming an enforcement level. Inputs, output fields and types, authentication and permissions are unchanged. Existing instruction bytes remain compatible with the pinned producer contracts and current SDK. Earlier reviews are retained.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/sdk-dmarc-description-20261002.json",
+      "sha256": "3a76206ab1ac8510e08631369e68f8453900f96b525c25e168ee8b9a114192ef"
+    },
+    {
+      "path": "skills/sendmux-management/SKILL.md",
+      "sha256": "04719fe232f6f06a2bea78bac953f4b3fb1738776e1928e5142065e9d430a080"
+    }
+  ]
+}
