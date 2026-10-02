@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-management",
+  "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+  "contractDigest": "5dd62a8ac18ef1b8aacb7a377da269dd172caf031e71555997a09c71ad0b11b2",
+  "sourceRevisions": {
+    "app": "5a4661b580200dec307a929c2f844d40df3f2657",
+    "sending": "214f87fbfa5d2016dbc77bee343776675a55996f",
+    "sdk": "86cafeca08c3211b9ef5168051fdb8ca3d739e83"
+  },
+  "reviewer": "Codex root, exact exported contract comparison and management skill review",
+  "rationale": "The sole exported contract change describes DMARC verification as the presence of v=DMARC1. Response fields, types, operation names, authentication and scopes are unchanged. The management skill invokes domain verification and makes no enforcement-level claim. Its existing instructions remain compatible with this result. Published and proposed management skill digests are identical.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/dmarc-description-20261002.json",
+      "sha256": "8261cf4579a63f81ea85009da3991eba56170b7fbeba6dd8aacfab138a8a73af"
+    },
+    {
+      "path": "skills/sendmux-management/SKILL.md",
+      "sha256": "04719fe232f6f06a2bea78bac953f4b3fb1738776e1928e5142065e9d430a080"
+    }
+  ]
+}

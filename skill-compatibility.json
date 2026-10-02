@@ -1783,6 +1783,13 @@
     {
       "skill": "sendmux-management",
       "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+      "contractDigest": "5dd62a8ac18ef1b8aacb7a377da269dd172caf031e71555997a09c71ad0b11b2",
+      "record": "evidence/skill-compatibility/reviews/sendmux-management-dmarc-20261002.json",
+      "sha256": "988821c8a581d78a529a0829e5afb84c34e912136a85b6cd49ce6b9ba4160029"
+    },
+    {
+      "skill": "sendmux-management",
+      "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
       "contractDigest": "51e7bff500e371b6a0a97152051a308c7689346a2c739d520c4a214c5b613cda",
       "record": "evidence/skill-compatibility/reviews/sendmux-management.json",
       "sha256": "09b9b055357d9f7238130899f12be84cb39b0d9511c07efa60a2c48ab2df3efe"
