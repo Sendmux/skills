@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "sdkRevision": "46e3f02ce325af651073d85e8156a4459bff36e0",
+  "skill": "sendmux-management",
+  "contractDigest": "67df3dd4257544a338f3f7db22518455e0fd628eb2e892a56014bc77f6ab226f",
+  "change": {
+    "tool": "management_verify_domain",
+    "path": "tools/by_surface/management/21/output_schema/properties/result/allOf/1/properties/data/properties/checks/properties/dmarc/description",
+    "before": "Published DMARC policy provides at least the required enforcement level.",
+    "after": "A DMARC record containing v=DMARC1 is present."
+  },
+  "review": "The management skill invokes domain verification and makes no DMARC enforcement-level claim. Tool inputs, output fields and types, authentication and permissions are unchanged. Existing skill instructions remain compatible. This review retains the pinned producer exports and binds the current SDK description separately from the earlier App-export review."
+}
