@@ -78,15 +78,56 @@
       "id": 6,
       "name": "local-attachment-approved-reply",
       "prompt": "A customer's message is open in my Sendmux mailbox. I have a local `signed-quote.pdf`, know its exact byte size, and want the agent to draft a reply with it attached. Do not send until I approve the exact recipient, subject, body, and attachment. The agent is connected through MCP; what workflow should it prepare?",
-      "expected_output": "The answer keeps the task mailbox-centred, routes the local PDF through the Mailbox presign flow, and prepares but does not send the reply before approval. A later Mailbox send uses the upload's blob_id and an idempotency key.",
+      "expected_output": "The answer keeps the task mailbox-centred, routes the local PDF through the Mailbox presign flow, and prepares but does not send the reply before approval. A later Mailbox send uses the upload's blob_id; a direct send reuses an idempotency key, while a saved draft sends only its approved revision.",
       "files": [],
       "expectations": [
         "The output keeps the reply in sendmux-mailbox-agent and routes attachment byte handling to sendmux-attachments.",
         "For the connected MCP path, the output uses mailbox_upload_attachment with presign_upload_url, filename, content_type, and exact size_bytes, followed by byte transfer outside model context.",
         "The output does not infer MCP filesystem access, recommend MCP file_path or shared roots, or inline the real PDF as base64.",
         "The output uses the exact returned upload method and headers, sends no Sendmux bearer on the upload request, and keeps signed upload metadata out of literal process arguments and retained output.",
-        "The output puts the resulting blob_id, not a Sending attachment_id, in the eventual mailbox_send_message attachment.",
-        "The output does not send before approval of the exact recipient, subject, body, and attachment, and includes an Idempotency-Key for the later retryable reply."
+        "The output puts the resulting blob_id, not a Sending attachment_id, in the eventual direct mailbox_send_message attachment or saved mailbox draft attachments.",
+        "The output does not send before approval of the exact recipient, subject, body, and attachment; a direct reply reuses an Idempotency-Key, while a saved reply sends the same approved draft revision and reconciles that draft after a lost response."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "saved-threaded-reply-for-review",
+      "prompt": "The user wants a reply to a customer email saved in Sendmux so they can edit it tomorrow. The original message has an attachment. Prepare the draft, but do not send it. What mailbox workflow should the agent use?",
+      "expected_output": "Create a saved reply draft from the owned source message, preserve threading and the source attachment context, return its stable draft ID and revision for later edits, and do not send before the user approves the reviewed draft.",
+      "files": [],
+      "expectations": [
+        "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+        "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+        "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+        "The output keeps the stable draft ID and revision for later editing.",
+        "The output does not send before the user approves the final recipients, content and attachments."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "draft-edit-conflict",
+      "prompt": "My agent opened a saved Sendmux reply draft at revision 3. A teammate then edited it to revision 4. The agent has new text to save. What should it do?",
+      "expected_output": "The agent conditionally edits using the revision it read; a revision conflict means re-read the saved draft and obtain a reviewed merge rather than overwriting the teammate's changes.",
+      "files": [],
+      "expectations": [
+        "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.",
+        "The output treats a revision conflict as a failed edit, not as success.",
+        "The output re-reads the current draft before proposing a merge or retry.",
+        "The output does not blindly overwrite revision 4 or send the stale revision."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "approved-revision-bound-send-retry",
+      "prompt": "I approved the exact recipients, subject, body and attachments in saved draft revision 5. The agent requested Sendmux to send it, but lost the HTTP response. Should it create a new message or retry, and what must it check?",
+      "expected_output": "Use the saved draft's revision-bound send operation and inspect its durable state after the lost response. Reconcile against the same draft ID and approved revision; never create or send a second message just because the response was lost.",
+      "files": [],
+      "expectations": [
+        "The output sends only the approved saved draft revision 5.",
+        "The output reads the same draft's durable send state after the lost response.",
+        "The output does not create a new draft or message for the retry.",
+        "The output uses the same draft ID and approved revision when reconciling uncertain acceptance, without inventing a separate send idempotency key.",
+        "The output keeps permission to send separate from permission to edit a draft."
       ]
     }
   ]

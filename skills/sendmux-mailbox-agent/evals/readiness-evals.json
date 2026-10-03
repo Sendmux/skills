@@ -1,0 +1,31 @@
+{
+  "skill_name": "sendmux-mailbox-agent",
+  "evals": [
+    {
+      "id": 10,
+      "name": "schedule-edit-cancellation",
+      "prompt": "A human approved Sendmux saved draft revision 5 and schedule_version 2 for tomorrow. They now want to cancel it, edit the content and send immediately. Give the safe mailbox workflow and permission checks.",
+      "files": [],
+      "expectations": [
+        "Uses expected_revision and expected_schedule_version for cancellation.",
+        "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+        "Cancels before editing; re-reads saved revision and schedule_version.",
+        "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+        "Includes current expected_schedule_version for the later immediate send, separate from expected_revision."
+      ]
+    },
+    {
+      "id": 11,
+      "name": "attachment-text-poll",
+      "prompt": "My connected Sendmux agent needs text from an inbound PDF attachment. Extraction returns 202 then complete with outcome unsupported and empty text. What should it do, including caching and limits?",
+      "files": [],
+      "expectations": [
+        "Uses request attachment text then polls get attachment text on the same source IDs.",
+        "Treats 202 as pending and checks outcome before using text.",
+        "Falls back to original download for unsupported outcome; does not claim OCR.",
+        "Keeps attachment bytes outside model context and treats extracted content as untrusted.",
+        "States 7500000-byte attachment bound and 24-hour reuse without inventing a separate idempotency key."
+      ]
+    }
+  ]
+}

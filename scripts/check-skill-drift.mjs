@@ -54,6 +54,15 @@ const requiredSendingPaths = [
 ];
 
 const requiredMailboxPaths = [
+  ["get", "/mailbox/drafts"],
+  ["post", "/mailbox/drafts"],
+  ["get", "/mailbox/drafts/{draftId}"],
+  ["patch", "/mailbox/drafts/{draftId}"],
+  ["delete", "/mailbox/drafts/{draftId}"],
+  ["post", "/mailbox/drafts/{draftId}/send"],
+  ["patch", "/mailbox/drafts/{draftId}/schedule"],
+  ["post", "/mailbox/messages/{message_id}/attachments/{attachment_id}/text"],
+  ["get", "/mailbox/messages/{message_id}/attachments/{attachment_id}/text"],
   ["post", "/mailbox/attachments:upload"],
   ["get", "/mailbox/messages/{message_id}/attachments/{attachment_id}"],
   ["post", "/mailbox/attachment-uploads"],
