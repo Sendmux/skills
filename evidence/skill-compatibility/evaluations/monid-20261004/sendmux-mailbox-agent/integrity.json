@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "artifact": "skill-level-native-workflow-aggregate",
+  "cases": [
+    7,
+    8,
+    10,
+    11
+  ],
+  "runs": 8,
+  "case_evidence_copies": 42,
+  "generator": {
+    "scope": "eval-11 static viewer only",
+    "exit_code": 0,
+    "viewer_sha256": "46ba07dfc7cd0c652be1e218c34f43e82d7c4e4616f4f2b88b519f7a172feecc",
+    "optional_benchmark_omitted": true,
+    "toolkit_modified": false
+  },
+  "integrity": {
+    "exit_code": 0,
+    "checked": [
+      "eval11 source, definition, prompt, metadata, output and grading hashes",
+      "eval11 exact assertions and root-supplied summaries",
+      "static embedded prompts, response texts and grading objects",
+      "all 42 aggregate case evidence copies byte-identical",
+      "8 aggregate run objects identical to per-eval benchmark runs",
+      "aggregate results and expectations match case grading"
+    ]
+  },
+  "benchmark_sha256": "0d01f12f678832c2053bd2acbb72da312fbbcc1259fe8ef06b431f30583d2c49",
+  "sources": {
+    "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/sendmux-mailbox-agent/eval-7/benchmark.json": "d73f2d7164d443f03621cd8194983d4be3f10f642dcd359c4a9afe2239d420ed",
+    "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/sendmux-mailbox-agent/eval-8/benchmark.json": "0b1443914004da7f47f2969fc06ff59d78735dcf3962fa923e4c7acbe533745a",
+    "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/sendmux-mailbox-agent/eval-10/benchmark.json": "3e2d2d036a08de995af0db83ba34365ce363c5aaefce7f2bab763030cf44df42",
+    "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/sendmux-mailbox-agent/eval-11/benchmark.json": "8685d66990a312b06e2634bcc35375ba4d06dbfdc5652d117b74d43b35b07091"
+  },
+  "copies": {
+    "benchmark.json": "0d01f12f678832c2053bd2acbb72da312fbbcc1259fe8ef06b431f30583d2c49",
+    "benchmark.md": "f5bb15f563c9ce7e2a6a6afc3be65f82507aee8f13e795d2e322215d782f95f6",
+    "eval-8/eval_metadata.json": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb",
+    "eval-7/eval_metadata.json": "e1e5f21ae7459a4ee2e46a1a0728c1ff16553df58f46ffff6b1762e94b021742",
+    "eval-10/eval_metadata.json": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0",
+    "eval-11/eval_metadata.json": "a90a02b2e10ac750cf03eabf622e54b7b757a6eecb36b67ebab3492ae52ac3da",
+    "eval-8/old_skill/run-1/grading.json": "7774243e675ad326f9ff2af98be63c9bc45ec20abcd4b6ce27ee9e7b03934b30",
+    "eval-8/old_skill/run-1/eval_metadata.json": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb",
+    "eval-8/old_skill/run-1/timing.json": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d",
+    "eval-8/old_skill/run-1/receipt.json": "4184d8cbff8fde2597447aced398d8ee0ac85fa72b37539831e85bb5859bfb9d",
+    "eval-8/old_skill/run-1/outputs/response.md": "c68d135394be3f28a7b01171f74904a1f28d30f175cc9d66cc02d7338b906631",
+    "eval-8/with_skill/run-1/grading.json": "c1ffba0ff1d6e5a428c2472ced01e0f21742ab15ced847b5b284bbaf5bf56612",
+    "eval-8/with_skill/run-1/eval_metadata.json": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb",
+    "eval-8/with_skill/run-1/timing.json": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d",
+    "eval-8/with_skill/run-1/receipt.json": "95208878403e0d2253d074a8283c83a42945861cd0e8bf096ac6e39e61dedfd3",
+    "eval-8/with_skill/run-1/outputs/response.md": "5dd1ec644d58d3af64eef9d4c35f3b986f898ae57b35f7918084e40b1474485c",
+    "eval-7/old_skill/run-1/grading.json": "495579fcdbe4dc18617bb98cae87c43c2164b082f6cbfca15b164af8b06154d0",
+    "eval-7/old_skill/run-1/timing.json": "5aa551e1f4a318fdfa8e1c972c093e0ba478ac7cae611a7ac1e9045749879ab0",
+    "eval-7/old_skill/run-1/receipt.json": "6bb99e62b201e7e2195dc5bcbbe68ffbf4b2402d472a0333f876a39ce9fe51c4",
+    "eval-7/old_skill/run-1/outputs/response.md": "c23c4995587034e36ebd5a6302775e2beef963c5a1fdcdc58b5988dab982168e",
+    "eval-7/with_skill/run-1/grading.json": "aec75dcbc7cb6dd3dd2d7e42267ef20f84171d7e95de1a970dc790d44c3c8c17",
+    "eval-7/with_skill/run-1/timing.json": "5aa551e1f4a318fdfa8e1c972c093e0ba478ac7cae611a7ac1e9045749879ab0",
+    "eval-7/with_skill/run-1/receipt.json": "107c57c3148e234ef08fc356b3a72fea0385684d42e63f73f3b14deec6776d52",
+    "eval-7/with_skill/run-1/outputs/response.md": "8390bf87118ebe8ba1a300abf246c70e256397aaabc3ce3296f9956a53e710d7",
+    "eval-10/old_skill/run-1/grading.json": "bb5005ac274dec0cd8122efcf9ad81f95fc7d91f19e19901c8b912861dc686d2",
+    "eval-10/old_skill/run-1/eval_metadata.json": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0",
+    "eval-10/old_skill/run-1/timing.json": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d",
+    "eval-10/old_skill/run-1/receipt.json": "541e52e612d130f6132b8972999a1c2e373bc36a210f7dbafab8015a59d79ba2",
+    "eval-10/old_skill/run-1/outputs/response.md": "4d6382aa2415432791dc32686290dc0009ee8a9f47a324d1f0fd445df9adbe8f",
+    "eval-10/with_skill/run-1/grading.json": "fe78599bb7e94b1e676b33f824118da2c3487639b498f3934732079c23677a66",
+    "eval-10/with_skill/run-1/eval_metadata.json": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0",
+    "eval-10/with_skill/run-1/timing.json": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d",
+    "eval-10/with_skill/run-1/receipt.json": "5fe3eb4285c56d4496841bf194b32d1b83059c45fd4516595a4eaf2b5aea6145",
+    "eval-10/with_skill/run-1/outputs/response.md": "a612f8a5a705dc278a974ea8e949a4b393d6e3cf49886a20823a1a49c69eb24f",
+    "eval-11/old_skill/run-1/grading.json": "0c4787e9dc7ba7884ced211296e749d3ca6ea6cc79b15f5ccc7689f2a1e3f108",
+    "eval-11/old_skill/run-1/eval_metadata.json": "a90a02b2e10ac750cf03eabf622e54b7b757a6eecb36b67ebab3492ae52ac3da",
+    "eval-11/old_skill/run-1/timing.json": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d",
+    "eval-11/old_skill/run-1/receipt.json": "c6f584a5de870c55c407487d3ff86d0bc122d4e04445d23660481aeffd9a21e6",
+    "eval-11/old_skill/run-1/outputs/response.md": "112681455590a3fe6462a602d4ac1a1e6dcbe864c5817cb0f4c74b074d8d12b1",
+    "eval-11/with_skill/run-1/grading.json": "de1962dab445a67cf44a78ec7dda66aa2d7e2972ddb197b3e3dd9b7ede0484c0",
+    "eval-11/with_skill/run-1/eval_metadata.json": "a90a02b2e10ac750cf03eabf622e54b7b757a6eecb36b67ebab3492ae52ac3da",
+    "eval-11/with_skill/run-1/timing.json": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d",
+    "eval-11/with_skill/run-1/receipt.json": "6470c6d595bc8031a6c3b27472b8e3295b8e098fe8e02eb1b0eb828f9e1b0833",
+    "eval-11/with_skill/run-1/outputs/response.md": "9a3b4080eb8ba8598a6305ddf78660c7c2283a2f5a0cd594ed7f65627c73249e"
+  },
+  "qualifications": [
+    "No compatibility acceptance or SKILLS evidence/source update",
+    "Mixed original grader/context provenance retained; eval8 old baseline reused",
+    "No complete exported tool transcripts or independently audited fresh-isolation claim",
+    "Model identity, separate agent IDs, token counts and task durations unavailable/null",
+    "No product runtime, tests, builds, containers, network or external model CLI"
+  ]
+}

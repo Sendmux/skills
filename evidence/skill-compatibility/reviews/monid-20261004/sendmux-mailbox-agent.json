@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-mailbox-agent",
+  "skillDigest": "7e91fe7dccb80deb333d6d1f2dc8eecc695d44a81fd46cffcd6a160f9f446eaf",
+  "previousSkillDigest": "7caa769e30408f23404ead3b3f427368ca715a09d8bc6c38d61e92ea23a2e3d3",
+  "contractDigest": "dbbb873d2752bc5587c229bf40bc8de96239e28ff880fcbaf891e8eea7ad0356",
+  "sourceRevisions": {
+    "app": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
+    "sending": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+    "sdk": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4"
+  },
+  "reviewer": "Codex /root/changed_product_gate_prep; exact source review and canonical producer-contract inspection; genuine executor/grader provenance retained in immutable evidence",
+  "rationale": "Source review confirms stable saved draft/revision reconciliation, separate send permissions, schedule cancellation/read/edit/fresh approval/send and bounded outcome-aware attachment-text polling. Genuine current/old cases7,8,10,11 pass19/19 versus9/19. Root-inline grading, mixed provenance and reused old eval8 are preserved; no runtime, repeatability or performance acceptance follows. Historical supplied app runtime-policy snapshot is retained; this record does not certify current live policy. Null metrics and original metadata/grades/output bytes are unchanged.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/monid-workflow-review-20261004.md",
+      "sha256": "21fb02a8fe8dccfcabcdbeb10b967da81a933dfbcd0cfe92c0f4af50a1b40123"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json",
+      "sha256": "ba56d9c603065aa95cbffb82baed1e0b2514af96de627bc6ee466ff1087829fe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "sha256": "5778c054085df07a0d4e265f340285f57a12805fc7a0fcc5d1f6d6d701b07192"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json",
+      "sha256": "e74680a811b724411cfa7389c26bff899cc1763767c52b0973f280ec51106c4b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "sha256": "f283c265c300dc3f1a313d436a698866c1f6cd9fe15ba7eb73bd1085c172498a"
+    },
+    {
+      "path": "skills/sendmux-mailbox-agent/SKILL.md",
+      "sha256": "ff1c3e7200f59ab4edcccccb14ad53c9d645bf67ea5a9a5e7a144f7e7847f904"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/benchmark.json",
+      "sha256": "0d01f12f678832c2053bd2acbb72da312fbbcc1259fe8ef06b431f30583d2c49"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/benchmark.md",
+      "sha256": "f5bb15f563c9ce7e2a6a6afc3be65f82507aee8f13e795d2e322215d782f95f6"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/eval_metadata.json",
+      "sha256": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/old_skill/run-1/eval_metadata.json",
+      "sha256": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/old_skill/run-1/grading.json",
+      "sha256": "bb5005ac274dec0cd8122efcf9ad81f95fc7d91f19e19901c8b912861dc686d2"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/old_skill/run-1/outputs/response.md",
+      "sha256": "4d6382aa2415432791dc32686290dc0009ee8a9f47a324d1f0fd445df9adbe8f"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/old_skill/run-1/receipt.json",
+      "sha256": "541e52e612d130f6132b8972999a1c2e373bc36a210f7dbafab8015a59d79ba2"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/old_skill/run-1/timing.json",
+      "sha256": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/with_skill/run-1/eval_metadata.json",
+      "sha256": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/with_skill/run-1/grading.json",
+      "sha256": "fe78599bb7e94b1e676b33f824118da2c3487639b498f3934732079c23677a66"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/with_skill/run-1/outputs/response.md",
+      "sha256": "a612f8a5a705dc278a974ea8e949a4b393d6e3cf49886a20823a1a49c69eb24f"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/with_skill/run-1/receipt.json",
+      "sha256": "5fe3eb4285c56d4496841bf194b32d1b83059c45fd4516595a4eaf2b5aea6145"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-10/with_skill/run-1/timing.json",
+      "sha256": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/eval_metadata.json",
+      "sha256": "a90a02b2e10ac750cf03eabf622e54b7b757a6eecb36b67ebab3492ae52ac3da"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/old_skill/run-1/eval_metadata.json",
+      "sha256": "a90a02b2e10ac750cf03eabf622e54b7b757a6eecb36b67ebab3492ae52ac3da"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/old_skill/run-1/grading.json",
+      "sha256": "0c4787e9dc7ba7884ced211296e749d3ca6ea6cc79b15f5ccc7689f2a1e3f108"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/old_skill/run-1/outputs/response.md",
+      "sha256": "112681455590a3fe6462a602d4ac1a1e6dcbe864c5817cb0f4c74b074d8d12b1"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/old_skill/run-1/receipt.json",
+      "sha256": "c6f584a5de870c55c407487d3ff86d0bc122d4e04445d23660481aeffd9a21e6"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/old_skill/run-1/timing.json",
+      "sha256": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/with_skill/run-1/eval_metadata.json",
+      "sha256": "a90a02b2e10ac750cf03eabf622e54b7b757a6eecb36b67ebab3492ae52ac3da"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/with_skill/run-1/grading.json",
+      "sha256": "de1962dab445a67cf44a78ec7dda66aa2d7e2972ddb197b3e3dd9b7ede0484c0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/with_skill/run-1/outputs/response.md",
+      "sha256": "9a3b4080eb8ba8598a6305ddf78660c7c2283a2f5a0cd594ed7f65627c73249e"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/with_skill/run-1/receipt.json",
+      "sha256": "6470c6d595bc8031a6c3b27472b8e3295b8e098fe8e02eb1b0eb828f9e1b0833"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-11/with_skill/run-1/timing.json",
+      "sha256": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/eval_metadata.json",
+      "sha256": "e1e5f21ae7459a4ee2e46a1a0728c1ff16553df58f46ffff6b1762e94b021742"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/old_skill/run-1/grading.json",
+      "sha256": "495579fcdbe4dc18617bb98cae87c43c2164b082f6cbfca15b164af8b06154d0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/old_skill/run-1/outputs/response.md",
+      "sha256": "c23c4995587034e36ebd5a6302775e2beef963c5a1fdcdc58b5988dab982168e"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/old_skill/run-1/receipt.json",
+      "sha256": "6bb99e62b201e7e2195dc5bcbbe68ffbf4b2402d472a0333f876a39ce9fe51c4"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/old_skill/run-1/timing.json",
+      "sha256": "5aa551e1f4a318fdfa8e1c972c093e0ba478ac7cae611a7ac1e9045749879ab0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/with_skill/run-1/grading.json",
+      "sha256": "aec75dcbc7cb6dd3dd2d7e42267ef20f84171d7e95de1a970dc790d44c3c8c17"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/with_skill/run-1/outputs/response.md",
+      "sha256": "8390bf87118ebe8ba1a300abf246c70e256397aaabc3ce3296f9956a53e710d7"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/with_skill/run-1/receipt.json",
+      "sha256": "107c57c3148e234ef08fc356b3a72fea0385684d42e63f73f3b14deec6776d52"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-7/with_skill/run-1/timing.json",
+      "sha256": "5aa551e1f4a318fdfa8e1c972c093e0ba478ac7cae611a7ac1e9045749879ab0"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/eval_metadata.json",
+      "sha256": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/old_skill/run-1/eval_metadata.json",
+      "sha256": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/old_skill/run-1/grading.json",
+      "sha256": "7774243e675ad326f9ff2af98be63c9bc45ec20abcd4b6ce27ee9e7b03934b30"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/old_skill/run-1/outputs/response.md",
+      "sha256": "c68d135394be3f28a7b01171f74904a1f28d30f175cc9d66cc02d7338b906631"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/old_skill/run-1/receipt.json",
+      "sha256": "4184d8cbff8fde2597447aced398d8ee0ac85fa72b37539831e85bb5859bfb9d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/old_skill/run-1/timing.json",
+      "sha256": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/with_skill/run-1/eval_metadata.json",
+      "sha256": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/with_skill/run-1/grading.json",
+      "sha256": "c1ffba0ff1d6e5a428c2472ced01e0f21742ab15ced847b5b284bbaf5bf56612"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/with_skill/run-1/outputs/response.md",
+      "sha256": "5dd1ec644d58d3af64eef9d4c35f3b986f898ae57b35f7918084e40b1474485c"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/with_skill/run-1/receipt.json",
+      "sha256": "95208878403e0d2253d074a8283c83a42945861cd0e8bf096ac6e39e61dedfd3"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/eval-8/with_skill/run-1/timing.json",
+      "sha256": "3a27f80dd14f184f9c1d528a94614cdc392b2d4913237f930b1dc3f3312f849d"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/sendmux-mailbox-agent/integrity.json",
+      "sha256": "993b0e003c88d211171e652cffaf458e5dbd66d5a0c4ab3f6802a63a952c1f17"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Computes the exact local file byte length, rather than a character count or an estimated value.",
+      "passed": true,
+      "evidence": "Computes SIZE_BYTES=\"$(wc -c < ./report.pdf | tr -d '[:space:]')\" and explains \"`wc -c` measures the local file's byte length.\"; no text-character estimate."
+    },
+    {
+      "text": "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+      "passed": true,
+      "evidence": "The standalone `sendmux sending:upload-attachment` invocation contains `--header Content-Length=\"$SIZE_BYTES\"`, binding the measured numeric byte length."
+    },
+    {
+      "text": "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+      "passed": true,
+      "evidence": "The upload invocation includes `--body-file ./report.pdf`, `--query filename=report.pdf`, `--query content_type=application/pdf` and `--json`."
+    },
+    {
+      "text": "Uses the existing work profile without printing or requesting credentials.",
+      "passed": true,
+      "evidence": "The invocation uses `--profile work`; prose states \"Credentials stay in the existing `work` profile\"; no credential requested or printed."
+    },
+    {
+      "text": "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+      "passed": true,
+      "evidence": "Only `wc`/`tr` measurement and `sending:upload-attachment` are proposed. States \"without sending an email\"; no send command or `--attach`."
+    },
+    {
+      "text": "Does not claim an attachment_id or completed upload without a real result.",
+      "passed": true,
+      "evidence": "States \"No commands have been run here, so no upload result is available.\" No attachment_id or completed-upload claim."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1
+  },
+  "grader_provenance": {
+    "task_path": "/root/skills_pair_grading",
+    "method": "independent-native-host-subagent",
+    "assessment_source": "Grader read all six actual saved responses against exact prepared assertions, verified immutable assigned source body hashes and source-definition prompt/assertion equality; grader did not author either evaluation answer."
+  }
+}

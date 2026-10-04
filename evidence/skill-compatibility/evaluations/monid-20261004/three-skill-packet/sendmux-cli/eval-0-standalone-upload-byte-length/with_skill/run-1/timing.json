@@ -1,0 +1,7 @@
+{
+  "total_tokens": null,
+  "duration_ms": null,
+  "total_duration_seconds": null,
+  "availability": "unavailable; parent reports host names but no separate task IDs, model identity, token counts or whole-agent duration",
+  "schedule": "Three current arms in parallel, then three old arms in parallel; not paired waves. No timing or cost comparison."
+}

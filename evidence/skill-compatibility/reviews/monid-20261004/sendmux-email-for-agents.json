@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-email-for-agents",
+  "skillDigest": "e592c53c7ef318d084407714719a4e07ab0d18ef5240f502048af95071a7d2e1",
+  "previousSkillDigest": "b954dac79d49b818d65b2dc4e6218427777292fc48328453fe5101fb8f3895b6",
+  "contractDigest": "12e578810ce86be42728569f74b240e688a10caa84c647fe0c86af57192ade25",
+  "sourceRevisions": {
+    "app": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
+    "sending": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+    "sdk": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4"
+  },
+  "reviewer": "Codex /root/changed_product_gate_prep; exact source review and canonical producer-contract inspection; genuine executor/grader provenance retained in immutable evidence",
+  "rationale": "Source review confirms saved/reopenable mailbox reply routing, exact reviewed revision approval, separate connected-account administration and no authority bypass. Genuine explanation-only current/old case passes5/5 versus1/5. Router attachment-text routing has no direct case; downstream mailbox extraction evidence does not prove router invocation. Historical supplied app runtime-policy snapshot is retained; this record does not certify current live policy. Null metrics and original metadata/grades/output bytes are unchanged.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/monid-workflow-review-20261004.md",
+      "sha256": "21fb02a8fe8dccfcabcdbeb10b967da81a933dfbcd0cfe92c0f4af50a1b40123"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json",
+      "sha256": "ba56d9c603065aa95cbffb82baed1e0b2514af96de627bc6ee466ff1087829fe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "sha256": "5778c054085df07a0d4e265f340285f57a12805fc7a0fcc5d1f6d6d701b07192"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json",
+      "sha256": "e74680a811b724411cfa7389c26bff899cc1763767c52b0973f280ec51106c4b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "sha256": "f283c265c300dc3f1a313d436a698866c1f6cd9fe15ba7eb73bd1085c172498a"
+    },
+    {
+      "path": "skills/sendmux-email-for-agents/SKILL.md",
+      "sha256": "8b68dc248155039138a9b53c22911947bdcbbaafb2c0f0f2adfba840835d6e93"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/benchmark.json",
+      "sha256": "4d48a71dc2c863c5c3e00369d0144d7701606050db86174404e32ab010d885d2"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/benchmark.md",
+      "sha256": "67cf1e3fb0d3a319bd1dffa7a2cb7da636f7c715a7627e3501a7cc69819af4ba"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/eval_metadata.json",
+      "sha256": "6aea8199ea365fcd1e7a9b9485cac59d35fb5e3908845998b28c53294221f1e7"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/old_skill/run-1/grading.json",
+      "sha256": "05a8973d65a9c08930c6e5529139d6c25034835826d8fa6e66604f50af4c3edc"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/old_skill/run-1/outputs/response.md",
+      "sha256": "6cc15f501f69920ba2c0bf8b170ab29a16c2ce16ff802eedc1b8e44ab3b082d2"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/old_skill/run-1/receipt.json",
+      "sha256": "8caf8f95c6f1515d30dadf335373e276794808567fdfb1fc18ee9c2808ee8800"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/old_skill/run-1/timing.json",
+      "sha256": "aafaf5db0e91a2e91a45ea068f14c0b42e4f89d6faa3def36c11fd64b05b1d74"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/with_skill/run-1/grading.json",
+      "sha256": "78c0111dca98c7ed1c4fb4199f9b671f6c74d8f74d3e4c34d035f16034d42716"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/with_skill/run-1/outputs/response.md",
+      "sha256": "f9c40fdfed553100c81eb2a37c59e8370a9408e2fe3ad2836fd3aedf94058d28"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/with_skill/run-1/receipt.json",
+      "sha256": "1ebd7f98bdf84438eafbe132a21d95019721cf359c9d9e79de2b6a96557eecf1"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/eval-7-human-editable-agent-replies/with_skill/run-1/timing.json",
+      "sha256": "aafaf5db0e91a2e91a45ea068f14c0b42e4f89d6faa3def36c11fd64b05b1d74"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-email-for-agents/execution.md",
+      "sha256": "1ea44a67a3b9ba23c394ae9f2efda83107eadfc6e570a8145b727cbc3d29dc25"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/packaging.md",
+      "sha256": "04d1bf0158efcab805ff9d77f94b65081230d5d0c740ae03046152c1c5b94130"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/verification.json",
+      "sha256": "ba5f055dccec4f6ce156f9cf2ae244b10aa3f6b6b32bede1d0609462f0ceea78"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/artifact-manifest.json",
+      "sha256": "eac9104f7ba5e1ebdb665c59f32680ce737fb9b1f938222cc5ff8e47100605f2"
+    }
+  ]
+}

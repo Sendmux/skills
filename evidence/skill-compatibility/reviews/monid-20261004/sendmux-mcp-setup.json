@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-mcp-setup",
+  "skillDigest": "1aaadcb310878ed6b05850e889f5456fb5a55b8cea4b9ea6f454db518115130a",
+  "previousSkillDigest": "330558950dc6569b802ab1c642b61927ca369d9fe3c151025a7643c0cfc9bf06",
+  "contractDigest": "671efc8a465da5dfbb98ea60c08f0f08c1f214dff2b2971055cd0583a0f77d9d",
+  "sourceRevisions": {
+    "app": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
+    "sending": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+    "sdk": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4"
+  },
+  "reviewer": "Codex /root/changed_product_gate_prep; exact source review and canonical producer-contract inspection; genuine executor/grader provenance retained in immutable evidence",
+  "rationale": "Source review confirms historical released package/catalogue, unpublished candidate version/catalogue, grant-visible subset and protocol/client qualification remain distinct. Genuine current/old explanation-only case passes4/4 versus2/4. Candidate package bytes are not published-package availability or real-client certification. Historical supplied app runtime-policy snapshot is retained; this record does not certify current live policy. Null metrics and original metadata/grades/output bytes are unchanged.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/monid-workflow-review-20261004.md",
+      "sha256": "21fb02a8fe8dccfcabcdbeb10b967da81a933dfbcd0cfe92c0f4af50a1b40123"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json",
+      "sha256": "ba56d9c603065aa95cbffb82baed1e0b2514af96de627bc6ee466ff1087829fe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "sha256": "5778c054085df07a0d4e265f340285f57a12805fc7a0fcc5d1f6d6d701b07192"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json",
+      "sha256": "e74680a811b724411cfa7389c26bff899cc1763767c52b0973f280ec51106c4b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "sha256": "f283c265c300dc3f1a313d436a698866c1f6cd9fe15ba7eb73bd1085c172498a"
+    },
+    {
+      "path": "skills/sendmux-mcp-setup/SKILL.md",
+      "sha256": "180839dcaf9a94b9a895912bf1760e61e5fce6ca1d31172b734da44d08731910"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/benchmark.json",
+      "sha256": "d77127c02ab0f6030c5ca428b2fdaa77265231408cea54782b273e3f1c711fd7"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/benchmark.md",
+      "sha256": "e2687ec773ef89f371544bfc4b8ffccc76e8202473367b908af44db194a308d4"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/eval_metadata.json",
+      "sha256": "3b1244cfe80b94d2b28f86195cca22caec170019be6d214b253535b1c1924f64"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/old_skill/run-1/grading.json",
+      "sha256": "a9befbb9fd60bb6a50b18f0489f5e964ad96a070b78ec3af7451b7f4f1f3eb3c"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/old_skill/run-1/outputs/response.md",
+      "sha256": "6f9d9e28505c41cd7206594e278d5087f16c96f5a92d46ef4d1739cc22c295df"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/old_skill/run-1/receipt.json",
+      "sha256": "26e45756361ec299ca68018f438c2b349f613d231a473858b9bc35382b4edb87"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/old_skill/run-1/timing.json",
+      "sha256": "aafaf5db0e91a2e91a45ea068f14c0b42e4f89d6faa3def36c11fd64b05b1d74"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/grading.json",
+      "sha256": "fb4ff3b9b30504fed3523a51030c8a539dc1f8af612864d16e80140af5d6dc04"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/outputs/response.md",
+      "sha256": "2d46061be833e1da74c8a15ad8ede5f7d012ee3f4aacd566ef14ba089db9073b"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/receipt.json",
+      "sha256": "2e6eb8244238c0379025544868e9bfe58d6fca34934f68bd8f6b8c69291e1aea"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/timing.json",
+      "sha256": "aafaf5db0e91a2e91a45ea068f14c0b42e4f89d6faa3def36c11fd64b05b1d74"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/sendmux-mcp-setup/execution.md",
+      "sha256": "dcf331429e2588fd02d74235ca67adc3e2320059cd9d7088bb71cca46b9c8b8a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/packaging.md",
+      "sha256": "04d1bf0158efcab805ff9d77f94b65081230d5d0c740ae03046152c1c5b94130"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/verification.json",
+      "sha256": "ba5f055dccec4f6ce156f9cf2ae244b10aa3f6b6b32bede1d0609462f0ceea78"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/monid-20261004/three-skill-packet/artifact-manifest.json",
+      "sha256": "eac9104f7ba5e1ebdb665c59f32680ce737fb9b1f938222cc5ff8e47100605f2"
+    }
+  ]
+}

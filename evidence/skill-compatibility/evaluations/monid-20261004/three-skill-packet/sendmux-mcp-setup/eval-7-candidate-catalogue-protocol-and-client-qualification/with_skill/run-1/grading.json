@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
+      "passed": true,
+      "evidence": "Names both MCP protocol revisions `2025-11-25` and `2026-07-28` and distinguishes date-labelled protocol revisions from software package versions."
+    },
+    {
+      "text": "The answer distinguishes the released sendmux-mcp package version 2.1.3 from protocol revisions and identifies 2.2.0 as the local candidate package metadata rather than a verified feature release.",
+      "passed": true,
+      "evidence": "Table separates released historical `2.1.3` from unpublished candidate source `2.2.0`; says the candidate version/counts do not prove `2.2.0` publication."
+    },
+    {
+      "text": "The answer identifies the unpublished candidate contract catalogue as 64 tools (35 Mailbox, 23 Management, 6 Sending), keeps the released 2.1.3 catalogue separate as 54 tools (26 Mailbox, 22 Management, 6 Sending), and explains that OAuth grants and selected surfaces determine actual visible tools.",
+      "passed": true,
+      "evidence": "Table gives released 54 tools (26 Mailbox, 22 Management, 6 Sending) and candidate 64 (35 Mailbox, 23 Management, 6 Sending). Explains approved OAuth grant, selected surfaces and credential permissions determine visible subset."
+    },
+    {
+      "text": "The answer does not treat a client listed in setup guidance as automatically certified.",
+      "passed": true,
+      "evidence": "States \"Naming them does not certify compatibility\" and requires separate verification for client configuration, transport and authentication flow."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1
+  },
+  "grader_provenance": {
+    "task_path": "/root/skills_pair_grading",
+    "method": "independent-native-host-subagent",
+    "assessment_source": "Grader read all six actual saved responses against exact prepared assertions, verified immutable assigned source body hashes and source-definition prompt/assertion equality; grader did not author either evaluation answer."
+  }
+}

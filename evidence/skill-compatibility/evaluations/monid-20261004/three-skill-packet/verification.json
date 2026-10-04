@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "local-packet-integrity",
+  "status": "passed",
+  "command": "python3 -c 'import hashlib,json,pathlib\nbase=pathlib.Path(\"/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-review-prep-current-20261003/prepared-evals\")\nexpected=json.loads(\"[{\\\"slug\\\":\\\"sendmux-cli\\\",\\\"case\\\":\\\"eval-0-standalone-upload-byte-length\\\",\\\"metadata_sha256\\\":\\\"76ba34feaa235c0c2e1273be61f0a19a91e8211ac867cc91c26893974bf6e41a\\\",\\\"prompt_sha256\\\":\\\"9bb59b9602a5f249658f1f25693ef40642f8e437c817ac858c659a6f3bf8747a\\\",\\\"arms\\\":{\\\"with_skill\\\":{\\\"revision\\\":\\\"51f9d21b56f92887b6ea145366aca1dc116aef75\\\",\\\"skill_sha256\\\":\\\"25f8c2ec8674eda97334471e15d5bf5050f99003e4d45f3d3e31574d845b5c9e\\\",\\\"output_sha256\\\":\\\"8bf054099d9bd51010c602f3a942c8bc32def54317abd8749b82b11f01deb350\\\"},\\\"old_skill\\\":{\\\"revision\\\":\\\"be7a4670d04ceb481fed4de1457c53d4e2295fee\\\",\\\"skill_sha256\\\":\\\"56e4220104424c349376d3fd4064adc7cb7bb4a8c48f8f72e27e2210fcd456a7\\\",\\\"output_sha256\\\":\\\"72ffa9a16ff2b6b66e128240e9d428c971df995ebc423766d541a18875976547\\\"}}},{\\\"slug\\\":\\\"sendmux-email-for-agents\\\",\\\"case\\\":\\\"eval-7-human-editable-agent-replies\\\",\\\"metadata_sha256\\\":\\\"6aea8199ea365fcd1e7a9b9485cac59d35fb5e3908845998b28c53294221f1e7\\\",\\\"prompt_sha256\\\":\\\"6b57286bf21cb9abee925a3e79ec5df35542c186070a859ae69a2c00706840da\\\",\\\"arms\\\":{\\\"with_skill\\\":{\\\"revision\\\":\\\"51f9d21b56f92887b6ea145366aca1dc116aef75\\\",\\\"skill_sha256\\\":\\\"8b68dc248155039138a9b53c22911947bdcbbaafb2c0f0f2adfba840835d6e93\\\",\\\"output_sha256\\\":\\\"f9c40fdfed553100c81eb2a37c59e8370a9408e2fe3ad2836fd3aedf94058d28\\\"},\\\"old_skill\\\":{\\\"revision\\\":\\\"be7a4670d04ceb481fed4de1457c53d4e2295fee\\\",\\\"skill_sha256\\\":\\\"aaff127931fcf86cb2e215e4b6063db91f216fe79b35e9b0168922bb81bf501d\\\",\\\"output_sha256\\\":\\\"6cc15f501f69920ba2c0bf8b170ab29a16c2ce16ff802eedc1b8e44ab3b082d2\\\"}}},{\\\"slug\\\":\\\"sendmux-mcp-setup\\\",\\\"case\\\":\\\"eval-7-candidate-catalogue-protocol-and-client-qualification\\\",\\\"metadata_sha256\\\":\\\"3b1244cfe80b94d2b28f86195cca22caec170019be6d214b253535b1c1924f64\\\",\\\"prompt_sha256\\\":\\\"b7cc56e1f2a7d73da9ad2a0ce43d8c34dc76fe1d6096033916955cd9a11935c9\\\",\\\"arms\\\":{\\\"with_skill\\\":{\\\"revision\\\":\\\"51f9d21b56f92887b6ea145366aca1dc116aef75\\\",\\\"skill_sha256\\\":\\\"180839dcaf9a94b9a895912bf1760e61e5fce6ca1d31172b734da44d08731910\\\",\\\"output_sha256\\\":\\\"2d46061be833e1da74c8a15ad8ede5f7d012ee3f4aacd566ef14ba089db9073b\\\"},\\\"old_skill\\\":{\\\"revision\\\":\\\"be7a4670d04ceb481fed4de1457c53d4e2295fee\\\",\\\"skill_sha256\\\":\\\"66869cf0fb32207d19fddae0430e27a476e32d91e607ed171ad985d42ecfa506\\\",\\\"output_sha256\\\":\\\"6f9d9e28505c41cd7206594e278d5087f16c96f5a92d46ef4d1739cc22c295df\\\"}}}]\"); sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest(); summaries=[]\nfor row in expected:\n case=base/row[\"slug\"]/row[\"case\"]; m=json.loads((case/\"eval_metadata.json\").read_bytes()); b=json.loads((case.parent/\"benchmark.json\").read_bytes()); counts={}\n assert sha(case/\"eval_metadata.json\")==row[\"metadata_sha256\"] and hashlib.sha256(m[\"prompt\"].encode()).hexdigest()==row[\"prompt_sha256\"]\n assert b[\"metadata\"][\"skill_name\"]==row[\"slug\"] and \"not the paired waves\" in b[\"metadata\"][\"schedule\"]\n for arm in [\"with_skill\",\"old_skill\"]:\n  run=case/arm/\"run-1\"; g=json.loads((run/\"grading.json\").read_bytes()); r=json.loads((run/\"receipt.json\").read_bytes()); t=json.loads((run/\"timing.json\").read_bytes())\n  assert [x[\"text\"] for x in g[\"expectations\"]]==m[\"assertions\"] and all(type(x[\"passed\"]) is bool and isinstance(x[\"evidence\"],str) and x[\"evidence\"].strip() for x in g[\"expectations\"])\n  n=len(g[\"expectations\"]); p=sum(x[\"passed\"] for x in g[\"expectations\"]); summary={\"passed\":p,\"failed\":n-p,\"total\":n,\"pass_rate\":p/n}; assert g[\"summary\"]==summary and (arm!=\"with_skill\" or p==n)\n  assert r[\"arm\"]==arm and r[\"skill_sha256\"]==row[\"arms\"][arm][\"skill_sha256\"] and r[\"skills_revision\"]==row[\"arms\"][arm][\"revision\"]\n  assert r[\"prompt_sha256\"]==row[\"prompt_sha256\"] and r[\"metadata_sha256\"]==sha(case/\"eval_metadata.json\")\n  assert sha(run/\"outputs/response.md\")==row[\"arms\"][arm][\"output_sha256\"]==r[\"output_sha256\"] and (run/\"outputs/response.md\").read_text().strip()\n  assert sha(run/\"grading.json\")==r[\"grading_sha256\"]\n  matched=[x for x in b[\"runs\"] if x[\"configuration\"]==arm and x[\"eval_id\"]==m[\"eval_id\"] and x[\"run_number\"]==1]; assert len(matched)==1\n  br=matched[0]; assert br[\"expectations\"]==g[\"expectations\"] and all(br[\"result\"][k]==v for k,v in summary.items())\n  assert all(br[\"result\"][k] is None for k in [\"time_seconds\",\"tokens\",\"tool_calls\",\"errors\"]) and all(t[k] is None and r[\"metrics\"][k] is None for k in [\"total_tokens\",\"duration_ms\",\"total_duration_seconds\"])\n  assert r[\"agent_id\"] is None and r[\"model\"] is None; counts[arm]=summary\n summaries.append({\"skill\":row[\"slug\"],\"counts\":counts})\nprint(json.dumps({\"status\":\"passed\",\"scope\":\"Read-only local packet integrity; not owning compatibility acceptance or runtime tests\",\"summaries\":summaries}))'",
+  "exit_code": 0,
+  "stdout": {
+    "status": "passed",
+    "scope": "Read-only local packet integrity; not owning compatibility acceptance or runtime tests",
+    "summaries": [
+      {
+        "skill": "sendmux-cli",
+        "counts": {
+          "with_skill": {
+            "passed": 6,
+            "failed": 0,
+            "total": 6,
+            "pass_rate": 1
+          },
+          "old_skill": {
+            "passed": 5,
+            "failed": 1,
+            "total": 6,
+            "pass_rate": 0.8333333333333334
+          }
+        }
+      },
+      {
+        "skill": "sendmux-email-for-agents",
+        "counts": {
+          "with_skill": {
+            "passed": 5,
+            "failed": 0,
+            "total": 5,
+            "pass_rate": 1
+          },
+          "old_skill": {
+            "passed": 1,
+            "failed": 4,
+            "total": 5,
+            "pass_rate": 0.2
+          }
+        }
+      },
+      {
+        "skill": "sendmux-mcp-setup",
+        "counts": {
+          "with_skill": {
+            "passed": 4,
+            "failed": 0,
+            "total": 4,
+            "pass_rate": 1
+          },
+          "old_skill": {
+            "passed": 2,
+            "failed": 2,
+            "total": 4,
+            "pass_rate": 0.5
+          }
+        }
+      }
+    ]
+  },
+  "limits": "Read-only bounded integrity checks bind saved artifacts; this is not the owning committed-source compatibility/acceptance gate or runtime testing.",
+  "prior_attempt": {
+    "status": "hook-rejected",
+    "reason": "Inline script was 31 lines (limit 30); no command executed. Split into bounded integrity and later hash inventory per hook guidance."
+  }
+}

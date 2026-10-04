@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "eval_id": 10,
+  "arm": "old_skill",
+  "execution": "native-host-subagent",
+  "status": "completed",
+  "task_path": "/root/mailbox_old10",
+  "agent_id": null,
+  "model": null,
+  "skills_revision": null,
+  "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/old-source/skills/sendmux-mailbox-agent/SKILL.md",
+  "skill_sha256": "62c6b3a920f5480f4454260f86d4182f066f5baee05e5dfdedfdc4a168f5587a",
+  "prompt_sha256": "7e5badd6b263577bee845bce88c401416df3a1280ebb48d2b997c03752d9f64d",
+  "metadata_sha256": "f2eab8980c3c6a52071ba8e7ae008782948fe1273ac6fea5cc89ebfb12cc53c0",
+  "definition_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-mailbox-agent/evals/readiness-evals.json",
+  "definition_sha256": "c37767fc866d086e46d3378a6b02f3f0bc8e9c7e67aa7e141e84c5919dc308b9",
+  "output_path": "outputs/response.md",
+  "output_sha256": "4d6382aa2415432791dc32686290dc0009ee8a9f47a324d1f0fd445df9adbe8f",
+  "grading_path": "grading.json",
+  "grading_sha256": "bb5005ac274dec0cd8122efcf9ad81f95fc7d91f19e19901c8b912861dc686d2",
+  "grader_task_path": "/root",
+  "grader_provenance": "Root inline, supplied assessments against unchanged original case10 expectations; packaging agent did not independently grade.",
+  "execution_provenance": "Parent reports native skill-only workflow task; actual saved response and source byte hashes verified in packaging. Full transcript and fresh isolation not independently audited; see execution.md.",
+  "external_actions": false,
+  "external_action_provenance": "Executor/parent reports explanation-only workflow; no complete tool transcript exported to packet.",
+  "metrics": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "total_duration_seconds": null,
+    "availability": "unavailable; host exposed task paths but no model identity, separate agent IDs, token counts or task duration"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.", "passed": true, "evidence": "Re-read the same saved draft; review revision 4 against the version originally opened; save only changed fields with expected_revision: 4 if 4 is still the last revision read."},
+    {"text": "The output treats a revision conflict as a failed edit, not as success.", "passed": true, "evidence": "A save with expected_revision: 3 should return 409. Never bypass that conflict by simply changing the expected revision to 4."},
+    {"text": "The output re-reads the current draft before proposing a merge or retry.", "passed": true, "evidence": "Keep new text locally and re-read the same saved draft; if another edit causes 409, re-read and review the merge again."},
+    {"text": "The output does not blindly overwrite revision 4 or send the stale revision.", "passed": true, "evidence": "Merge while preserving teammate edits; resolve overlapping edits with teammate or user. Saving does not authorise sending; obtain approval of final saved recipients, subject, bodies and attachments."}
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1}
+}

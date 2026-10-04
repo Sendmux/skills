@@ -1,0 +1,6 @@
+{
+  "total_tokens": null,
+  "duration_ms": null,
+  "total_duration_seconds": null,
+  "availability": "unavailable; host exposed task paths but no model identity, separate agent IDs, token counts or task duration"
+}

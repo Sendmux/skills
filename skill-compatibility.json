@@ -549,13 +549,20 @@
       "app": [
         "mailboxBatchGetMessages",
         "mailboxBatchUpdateMessages",
+        "mailboxControlDraftSchedule",
         "mailboxCountMessages",
         "mailboxCreateAttachmentUpload",
+        "mailboxCreateDraft",
+        "mailboxGetAttachmentText",
         "mailboxGetChanges",
         "mailboxGetConnection",
+        "mailboxGetDraft",
         "mailboxGetMe",
+        "mailboxRequestAttachmentText",
         "mailboxSearchMessageSnippets",
+        "mailboxSendDraft",
         "mailboxSendMessage",
+        "mailboxUpdateDraft",
         "mailboxUploadAttachment",
         "managementGetConnection"
       ],
@@ -851,10 +858,14 @@
         "mailboxBatchDeleteMessages",
         "mailboxBatchGetMessages",
         "mailboxBatchUpdateMessages",
+        "mailboxControlDraftSchedule",
         "mailboxCountMessages",
         "mailboxCreateAttachmentUpload",
+        "mailboxCreateDraft",
+        "mailboxGetAttachmentText",
         "mailboxGetChanges",
         "mailboxGetConnection",
+        "mailboxGetDraft",
         "mailboxGetIdentity",
         "mailboxGetMe",
         "mailboxGetMessage",
@@ -863,43 +874,60 @@
         "mailboxListThreadMessages",
         "mailboxListThreads",
         "mailboxQueryMessageChanges",
+        "mailboxRequestAttachmentText",
         "mailboxSearchMessageSnippets",
+        "mailboxSendDraft",
         "mailboxSendMessage",
         "mailboxStreamEvents",
+        "mailboxUpdateDraft",
         "mailboxUploadAttachment"
       ],
       "mcp": [
         "mailbox_batch_delete_messages",
         "mailbox_batch_get_messages",
         "mailbox_batch_update_messages",
+        "mailbox_control_draft_schedule",
         "mailbox_count_messages",
+        "mailbox_create_draft",
         "mailbox_get_attachment",
+        "mailbox_get_attachment_text",
         "mailbox_get_changes",
+        "mailbox_get_draft",
         "mailbox_get_identity",
         "mailbox_get_me",
         "mailbox_get_thread",
         "mailbox_list_folders",
         "mailbox_list_thread_messages",
         "mailbox_list_threads",
+        "mailbox_request_attachment_text",
         "mailbox_search_message_snippets",
+        "mailbox_send_draft",
         "mailbox_send_message",
+        "mailbox_update_draft",
         "mailbox_upload_attachment"
       ],
       "cli": [
         "mailbox:batch-delete-messages",
         "mailbox:batch-get-messages",
         "mailbox:batch-update-messages",
+        "mailbox:control-draft-schedule",
         "mailbox:count-messages",
+        "mailbox:create-draft",
         "mailbox:folders:list",
+        "mailbox:get-attachment-text",
         "mailbox:get-changes",
         "mailbox:get-connection",
+        "mailbox:get-draft",
         "mailbox:list-thread-messages",
         "mailbox:list-threads",
         "mailbox:me:get",
         "mailbox:query-message-changes",
+        "mailbox:request-attachment-text",
         "mailbox:search-message-snippets",
+        "mailbox:send-draft",
         "mailbox:send-message",
-        "mailbox:stream-events"
+        "mailbox:stream-events",
+        "mailbox:update-draft"
       ],
       "public": {
         "packages/ts/mailbox/src/index.ts": [
@@ -958,17 +986,24 @@
           "mailboxBatchDeleteMessages",
           "mailboxBatchGetMessages",
           "mailboxBatchUpdateMessages",
+          "mailboxControlDraftSchedule",
           "mailboxCountMessages",
+          "mailboxCreateDraft",
+          "mailboxGetAttachmentText",
           "mailboxGetChanges",
           "mailboxGetConnection",
+          "mailboxGetDraft",
           "mailboxGetMe",
           "mailboxListFolders",
           "mailboxListThreadMessages",
           "mailboxListThreads",
           "mailboxQueryMessageChanges",
+          "mailboxRequestAttachmentText",
           "mailboxSearchMessageSnippets",
+          "mailboxSendDraft",
           "mailboxSendMessage",
-          "mailboxStreamEvents"
+          "mailboxStreamEvents",
+          "mailboxUpdateDraft"
         ],
         "packages/ts/core/src/generated-client.ts": [
           "configureGeneratedClient"
@@ -1821,22 +1856,106 @@
       "contractDigest": "ebc0852b0a585af0b82701534938bd4b5e25a2b93c835159646d418ee19dc228",
       "record": "evidence/skill-compatibility/reviews/sendmux-token-efficient-usage.json",
       "sha256": "f442135d015c4b41bfbe0fab7b483c795c8576ad6268895ef773ef420f665b7b"
+    },
+    {
+      "skill": "sendmux-cli",
+      "skillDigest": "9b16a314a4abaff01fa663caabe6fd5f7583d626b63609b1e81cfc182103e1be",
+      "contractDigest": "2da62662eb0ead5cddc91483390b4208519bb3efc15d95c8d121b9af876d93c9",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-cli.json",
+      "sha256": "ab6970579ad2571e2eb2511dfc7c79c76abd247863f261cf39f08c823c3d705f"
+    },
+    {
+      "skill": "sendmux-email-for-agents",
+      "skillDigest": "e592c53c7ef318d084407714719a4e07ab0d18ef5240f502048af95071a7d2e1",
+      "contractDigest": "12e578810ce86be42728569f74b240e688a10caa84c647fe0c86af57192ade25",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-email-for-agents.json",
+      "sha256": "636576e69e07ea8ca5548dc22afd1db4a0fa19e1e8c987a4289d205232ceafcc"
+    },
+    {
+      "skill": "sendmux-mailbox-agent",
+      "skillDigest": "7e91fe7dccb80deb333d6d1f2dc8eecc695d44a81fd46cffcd6a160f9f446eaf",
+      "contractDigest": "dbbb873d2752bc5587c229bf40bc8de96239e28ff880fcbaf891e8eea7ad0356",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-mailbox-agent.json",
+      "sha256": "c98d17cbd870c37046e9ee2183f5a9f1311cbdb2f3d2cd566106ce7a5645e98c"
+    },
+    {
+      "skill": "sendmux-mcp-setup",
+      "skillDigest": "1aaadcb310878ed6b05850e889f5456fb5a55b8cea4b9ea6f454db518115130a",
+      "contractDigest": "671efc8a465da5dfbb98ea60c08f0f08c1f214dff2b2971055cd0583a0f77d9d",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-mcp-setup.json",
+      "sha256": "be8964122e4b7ff211b40a601a1e571e2ead0d76b22e9d8f88dd899d97363a29"
+    },
+    {
+      "skill": "agent-email-inbox",
+      "skillDigest": "74d2bc70ac8f182249bd78caec0dbd213ef7f9357541cbdacdc17167219abbf7",
+      "contractDigest": "0da6f128dd746c936b1635b7b23730d07c8fca7faf696765b32e8589fa062cb4",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/agent-email-inbox.json",
+      "sha256": "5a71dd72e390bdac472881234e31594a51a7088849cb2c5f6e617e21aec921e0"
+    },
+    {
+      "skill": "email-for-ai-agents",
+      "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
+      "contractDigest": "7f5fbf27a667f5885fbc5bba2a15d053c482a75b5a54793e2fa5050f60123223",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/email-for-ai-agents.json",
+      "sha256": "dd6c9b15e562da3dc05acae7d0b977bc0ba508d0d4e1c81c671c7e8eeb2ddbeb"
+    },
+    {
+      "skill": "sendmux-attachments",
+      "skillDigest": "1683e3417d4184809ecf349175a16271bb8a8c942b7ada148b8831a1e2872af6",
+      "contractDigest": "8085316c08a733f4bd551320b21abaef618911a4f7cc7807599919bb8ce58591",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-attachments-workflow.json",
+      "sha256": "673d1e6ba059ddbfea65c1810646d7f5752598883c7b42c864c34303ea54a762"
+    },
+    {
+      "skill": "sendmux-attachments",
+      "skillDigest": "1683e3417d4184809ecf349175a16271bb8a8c942b7ada148b8831a1e2872af6",
+      "contractDigest": "8085316c08a733f4bd551320b21abaef618911a4f7cc7807599919bb8ce58591",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-attachments.json",
+      "sha256": "cc0a74f2b99e80bbccbc7e688bb1a6e6be14a597bd91ae95a23a8a921b699b40"
+    },
+    {
+      "skill": "sendmux-getting-started",
+      "skillDigest": "5029bf05c88abc8c25680cbd4a1cb7e311668752478c295f984f491a4781d556",
+      "contractDigest": "e4115a662c55b768028fd1a45348c45d8f9d76950dd64039a2af17171f9eac52",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-getting-started.json",
+      "sha256": "61f158fadb6e2a6cb0eaf84eb45ec9cfa09ad773400242c2bf8056a071abee83"
+    },
+    {
+      "skill": "sendmux-management",
+      "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+      "contractDigest": "456c2cb6fcb49a6f9231dad4961a2a37b5823f3a1b59412f7c465a875ad5b8c2",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-management.json",
+      "sha256": "ac6d11e39044a781483d27622f933f28a667d673bf4b525f0d55a06be8410870"
+    },
+    {
+      "skill": "sendmux-send-email",
+      "skillDigest": "60fcef4c782addf56f3e67cc770e74a5e980aca007ab25b0bb3cab679776b6f7",
+      "contractDigest": "55992ed17d0aeec1b5bed7abc4dd642de049167a5c71d19461535e2083d9279b",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-send-email.json",
+      "sha256": "a292b190ca51520547542a099c3c583d9b73e660532004d0872edc11a9595e5a"
+    },
+    {
+      "skill": "sendmux-token-efficient-usage",
+      "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
+      "contractDigest": "969ac3220d07bd7eec3f6b3171b259a831e2f8efe691e6dc1cc12ba6c8f58709",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-token-efficient-usage.json",
+      "sha256": "e5d119662ac2261414cda202e0d77b474c8d1657953cae472817acbc8dec9da0"
     }
   ],
   "releaseInputs": {
     "publishedRevision": "be7a4670d04ceb481fed4de1457c53d4e2295fee",
-    "sdkRevision": "4b245f66d78068d7c326fb184887ffa7fc033feb",
+    "sdkRevision": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4",
     "app": {
-      "revision": "043544c168faf3124893358bacb0d54042af238b",
-      "openapi": "evidence/skill-compatibility/contracts/app-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/app-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/app-export.json"
+      "revision": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
+      "openapi": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "policy": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json"
     },
     "sending": {
-      "revision": "214f87fbfa5d2016dbc77bee343776675a55996f",
-      "openapi": "evidence/skill-compatibility/contracts/sending-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/sending-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/sending-export.json"
+      "revision": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+      "openapi": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "policy": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json"
     }
   }
 }

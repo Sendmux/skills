@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Uses expected_revision and expected_schedule_version for cancellation.",
+      "passed": true,
+      "evidence": "Step 2 cancels with both current expected_revision and expected_schedule_version; uses 5 and 2 only if the read confirms them."
+    },
+    {
+      "text": "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+      "passed": true,
+      "evidence": "Step 2 supplies scheduled_for: null and states cancellation cannot undo sending that has already begun."
+    },
+    {
+      "text": "Cancels before editing; re-reads saved revision and schedule_version.",
+      "passed": true,
+      "evidence": "Steps 2–4 cancel before editing, confirm cancellation, re-read and capture the resulting revision and schedule version without guessing increments."
+    },
+    {
+      "text": "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+      "passed": true,
+      "evidence": "Step 5 requires approval of exact final recipients, subject, bodies and attachments, plus immediate timing; old approval does not carry over."
+    },
+    {
+      "text": "Includes current expected_schedule_version for the later immediate send, separate from expected_revision.",
+      "passed": true,
+      "evidence": "Step 6 sends with newly approved expected_revision and current expected_schedule_version, even for immediate send; step 7 says no separate send idempotency key is required."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  },
+  "grader_provenance": {
+    "task_path": "/root",
+    "method": "root-inline",
+    "assessment_source": "Parent supplied assessments after root reviewed actual outputs against unchanged case10 expectations; packaging agent did not independently grade."
+  }
+}

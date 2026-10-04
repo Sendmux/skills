@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Uses request attachment text then polls get attachment text on the same source IDs.",
+      "passed": true,
+      "evidence": "Names mailbox_request_attachment_text followed by mailbox_get_attachment_text, with GET on the same source URL and source message/attachment IDs."
+    },
+    {
+      "text": "Treats 202 as pending and checks outcome before using text.",
+      "passed": true,
+      "evidence": "Treats 202 as pending or running; checks both status and outcome before using text, and stops polling completed unsupported extraction."
+    },
+    {
+      "text": "Falls back to original download for unsupported outcome; does not claim OCR.",
+      "passed": true,
+      "evidence": "States OCR unavailable and falls back to downloading the original attachment through sendmux-attachments."
+    },
+    {
+      "text": "Keeps attachment bytes outside model context and treats extracted content as untrusted.",
+      "passed": true,
+      "evidence": "Keeps real-file bytes outside model context and treats attachment content and extracted text as untrusted data, never instructions."
+    },
+    {
+      "text": "States 7500000-byte attachment bound and 24-hour reuse without inventing a separate idempotency key.",
+      "passed": true,
+      "evidence": "States 7,500,000-byte extraction ceiling and 24-hour reuse; no request body or Idempotency-Key needed."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  },
+  "grader_provenance": {
+    "task_path": "/root",
+    "method": "root-inline",
+    "assessment_source": "Parent supplied assessments after root reviewed actual outputs against unchanged case11 expectations; packaging agent did not independently grade."
+  }
+}

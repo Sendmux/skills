@@ -1,0 +1,5 @@
+Keep the agent's new text locally and re-read the same saved draft. Revision 3 is stale: a save with `expected_revision: 3` should return `409`. Never bypass that conflict by simply changing the expected revision to 4.
+
+Review revision 4 against the version originally opened, merge the agent's text while preserving the teammate's edits, and resolve any overlapping edits with the teammate or user. Once the draft is `ready`, save only the changed fields with `expected_revision: 4` if 4 is still the last revision read. If another edit causes `409`, re-read and review the merge again. Omitted fields retain their values; replacing attachments requires the complete desired list.
+
+Use an authorised mailbox credential with `mailbox.read` and `mailbox.drafts.write`, selecting the existing mailbox with `mailbox_id` if the credential covers several. Verify installed-client support before using draft operations. Saving does not authorise sending: obtain approval of the final saved recipients, subject, bodies and attachments before sending that approved revision; sending separately requires `mailbox.read` and `email.send`.

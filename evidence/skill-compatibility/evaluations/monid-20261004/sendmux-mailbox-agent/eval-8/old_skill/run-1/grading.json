@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.", "passed": false, "evidence": "Old output explicitly says this skill does not document saved-draft reads, updates or revision guards. It suggests generic if_in_state where documented, warns revision numbers are not interchangeable with state tokens, and supplies no supported expected_revision workflow."},
+    {"text": "The output treats a revision conflict as a failed edit, not as success.", "passed": true, "evidence": "Re-read current resource state before retrying a 409 conflict. Nothing has been saved or sent by this guidance."},
+    {"text": "The output re-reads the current draft before proposing a merge or retry.", "passed": true, "evidence": "Re-read the current draft, compare teammate changes with proposed text, and resolve conflicting edits before retrying."},
+    {"text": "The output does not blindly overwrite revision 4 or send the stale revision.", "passed": true, "evidence": "Do not overwrite teammate revision 4 using stale revision 3; verify supported saving operation, do not invent arguments or use mailbox_send_message, which sends the reply."}
+  ],
+  "summary": {"passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75}
+}

@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-mcp-setup",
+    "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-mcp-setup/SKILL.md",
+    "executor_model": null,
+    "analyzer_model": null,
+    "timestamp": null,
+    "evals_run": [
+      7
+    ],
+    "runs_per_configuration": 1,
+    "scope": "One current/old native-host content-only case per skill, independently graded against unchanged existing assertions; no runtime, full-skill, compatibility, package publication or release acceptance.",
+    "schedule": "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison."
+  },
+  "runs": [
+    {
+      "eval_id": 7,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
+          "passed": true,
+          "evidence": "Names both MCP protocol revisions `2025-11-25` and `2026-07-28` and distinguishes date-labelled protocol revisions from software package versions."
+        },
+        {
+          "text": "The answer distinguishes the released sendmux-mcp package version 2.1.3 from protocol revisions and identifies 2.2.0 as the local candidate package metadata rather than a verified feature release.",
+          "passed": true,
+          "evidence": "Table separates released historical `2.1.3` from unpublished candidate source `2.2.0`; says the candidate version/counts do not prove `2.2.0` publication."
+        },
+        {
+          "text": "The answer identifies the unpublished candidate contract catalogue as 64 tools (35 Mailbox, 23 Management, 6 Sending), keeps the released 2.1.3 catalogue separate as 54 tools (26 Mailbox, 22 Management, 6 Sending), and explains that OAuth grants and selected surfaces determine actual visible tools.",
+          "passed": true,
+          "evidence": "Table gives released 54 tools (26 Mailbox, 22 Management, 6 Sending) and candidate 64 (35 Mailbox, 23 Management, 6 Sending). Explains approved OAuth grant, selected surfaces and credential permissions determine visible subset."
+        },
+        {
+          "text": "The answer does not treat a client listed in setup guidance as automatically certified.",
+          "passed": true,
+          "evidence": "States \"Naming them does not certify compatibility\" and requires separate verification for client configuration, transport and authentication flow."
+        }
+      ],
+      "notes": [
+        "Actual original saved response retained byte-identically; independent grading against exact prepared assertions.",
+        "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+        "Metrics unavailable; command wall-clock values are not agent duration."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "pass_rate": 0.5,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
+          "passed": true,
+          "evidence": "Names MCP protocol revisions `2025-11-25` and `2026-07-28`, separately identifying package version as the software release."
+        },
+        {
+          "text": "The answer distinguishes the released sendmux-mcp package version 2.1.3 from protocol revisions and identifies 2.2.0 as the local candidate package metadata rather than a verified feature release.",
+          "passed": false,
+          "evidence": "Names package `2.1.3` and distinguishes it from dated protocol revisions, but never identifies `2.2.0` or local/unpublished candidate metadata."
+        },
+        {
+          "text": "The answer identifies the unpublished candidate contract catalogue as 64 tools (35 Mailbox, 23 Management, 6 Sending), keeps the released 2.1.3 catalogue separate as 54 tools (26 Mailbox, 22 Management, 6 Sending), and explains that OAuth grants and selected surfaces determine actual visible tools.",
+          "passed": false,
+          "evidence": "Reports only 54 tools (26 Mailbox, 22 Management, 6 Sending) and grant/surface subsets; never reports candidate 64 tools or its 35/23/6 split."
+        },
+        {
+          "text": "The answer does not treat a client listed in setup guidance as automatically certified.",
+          "passed": true,
+          "evidence": "States guide inclusion \"does not certify compatibility\" and says \"Verify the chosen client separately\"."
+        }
+      ],
+      "notes": [
+        "Actual original saved response retained byte-identically; independent grading against exact prepared assertions.",
+        "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+        "Metrics unavailable; command wall-clock values are not agent duration."
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.5,
+        "stddev": 0,
+        "min": 0.5,
+        "max": 0.5
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "delta": {
+      "pass_rate": 0.5,
+      "time_seconds": null,
+      "tokens": null
+    }
+  },
+  "notes": [
+    "Manual exact aggregation preserves unavailable metrics as null; canonical aggregator not invoked.",
+    "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+    "One run per arm does not establish repeatability or performance.",
+    "Canonical viewer pending: this task permits only read-only/bounded canonical tooling; no viewer generation run.",
+    "Grade scope is existing assertions; router extraction routing is not directly evaluated, CLI prompt does not test catalogue reporting."
+  ]
+}
