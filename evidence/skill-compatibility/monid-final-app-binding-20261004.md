@@ -1,0 +1,13 @@
+# Final app evidence-only source binding
+
+App source `c3c760622b7a1d1ce82eddc3801854e2f4cde898` follows `5000ba2ec29cb1c399921aa9aa19f7df04fb92f5`; their sole changed path is `evidence/monid-readiness-20261003.md`. All executable source, modes and lockfile are unchanged. Final source tree is `cee5db14325d3f9ebc33bba447f0af1fc8cf12aa`.
+
+Root ran the existing canonical materialiser and app exporter in a fresh owned context. Parent reports materialiser exit0 and exporter session11577 exit0; this source preparation independently reads the actual emitted artifacts, without rerunning either command. Fresh receipt SHA256 `78f091cf322b2b703b7f7fad27ce044fe620e97839d312048a1fa5be6a17d49a` binds final revision/tree, lockfile `2e290a36455cf84b09b434abad53d004976d5da50368da6a94d78ae4262bbd05`, OpenAPI `90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf` and policy `d4b9dc980b8a1177b508072a177e29c9f5e2a31a94890b17949f316affe2b246`.
+
+Fresh OpenAPI is byte-identical to the preserved app5000 artifact, so the map retains that exact committed OpenAPI path. Fresh policy differs only in its revision: all four fingerprints, historical runtime snapshot/hash and values hash are unchanged. The new receipt and policy are copied byte-exact to additive final-app paths; the original producer packet/receipt/policy remain immutable.
+
+Selected contracts exclude OpenAPI `info.version` and use policy fingerprints rather than policy revision (`scripts/skill-compatibility.mjs:77-93`). Exact existing review selection is preserved. Original review sourceRevisions remain app5000/Sending2c324/SDK7e; the checker explicitly calls a matching review with older source revisions `no-impact` at :331. That is genuine existing review reuse, not fresh semantic evaluation or a new reviewed-at-c3 claim. CLI actual-published previous digest/map precedence remains as reconciled in c877; historical be7 grades are never relabelled.
+
+All old exports, review records, evidence/evaluation artifacts, timings, guidance, generated copies, versions and review order remain unchanged. Sending revision `2c324361e353bd4abcd399b6e19be1855deebe5b`, SDK `7e867c5bd7b7c85add27c7c04e036997ae57dbc4` and actual published skills `fc7c11647c3bb9f6ba80e0aa6679ad6895d94ce1` remain pinned.
+
+The final map/skills commit changes candidate identity; fresh canonical committed-source acceptance must run against that actual commit and final app revision. Preparation and copied export evidence are not acceptance, public SDK visibility, package/install validation, production rollout or publication. No new model run, unit/build rerun or version change follows solely from this app evidence-only commit. Final app hook cleanup/receipt remains independently owned by root.

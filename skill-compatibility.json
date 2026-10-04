@@ -1953,10 +1953,10 @@
     "publishedRevision": "fc7c11647c3bb9f6ba80e0aa6679ad6895d94ce1",
     "sdkRevision": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4",
     "app": {
-      "revision": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
+      "revision": "c3c760622b7a1d1ce82eddc3801854e2f4cde898",
       "openapi": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json"
+      "policy": "evidence/skill-compatibility/contracts/monid-app-final-20261004/app-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/monid-app-final-20261004/app-export.json"
     },
     "sending": {
       "revision": "2c324361e353bd4abcd399b6e19be1855deebe5b",
