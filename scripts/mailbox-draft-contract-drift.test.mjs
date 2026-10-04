@@ -1,16 +1,24 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const docsRoot =
-  process.env.SENDMUX_DOCS || "/Users/rj/Desktop/GIT-REPOS/sendmux-docs";
-const sdkRoot = process.env.SENDMUX_SDK || "/Users/rj/Desktop/GIT-REPOS/sendmux-sdk";
+const releaseInputs = JSON.parse(
+  readFileSync(path.join(repoRoot, "skill-compatibility.json"), "utf8"),
+).releaseInputs;
+const sdkRoot = process.env.SENDMUX_SDK || path.join(repoRoot, "_sdk");
+assert.ok(
+  existsSync(sdkRoot),
+  `Missing SDK fixture at ${sdkRoot}; set SENDMUX_SDK or check out the pinned SDK to _sdk`,
+);
 const appOpenApi =
-  process.env.SENDMUX_APP_OPENAPI || path.join(docsRoot, "openapi-app.json");
+  process.env.SENDMUX_APP_OPENAPI || path.join(repoRoot, releaseInputs.app.openapi);
+const sendingOpenApi =
+  process.env.SENDMUX_SENDING_OPENAPI ||
+  path.join(repoRoot, releaseInputs.sending.openapi);
 const artifactsRoot = path.join(repoRoot, ".claude/artifacts/monid-readiness-skills");
 const operations = [
   ["get", "/mailbox/drafts"],
@@ -45,9 +53,9 @@ for (const [method, route] of operations) {
         encoding: "utf8",
         env: {
           ...process.env,
-          SENDMUX_DOCS: docsRoot,
           SENDMUX_SDK: sdkRoot,
           SENDMUX_APP_OPENAPI: specPath,
+          SENDMUX_SENDING_OPENAPI: sendingOpenApi,
         },
       },
     );

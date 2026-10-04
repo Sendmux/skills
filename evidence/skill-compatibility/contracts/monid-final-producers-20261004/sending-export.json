@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "producer": "sending",
+  "revision": "fb6237d9ee08937cb0704b21b1497c568fc14e76",
+  "sourceTree": "a5c694a7fb6535b11e3a39ca74942706a471c593",
+  "lockfileSha256": "ef0259838427fdfcb2426a68a3f46f70124ec5688bcb6b365c60821b10a623af",
+  "openapiSha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5",
+  "policySha256": "8ea42a699a0c7e903ef22cb0d152b7975e33401c654cfcb764465e35c015af9b",
+  "exporter": "app/http-api/v1/schemas/registry.js"
+}

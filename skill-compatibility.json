@@ -1953,16 +1953,16 @@
     "publishedRevision": "fc7c11647c3bb9f6ba80e0aa6679ad6895d94ce1",
     "sdkRevision": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4",
     "app": {
-      "revision": "32ad53c3335af25f6d46d156c93b567ca2df61f0",
+      "revision": "5c5378f913d20547a6e6ec3c09d9f790b0b04cb7",
       "openapi": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/monid-app-metadata-final-20261004/app-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/monid-app-metadata-final-20261004/app-export.json"
+      "policy": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/app-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/app-export.json"
     },
     "sending": {
-      "revision": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+      "revision": "fb6237d9ee08937cb0704b21b1497c568fc14e76",
       "openapi": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json"
+      "policy": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/sending-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/sending-export.json"
     }
   }
 }
