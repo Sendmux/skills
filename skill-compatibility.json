@@ -1861,6 +1861,13 @@
       "skill": "sendmux-cli",
       "skillDigest": "9b16a314a4abaff01fa663caabe6fd5f7583d626b63609b1e81cfc182103e1be",
       "contractDigest": "2da62662eb0ead5cddc91483390b4208519bb3efc15d95c8d121b9af876d93c9",
+      "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-cli-published-171.json",
+      "sha256": "abc80b87fbc0a545778c94b386abd51923d732a6c87428382aa15f25129d6ff6"
+    },
+    {
+      "skill": "sendmux-cli",
+      "skillDigest": "9b16a314a4abaff01fa663caabe6fd5f7583d626b63609b1e81cfc182103e1be",
+      "contractDigest": "2da62662eb0ead5cddc91483390b4208519bb3efc15d95c8d121b9af876d93c9",
       "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-cli.json",
       "sha256": "ab6970579ad2571e2eb2511dfc7c79c76abd247863f261cf39f08c823c3d705f"
     },
@@ -1943,7 +1950,7 @@
     }
   ],
   "releaseInputs": {
-    "publishedRevision": "be7a4670d04ceb481fed4de1457c53d4e2295fee",
+    "publishedRevision": "fc7c11647c3bb9f6ba80e0aa6679ad6895d94ce1",
     "sdkRevision": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4",
     "app": {
       "revision": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
