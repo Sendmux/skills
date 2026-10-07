@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "arm": "old_skill",
+  "execution": "native-host-subagent",
+  "status": "completed",
+  "task_path": "/root/mailbox_eval_old",
+  "agent_id": null,
+  "skills_revision": "be7a4670d04ceb481fed4de1457c53d4e2295fee",
+  "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/old-source/skills/sendmux-mailbox-agent/SKILL.md",
+  "skill_sha256": "62c6b3a920f5480f4454260f86d4182f066f5baee05e5dfdedfdc4a168f5587a",
+  "prompt_sha256": "e7fd55a3494977b8ff4729532a51e05fa65ed61dcb5626f8fa1acd22a240f9b1",
+  "metadata_sha256": "e1e5f21ae7459a4ee2e46a1a0728c1ff16553df58f46ffff6b1762e94b021742",
+  "output_path": "outputs/response.md",
+  "output_sha256": "c23c4995587034e36ebd5a6302775e2beef963c5a1fdcdc58b5988dab982168e",
+  "grading_path": "grading.json",
+  "grading_sha256": "495579fcdbe4dc18617bb98cae87c43c2164b082f6cbfca15b164af8b06154d0",
+  "grader_task_path": "/root/sdk_release_identity",
+  "external_actions": false,
+  "external_action_provenance": "Parent reports completed native pair without external side effects; output states documentation only. No complete tool trace retained in packet.",
+  "execution_provenance": "Genuine response preserved from parent native-host task; task path provided by parent checkpoint. Original dispatch/result tool records not retained in packet.",
+  "metrics": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "total_duration_seconds": null,
+    "availability": "unavailable from current host-visible checkpoint"
+  },
+  "packaged_at": "2026-10-03 07:13:36 UTC"
+}

@@ -1,0 +1,7 @@
+{
+  "total_tokens": null,
+  "duration_ms": null,
+  "total_duration_seconds": null,
+  "availability": "unavailable",
+  "reason": "Native host did not expose duration or token totals in the saved checkpoint; no inferred timing or synthetic zero values."
+}

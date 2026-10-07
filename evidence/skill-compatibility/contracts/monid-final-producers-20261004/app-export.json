@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "producer": "app",
+  "revision": "5c5378f913d20547a6e6ec3c09d9f790b0b04cb7",
+  "sourceTree": "20fb52c9af2637955c630cbde7c1ef3044014fa1",
+  "lockfileSha256": "2e290a36455cf84b09b434abad53d004976d5da50368da6a94d78ae4262bbd05",
+  "openapiSha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf",
+  "policySha256": "2376c09b06fb1cddfd88daac3f3caf22ee27daaa151084323e392247582775c6",
+  "exporter": "scripts/emit-openapi-spec.ts"
+}

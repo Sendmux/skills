@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "eval_id": 8,
+  "arm": "with_skill",
+  "execution": "native-host-subagent",
+  "status": "completed",
+  "task_path": "/root/mailbox_eval_current8",
+  "agent_id": null,
+  "model": null,
+  "skills_revision": "51f9d21b56f92887b6ea145366aca1dc116aef75",
+  "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-mailbox-agent/SKILL.md",
+  "skill_sha256": "ff1c3e7200f59ab4edcccccb14ad53c9d645bf67ea5a9a5e7a144f7e7847f904",
+  "prompt_sha256": "15ac58b59e46d76eb49dee26b776782a538aca943242c07af1d580c363b45c02",
+  "metadata_sha256": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb",
+  "output_path": "outputs/response.md",
+  "output_sha256": "5dd1ec644d58d3af64eef9d4c35f3b986f898ae57b35f7918084e40b1474485c",
+  "grading_path": "grading.json",
+  "grading_sha256": "c1ffba0ff1d6e5a428c2472ced01e0f21742ab15ced847b5b284bbaf5bf56612",
+  "grader_task_path": "/root",
+  "execution_provenance": "Fresh native task; same-task executor directly read the current skill and saved the actual response. Root retained paired dispatch/provenance in execution.md.",
+  "external_actions": false,
+  "external_action_provenance": "Executor/parent reports documentation-only task; no complete tool transcript exported to packet.",
+  "metrics": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "total_duration_seconds": null,
+    "availability": "unavailable; host exposed task paths but no model identity, separate agent IDs, token counts or task duration"
+  }
+}

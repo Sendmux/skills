@@ -32,7 +32,7 @@ Use this skill to connect an agent client to Sendmux through MCP.
 pip install sendmux-mcp
 ```
 
-This guide targets the released `sendmux-mcp` 2.1.3 package. The package speaks MCP protocol revisions `2025-11-25` and `2026-07-28` over stdio or Streamable HTTP. Its catalogue contains 54 tools: 26 Mailbox, 22 Management, and 6 Sending. Selected surfaces and OAuth grants determine which subset a credential can see.
+This guide targets the released `sendmux-mcp` 2.1.3 package as a historical catalogue reference. The package speaks MCP protocol revisions `2025-11-25` and `2026-07-28` over stdio or Streamable HTTP. The released catalogue contains 54 tools: 26 Mailbox, 22 Management, and 6 Sending. The unpublished candidate source declares package version 2.2.0 and its catalogue contains 64 tools: 35 Mailbox, 23 Management, and 6 Sending; those counts do not prove a new package has been published. Selected surfaces and OAuth grants determine which subset a credential can see.
 
 Console scripts:
 
@@ -56,15 +56,15 @@ Hosted MCP OAuth and REST OAuth use separate resources; do not reuse a REST acce
 
 Standard dynamic client registration can omit `resource`; that produces a valid resource-neutral registration and is not by itself a reason to re-register. Check each later binding separately: the client authorisation request must target exactly `https://mcp.sendmux.ai/mcp`; the Sendmux OAuth authorisation server owns the approved grant and must store that exact resource restriction; and the token it issues must have that exact audience. A client such as Atlassian controls its requests and connection OAuth UI, but it cannot edit the grant stored by Sendmux. If the request fields are correct and `invalid_target` persists, investigate the Sendmux authorisation-server grant state before blaming the client or re-registering; do not claim any failure stage is more common without actual evidence. For Atlassian, use its connection OAuth UI, not a client-unspecified `/mcp auth` or another slash command. Configuration shapes and authentication commands elsewhere in this guide apply only to their named client. A REST bearer presented to the MCP resource server is still invalid for that audience, but do not predict the resource server's rejection shape from an authorisation-stage error.
 
-## Local server surface map
+## Candidate source surface map
 
 | Surface    | Key                                                                     | Tool count | Example tools                                                                                                                                         |
 | ---------- | ----------------------------------------------------------------------- | ---------: | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mailbox    | `smx_mbx_` or scoped `smx_agent_`                                       |         26 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_get_attachment`, `mailbox_upload_attachment`, `mailbox_wait_for_message` |
-| Management | `smx_root_`                                                             |         22 | `management_create_domain`, `management_create_mailbox`, `management_create_mailbox_key`, `management_get_spend_summary`, `management_create_webhook` |
+| Mailbox    | `smx_mbx_` or scoped `smx_agent_`                                       |         35 | `mailbox_list_granted_mailboxes`, `mailbox_search_message_snippets`, `mailbox_get_attachment`, `mailbox_upload_attachment`, `mailbox_wait_for_message` |
+| Management | `smx_root_`                                                             |         23 | `management_create_domain`, `management_create_mailbox`, `management_create_mailbox_key`, `management_get_spend_summary`, `management_create_webhook` |
 | Sending    | Send-capable `smx_mbx_` or owner-approved Sending-resource `smx_agent_` |          6 | `sending_send_email`, `sending_send_email_batch`, `sending_upload_attachment`, `sending_create_attachment_upload`, `sending_get_attachment`            |
 
-Compatibility notes must report the complete catalogue as 54 tools: 26 Mailbox, 22 Management, and 6 Sending. Do not describe a credential-visible subset as the catalogue.
+Compatibility notes must distinguish the unpublished candidate source catalogue of 64 tools: 35 Mailbox, 23 Management, and 6 Sending from the released 2.1.3 catalogue above. Do not describe a credential-visible subset as the catalogue.
 
 Hosted tool visibility depends on the approved grant. For multi-mailbox grants, call `mailbox_list_granted_mailboxes` first and pass the returned `mailbox_id` to mailbox tools when targeting a mailbox. Client examples in this guide are documented configurations, not claims that the client is certified compatible; verify the chosen client separately.
 

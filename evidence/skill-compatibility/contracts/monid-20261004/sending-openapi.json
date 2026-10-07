@@ -1,0 +1,1856 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Sendmux Sending API",
+    "version": "1.0.0",
+    "description": "Send emails programmatically via the Sendmux email infrastructure. Every response carries an `X-Request-Id` header; errors include a `retryable` flag. 429 and 503 responses include `Retry-After`. Mutating endpoints accept an `Idempotency-Key` header for safe retries."
+  },
+  "servers": [
+    {
+      "url": "https://smtp.sendmux.ai/api/v1",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "OAuth2": [
+        "email.send"
+      ]
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Sendmux API key (smx_...)"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Use the authorisation-code flow with S256 PKCE and resource=https://sendmux.ai/api. The user must grant Sending API access and email.send. OAuth access tokens authenticate HTTP requests; use a send-capable API key for SMTP.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app.sendmux.ai/oauth/authorize",
+            "tokenUrl": "https://app.sendmux.ai/oauth/token",
+            "refreshUrl": "https://app.sendmux.ai/oauth/token",
+            "scopes": {
+              "email.send": "Send email and manage temporary sending attachments"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "description": "Unique request identifier",
+            "example": "req_clxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "Connection": {
+        "type": "object",
+        "properties": {
+          "team": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "credential": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "api_key",
+                  "oauth",
+                  "agent_token"
+                ],
+                "example": "api_key"
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "label": {
+            "type": "string",
+            "description": "Display label for this connection."
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mailboxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                }
+              },
+              "required": [
+                "id",
+                "email"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "team",
+          "credential",
+          "label",
+          "permissions",
+          "mailboxes"
+        ],
+        "additionalProperties": false
+      },
+      "SuccessEnvelope": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "ok",
+          "meta"
+        ]
+      },
+      "ConnectionResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SuccessEnvelope"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/Connection"
+              }
+            },
+            "required": [
+              "data"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "ErrorIssue": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "Dot-path to the failing field",
+            "example": "to.email"
+          },
+          "code": {
+            "type": "string",
+            "description": "Issue code from the validator",
+            "example": "invalid_string"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable issue message"
+          }
+        },
+        "required": [
+          "field",
+          "code",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Machine-readable error code",
+            "example": "validation_error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error description"
+          },
+          "param": {
+            "type": "string",
+            "description": "Parameter that caused the error"
+          },
+          "doc_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to error documentation"
+          },
+          "retryable": {
+            "type": "boolean",
+            "description": "True when the client may safely retry the same request. 429 and 5xx default true; 4xx default false."
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorIssue"
+            },
+            "description": "Accumulated per-field issues (validation errors)"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "retryable"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "required": [
+          "ok",
+          "error",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "AttachmentUploadData": {
+        "type": "object",
+        "properties": {
+          "attachment_id": {
+            "type": "string",
+            "pattern": "^att_[a-z0-9]{24}$",
+            "description": "Temporary attachment ID to use in email attachments[].",
+            "example": "att_tz4a98xxat96iws9zmbrgj3a"
+          },
+          "filename": {
+            "type": "string",
+            "description": "Stored attachment filename",
+            "example": "analysis.pdf"
+          },
+          "content_type": {
+            "type": "string",
+            "description": "Stored attachment MIME type",
+            "example": "application/pdf"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "description": "Stored attachment byte size",
+            "example": 20480
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO timestamp when this temporary attachment reference expires.",
+            "example": "2026-07-07T08:15:00.000Z"
+          }
+        },
+        "required": [
+          "attachment_id",
+          "filename",
+          "content_type",
+          "size_bytes",
+          "expires_at"
+        ],
+        "additionalProperties": false
+      },
+      "AttachmentUploadResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SuccessEnvelope"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/AttachmentUploadData"
+              }
+            },
+            "required": [
+              "data"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "AttachmentUploadIntentData": {
+        "type": "object",
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "pattern": "^upl_[a-z0-9]{24}$",
+            "description": "Temporary upload intent ID.",
+            "example": "upl_tz4a98xxat96iws9zmbrgj3a"
+          },
+          "upload_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Short-lived URL that accepts a binary PUT with the returned headers.",
+            "example": "https://smtp.sendmux.ai/api/v1/emails/attachment-uploads/upl_tz4a98xxat96iws9zmbrgj3a"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "PUT"
+            ],
+            "description": "HTTP method for upload_url"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO timestamp when the upload URL expires.",
+            "example": "2026-07-07T08:15:00.000Z"
+          },
+          "max_size_bytes": {
+            "type": "integer",
+            "description": "Maximum upload size in bytes",
+            "example": 18874368
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Headers that must be sent with the PUT upload request.",
+            "example": {
+              "Content-Type": "application/pdf",
+              "Content-Length": "20480",
+              "X-Sendmux-Upload-Token": "smx_upload_..."
+            }
+          }
+        },
+        "required": [
+          "upload_id",
+          "upload_url",
+          "method",
+          "expires_at",
+          "max_size_bytes",
+          "headers"
+        ],
+        "additionalProperties": false
+      },
+      "AttachmentUploadIntentResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SuccessEnvelope"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/AttachmentUploadIntentData"
+              }
+            },
+            "required": [
+              "data"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "AttachmentUploadIntentRequest": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Filename to associate with the uploaded attachment.",
+            "example": "analysis.pdf"
+          },
+          "content_type": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "MIME type expected for the upload.",
+            "example": "application/pdf"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "description": "Exact byte size that will be uploaded.",
+            "example": 20480
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "Optional SHA-256 hex digest for the upload bytes.",
+            "example": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        },
+        "required": [
+          "filename",
+          "size_bytes"
+        ],
+        "additionalProperties": false
+      },
+      "SendSuccessData": {
+        "type": "object",
+        "properties": {
+          "message_id": {
+            "type": "string",
+            "pattern": "^eml_[a-z0-9]{24}$",
+            "description": "Unique message identifier (eml_ prefix + 24 alphanumeric chars)",
+            "example": "eml_tz4a98xxat96iws9zmbrgj3a"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued"
+            ],
+            "description": "Message queuing status"
+          }
+        },
+        "required": [
+          "message_id",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "SendSuccessResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SuccessEnvelope"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/SendSuccessData"
+              }
+            },
+            "required": [
+              "data"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email",
+            "description": "Email address",
+            "example": "user@example.com"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[^\\r\\n]*$",
+            "description": "Display name",
+            "example": "John Smith"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "additionalProperties": false,
+        "description": "Sender address"
+      },
+      "Recipient": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email",
+            "description": "Recipient email address"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[^\\r\\n]*$",
+            "description": "Recipient display name"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "additionalProperties": false
+      },
+      "InlineAttachment": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Filename with allowed extension",
+            "example": "invoice.pdf"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Base64-encoded file content"
+          },
+          "type": {
+            "type": "string",
+            "description": "MIME type override",
+            "example": "application/pdf"
+          },
+          "encoding": {
+            "type": "string",
+            "enum": [
+              "base64"
+            ],
+            "default": "base64"
+          }
+        },
+        "required": [
+          "filename",
+          "content"
+        ],
+        "additionalProperties": false
+      },
+      "UploadedAttachmentRef": {
+        "type": "object",
+        "properties": {
+          "attachment_id": {
+            "type": "string",
+            "pattern": "^att_[a-z0-9]{24}$",
+            "description": "Temporary uploaded attachment ID returned by POST /emails/attachments.",
+            "example": "att_tz4a98xxat96iws9zmbrgj3a"
+          }
+        },
+        "required": [
+          "attachment_id"
+        ],
+        "additionalProperties": false
+      },
+      "Attachment": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/InlineAttachment"
+          },
+          {
+            "$ref": "#/components/schemas/UploadedAttachmentRef"
+          }
+        ]
+      },
+      "EmailSendRequest": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "to": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "description": "Primary recipient"
+              }
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 998,
+            "pattern": "^[^\\r\\n]*$",
+            "description": "Email subject line (max 998 chars, RFC 5322)",
+            "example": "Welcome to Sendmux"
+          },
+          "html_body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 26214400,
+            "description": "HTML email content (max 25MB)"
+          },
+          "text_body": {
+            "type": "string",
+            "maxLength": 26214400,
+            "description": "Plain text alternative (max 25MB)"
+          },
+          "reply_to": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "description": "Reply-To address"
+              }
+            ]
+          },
+          "return_path": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email",
+            "description": "Envelope sender for VERP support"
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            },
+            "maxItems": 49,
+            "description": "CC recipients (subject to 50 total To, CC, and BCC recipients)"
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            },
+            "maxItems": 49,
+            "description": "BCC recipients (subject to 50 total To, CC, and BCC recipients)"
+          },
+          "custom_headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 500,
+              "pattern": "^[^\\r\\n]*$"
+            },
+            "description": "Custom X-* headers to include in the email"
+          },
+          "delivery_group": {
+            "description": "One delivery group public ID or a non-empty array of up to 50 IDs",
+            "oneOf": [
+              {
+                "type": "string",
+                "pattern": "^dgrp_[a-z0-9][a-z0-9_-]{0,122}$"
+              },
+              {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 50,
+                "items": {
+                  "type": "string",
+                  "pattern": "^dgrp_[a-z0-9][a-z0-9_-]{0,122}$"
+                }
+              }
+            ]
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "maxItems": 10,
+            "description": "File attachments (max 10). Use attachment_id refs for uploaded files."
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "subject",
+          "html_body"
+        ],
+        "additionalProperties": false
+      },
+      "BatchResultItem": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "description": "Position in the input array"
+          },
+          "message_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^eml_[a-z0-9]{24}$",
+            "description": "Message ID (null if failed)"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "failed"
+            ],
+            "description": "Result status"
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "description": "Error details (only if failed)"
+              }
+            ]
+          }
+        },
+        "required": [
+          "index",
+          "message_id",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "BatchSummary": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total messages in batch"
+          },
+          "queued": {
+            "type": "integer",
+            "description": "Successfully queued count"
+          },
+          "failed": {
+            "type": "integer",
+            "description": "Failed count"
+          }
+        },
+        "required": [
+          "total",
+          "queued",
+          "failed"
+        ],
+        "additionalProperties": false
+      },
+      "BatchSendSuccessData": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchResultItem"
+            }
+          },
+          "summary": {
+            "$ref": "#/components/schemas/BatchSummary"
+          }
+        },
+        "required": [
+          "results",
+          "summary"
+        ],
+        "additionalProperties": false
+      },
+      "BatchSendSuccessResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SuccessEnvelope"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/BatchSendSuccessData"
+              }
+            },
+            "required": [
+              "data"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "BatchSendRequest": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmailSendRequest"
+            },
+            "minItems": 1,
+            "maxItems": 100,
+            "description": "Array of email messages to send (max 100)"
+          }
+        },
+        "required": [
+          "messages"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/me": {
+      "get": {
+        "operationId": "sendingGetConnection",
+        "tags": [
+          "Meta"
+        ],
+        "summary": "Get Sending connection",
+        "description": "Validate this Sending credential and return its team, connection label, permissions and authorised mailboxes. Requires email.send. Credits, provider readiness and mailbox storage are not checked. No user profile or secrets are returned.",
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2": [
+              "email.send"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection information",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Always no-store."
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Request identifier."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Connection information is unchanged. Authentication is checked on every request."
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Credential is not authorised for this API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authentication service temporarily unavailable",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails/attachments": {
+      "post": {
+        "operationId": "sendingUploadAttachment",
+        "summary": "Upload an attachment",
+        "description": "Upload binary attachment bytes and receive a temporary attachment_id for use in attachments[]. Requires `email.send` permission.",
+        "tags": [
+          "Attachments"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2": [
+              "email.send"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Optional client-generated key to make the request idempotent for 24 hours. Replays under the same key return the cached response; a reused key with a different body returns 409 idempotency_conflict.",
+            "example": "order-12345-2026-04-24"
+          },
+          {
+            "name": "Content-Length",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "description": "Exact number of bytes in the binary request body.",
+            "example": 20480
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "Filename to associate with the uploaded attachment.",
+            "example": "analysis.pdf"
+          },
+          {
+            "name": "content_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "MIME type override for the uploaded attachment.",
+            "example": "application/pdf"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Attachment uploaded successfully",
+            "headers": {
+              "Location": {
+                "description": "Canonical URL for the temporary uploaded attachment metadata.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid upload metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Attachment exceeds the upload size cap",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Attachment validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Attachment storage temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails/attachments/{attachment_id}": {
+      "get": {
+        "operationId": "sendingGetAttachment",
+        "summary": "Get attachment metadata",
+        "description": "Return metadata for a temporary uploaded attachment owned by the authenticated team. File bytes are not returned.",
+        "tags": [
+          "Attachments"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2": [
+              "email.send"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "attachment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^att_[a-z0-9]{24}$"
+            },
+            "description": "Temporary attachment ID returned by an upload endpoint."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentUploadResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Attachment not found or expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Attachment storage temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails/attachment-uploads": {
+      "post": {
+        "operationId": "sendingCreateAttachmentUpload",
+        "summary": "Create an attachment upload URL",
+        "description": "Create a short-lived upload URL and token that lets a remote client PUT one binary attachment without exposing the API key on the upload request. Requires `email.send` permission.",
+        "tags": [
+          "Attachments"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2": [
+              "email.send"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Optional client-generated key to make the request idempotent for 24 hours. Replays under the same key return the cached response; a reused key with a different body returns 409 idempotency_conflict.",
+            "example": "order-12345-2026-04-24"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttachmentUploadIntentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Attachment upload URL created",
+            "headers": {
+              "Location": {
+                "description": "Canonical URL for the temporary attachment upload intent.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentUploadIntentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Attachment exceeds the upload size cap",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Attachment upload validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Attachment upload service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails/attachment-uploads/{upload_id}": {
+      "put": {
+        "operationId": "sendingCompleteAttachmentUpload",
+        "summary": "Upload bytes to an attachment upload URL",
+        "description": "Upload the exact binary bytes for a previously-created attachment upload URL. This operation uses the short-lived upload token header returned by POST /emails/attachment-uploads, not a Sendmux API key.",
+        "tags": [
+          "Attachments"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "X-Sendmux-Upload-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Short-lived upload token returned by POST /emails/attachment-uploads."
+          },
+          {
+            "name": "Content-Length",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "description": "Exact number of bytes in the binary request body.",
+            "example": 20480
+          },
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^upl_[a-z0-9]{24}$"
+            },
+            "description": "Upload intent ID returned by POST /emails/attachment-uploads."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Attachment uploaded successfully",
+            "headers": {
+              "Location": {
+                "description": "Canonical URL for the temporary uploaded attachment metadata.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid upload headers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Upload token missing, invalid, or expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Upload intent not found or expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Upload already completed with different content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Uploaded bytes do not match the expected size",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Attachment validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Attachment storage temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails/send": {
+      "post": {
+        "operationId": "sendingSendEmail",
+        "summary": "Send a single email",
+        "description": "Queue a single email for delivery. Requires `email.send` permission.",
+        "tags": [
+          "Emails"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2": [
+              "email.send"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Optional client-generated key to make the request idempotent for 24 hours. Replays under the same key return the cached response; a reused key with a different body returns 409 idempotency_conflict.",
+            "example": "order-12345-2026-04-24"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailSendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email queued successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request (invalid JSON or syntactic parameter error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Insufficient credits",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency conflict (Idempotency-Key reused with different body, or request already in flight)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request body exceeds 25 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error (schema failures, accumulated in error.errors[])",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded or Free daily sending limit reached (Retry-After header included)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable (Retry-After header included)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails/send/batch": {
+      "post": {
+        "operationId": "sendingSendEmailBatch",
+        "summary": "Send a batch of emails",
+        "description": "Queue up to 100 emails for delivery in a single request. Uses partial success model — individual message failures do not fail the entire batch. Requires `email.send` permission.",
+        "tags": [
+          "Emails"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2": [
+              "email.send"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Optional client-generated key to make the request idempotent for 24 hours. Replays under the same key return the cached response; a reused key with a different body returns 409 idempotency_conflict.",
+            "example": "order-12345-2026-04-24"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchSendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Batch processed (check individual results for per-message status)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchSendSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request (invalid JSON or syntactic parameter error)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Insufficient credits for entire batch",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request body exceeds 25 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "All messages failed validation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded or Free daily sending limit reached (Retry-After header included)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable or all messages failed with transient errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "operationId": "sendingGetOpenApiSpec",
+        "summary": "OpenAPI 3.1 specification",
+        "description": "Auto-generated OpenAPI 3.1 spec for the Sendmux Sending API. Public endpoint (no authentication). Emits a weak ETag; clients may send `If-None-Match` to receive 304 Not Modified.",
+        "tags": [
+          "Meta"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Weak ETag from a previous response. When it matches the current resource, the server returns 304 Not Modified with no body."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenAPI 3.1 document",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Weak ETag of the canonical spec content"
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "public, max-age=3600"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "additionalProperties": {}
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Spec has not changed (matches If-None-Match). Response body is empty per RFC 7232 §4.1.",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

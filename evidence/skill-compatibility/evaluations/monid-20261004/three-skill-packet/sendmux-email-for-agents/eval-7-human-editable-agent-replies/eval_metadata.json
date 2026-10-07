@@ -1,0 +1,12 @@
+{
+  "eval_id": 7,
+  "eval_name": "human-editable-agent-replies",
+  "prompt": "Our support agent should prepare threaded email replies that a person can reopen and edit in Sendmux before approving a send. It may use customer-connected outgoing accounts. Which Sendmux workflow and skill should own this? Keep the answer at routing level.",
+  "assertions": [
+    "The output routes saved threaded reply preparation and later send to sendmux-mailbox-agent.",
+    "The output says the draft can be reopened and edited before sending.",
+    "The output keeps the exact reviewed revision behind a human send-approval boundary.",
+    "The output routes connected outgoing account setup or policy administration to sendmux-management.",
+    "The output does not claim that a connected provider account bypasses mailbox send permission or sender policy."
+  ]
+}

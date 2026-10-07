@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Uses expected_revision and expected_schedule_version for cancellation.",
+      "passed": false,
+      "evidence": "Steps 1–2 check revision 5 and schedule_version 2 and refer to a documented concurrency guard, but supply neither expected_revision nor expected_schedule_version cancellation fields."
+    },
+    {
+      "text": "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+      "passed": false,
+      "evidence": "Step 2 warns that delivery may already be in flight or completed, but never specifies scheduled_for: null."
+    },
+    {
+      "text": "Cancels before editing; re-reads saved revision and schedule_version.",
+      "passed": false,
+      "evidence": "Steps 2–3 cancel before editing and read back the resulting draft revision, but omit re-reading and capturing the resulting schedule_version."
+    },
+    {
+      "text": "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+      "passed": true,
+      "evidence": "Step 4 requests exact recipient, subject, body, attachments and immediate timing approval; it explicitly says old approval does not cover changed content today."
+    },
+    {
+      "text": "Includes current expected_schedule_version for the later immediate send, separate from expected_revision.",
+      "passed": false,
+      "evidence": "Step 5 checks that the draft remains current and the schedule cancelled, but omits current expected_schedule_version for immediate send and incorrectly advises a separate Idempotency-Key."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 4,
+    "total": 5,
+    "pass_rate": 0.2
+  },
+  "grader_provenance": {
+    "task_path": "/root",
+    "method": "root-inline",
+    "assessment_source": "Parent supplied assessments after root reviewed actual outputs against unchanged case10 expectations; packaging agent did not independently grade."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "eval_id": 7,
+  "eval_name": "saved-threaded-reply-for-review",
+  "prompt": "The user wants a reply to a customer email saved in Sendmux so they can edit it tomorrow. The original message has an attachment. Prepare the draft, but do not send it. What mailbox workflow should the agent use?",
+  "assertions": [
+    "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+    "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+    "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+    "The output keeps the stable draft ID and revision for later editing.",
+    "The output does not send before the user approves the final recipients, content and attachments."
+  ]
+}

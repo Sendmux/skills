@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "arm": "with_skill",
+  "execution": "native-host-subagent",
+  "status": "completed",
+  "task_path": "/root/mailbox_eval_current",
+  "agent_id": null,
+  "skills_revision": "51f9d21b56f92887b6ea145366aca1dc116aef75",
+  "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-mailbox-agent/SKILL.md",
+  "skill_sha256": "ff1c3e7200f59ab4edcccccb14ad53c9d645bf67ea5a9a5e7a144f7e7847f904",
+  "prompt_sha256": "e7fd55a3494977b8ff4729532a51e05fa65ed61dcb5626f8fa1acd22a240f9b1",
+  "metadata_sha256": "e1e5f21ae7459a4ee2e46a1a0728c1ff16553df58f46ffff6b1762e94b021742",
+  "output_path": "outputs/response.md",
+  "output_sha256": "8390bf87118ebe8ba1a300abf246c70e256397aaabc3ce3296f9956a53e710d7",
+  "grading_path": "grading.json",
+  "grading_sha256": "aec75dcbc7cb6dd3dd2d7e42267ef20f84171d7e95de1a970dc790d44c3c8c17",
+  "grader_task_path": "/root/sdk_release_identity",
+  "external_actions": false,
+  "external_action_provenance": "Parent reports completed native pair without external side effects; output states documentation only. No complete tool trace retained in packet.",
+  "execution_provenance": "Genuine response preserved from parent native-host task; task path provided by parent checkpoint. Original dispatch/result tool records not retained in packet.",
+  "metrics": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "total_duration_seconds": null,
+    "availability": "unavailable from current host-visible checkpoint"
+  },
+  "packaged_at": "2026-10-03 07:13:36 UTC"
+}

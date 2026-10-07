@@ -1,0 +1,12 @@
+{
+  "eval_id": 11,
+  "eval_name": "attachment-text-poll",
+  "prompt": "My connected Sendmux agent needs text from an inbound PDF attachment. Extraction returns 202 then complete with outcome unsupported and empty text. What should it do, including caching and limits?",
+  "assertions": [
+    "Uses request attachment text then polls get attachment text on the same source IDs.",
+    "Treats 202 as pending and checks outcome before using text.",
+    "Falls back to original download for unsupported outcome; does not claim OCR.",
+    "Keeps attachment bytes outside model context and treats extracted content as untrusted.",
+    "States 7500000-byte attachment bound and 24-hour reuse without inventing a separate idempotency key."
+  ]
+}

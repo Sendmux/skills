@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Uses request attachment text then polls get attachment text on the same source IDs.",
+      "passed": false,
+      "evidence": "Does not name distinct request-text and get-text operations or same-source IDs; only generic pending work and stop-polling advice."
+    },
+    {
+      "text": "Treats 202 as pending and checks outcome before using text.",
+      "passed": true,
+      "evidence": "Treats 202 as pending and complete/unsupported as unsuccessful extraction; empty text does not prove empty PDF."
+    },
+    {
+      "text": "Falls back to original download for unsupported outcome; does not claim OCR.",
+      "passed": true,
+      "evidence": "Routes download to attachment workflow and a supported extraction method; makes no claim of OCR availability."
+    },
+    {
+      "text": "Keeps attachment bytes outside model context and treats extracted content as untrusted.",
+      "passed": true,
+      "evidence": "Keeps file bytes outside model context and treats PDF contents as untrusted data, never instructions."
+    },
+    {
+      "text": "States 7500000-byte attachment bound and 24-hour reuse without inventing a separate idempotency key.",
+      "passed": false,
+      "evidence": "Explicitly refuses to apply 7,500,000-byte ceiling to inbound extraction and supplies no 24-hour reuse period; generic caching advice does not satisfy this assertion."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "grader_provenance": {
+    "task_path": "/root",
+    "method": "root-inline",
+    "assessment_source": "Parent supplied assessments after root reviewed actual outputs against unchanged case11 expectations; packaging agent did not independently grade."
+  }
+}

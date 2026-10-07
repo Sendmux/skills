@@ -1,0 +1,11 @@
+# Final producer source bindings
+
+Genuine App export binds `5c5378f913d20547a6e6ec3c09d9f790b0b04cb7`/tree`20fb52c9af2637955c630cbde7c1ef3044014fa1`; Sending binds `fb6237d9ee08937cb0704b21b1497c568fc14e76`/tree`a5c694a7fb6535b11e3a39ca74942706a471c593`. App exporter session50753 and independent verifier both exited0; Sending exporter33333 and independent verification both exited0. The four genuine policy/receipt files are copied byte-exact under `contracts/monid-final-producers-20261004/`; earlier7a/652d and414 packets remain historical inputs.
+
+Existing OpenAPI paths retained after actual byte equality: App SHA256`90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf`, Sending`eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5`. Selected policy fingerprints and retained-runtime snapshot match earlier inputs. Actual final policy/receipt identities stay distinct: App policy`2376c09b06fb1cddfd88daac3f3caf22ee27daaa151084323e392247582775c6`, receipt`7d3e277b9f78490d669f719005dbc29df4d11e9aad5ad584922a89047a7b7353`; Sending policy`8ea42a699a0c7e903ef22cb0d152b7975e33401c654cfcb764465e35c015af9b`, receipt`53e5320497cccf1cefa6469c94e3d188fc6685be113ddad601bdc6a783fcd730`.
+
+Canonical `scripts/skill-compatibility.mjs:68–92,309–333,385–405` validates genuine source receipts, derives review/no-impact/superseded from matching digests, and prepares from committed map/artifacts. This change only updates final producer release bindings; it preserves all26review records and historical eval/grading/benchmark metadata. Source commit must precede actual committed22-entry compatibility acceptance; no acceptance is asserted by this note.
+
+Published comparison remains`fc7c11647c3bb9f6ba80e0aa6679ad6895d94ce1`; SDK input remains`7e867c5bd7b7c85add27c7c04e036997ae57dbc4`. Separate public MCP fixture`8a204d91eab96652ec39e9e59cef6280ef88b925` does not replace the SDK or add a checker API. Fixture correction and original9red/9green/override9/missing-SDK-negative evidence remain unchanged in `evidence/monid-skills-fixture-portability-20261004.md`.
+
+Retained September30 policy snapshot remains historical baseline, not fresh production acceptance. Source compatibility, ordinary source push, hosted CI, public release and deployed acceptance remain separate. No skill body, version, eval, package, metadata or publication change.

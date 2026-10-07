@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+      "passed": true,
+      "evidence": "\"Use a **saved Mailbox reply draft**, so the customer reply survives across sessions and the user can edit it in Sendmux tomorrow. Leave it unsent and unscheduled.\" The response chooses a persistent saved draft, then identifies mailbox_create_draft and its REST/CLI equivalents; it does not substitute a chat-only draft or immediate send."
+    },
+    {
+      "text": "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+      "passed": true,
+      "evidence": "\"source: {\"message_id\":\"<source message ID>\",\"action\":\"reply\"}\" and \"Sendmux prepares the reply recipients and thread headers.\" The response explicitly passes the original message as the saved reply source and states the resulting recipient/thread preparation."
+    },
+    {
+      "text": "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+      "passed": true,
+      "evidence": "\"Replies retain source inline images; regular source attachments are not automatically included as they are for forwards. Include a regular attachment only when intended, using a mailbox `blob_id` in the draft's `attachments` array\". This distinguishes inherited source inline content from a deliberate regular attachment addition."
+    },
+    {
+      "text": "The output keeps the stable draft ID and revision for later editing.",
+      "passed": true,
+      "evidence": "\"Keep its returned `id`, `revision` and `schedule_version`.\", followed by \"Give the user the saved draft reference so they can reopen it tomorrow.\" Later editing reads the current draft and uses expected_revision. The response retains the saved identity and revision rather than treating the prepared text as disposable."
+    },
+    {
+      "text": "The output does not send before the user approves the final recipients, content and attachments.",
+      "passed": true,
+      "evidence": "\"Do not call a send or scheduling operation\" and \"Sending later requires separate approval of the exact final recipients, subject, bodies and attachments\", followed by \"Any approved later send must target the saved draft and approved revision.\" The response leaves this draft unsent and explicitly gates a later send on approval of its final reviewed content."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}

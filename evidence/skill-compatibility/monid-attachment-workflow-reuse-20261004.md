@@ -1,0 +1,17 @@
+# Attachment workflow replacement: historical evidence reused
+
+Local source binding only; no new evaluation, actual upload/send, runtime acceptance, package or publication claim.
+
+Canonical `scripts/skill-compatibility.mjs:315–321` requires a tested workflow replacement when published instructions have no matching review under the new contract. Published `be7a4670d04ceb481fed4de1457c53d4e2295fee` attachment whole-skill digest is `4a2e9ee4d5229ce7f13b71a73924c2738f86b0bd2207fbc197e830528f9574d2`; current `51f9d21b56f92887b6ea145366aca1dc116aef75` is `1683e3417d4184809ecf349175a16271bb8a8c942b7ada148b8831a1e2872af6`. Unchanged against the historical reviewed replacement does not mean unchanged against the published source.
+
+Historical `evidence/skill-compatibility/reviews/sendmux-attachments.json` already records that exact replacement pair and genuine standalone-upload evidence. It corrects measured Content-Length and command-first profile syntax. The current body SHA256 `bf4b381efd3e89afef46464c0b68b948bfd3bc8eb69a6d3993fad8ae3dca77e2` equals the original `receipt.json` `skill_sha256`; current whole-skill digest equals the historical tested record. Every historical evidence path/hash still matches current committed bytes.
+
+Read-only receipt/evidence check exited0: real recorded model usage, no tools/MCP/external actions; exact prompt hash; unchanged metadata assertions equal grading assertions; six true grades with non-empty evidence; exact benchmark expectations and summary6/6. Response gives measured byte length and required header, uses the existing profile and raw body/query flags, performs no send and invents no completed upload. Source report `monid-unchanged-contract-review-20261004.md` independently confirms all selected Sending contracts/CLI metadata/file helpers remain identical and changed selected Mailbox/public declarations leave taught workflows supported.
+
+Original benchmark metadata says three runs per configuration, but its actual run list contains one `with_skill` and one `without_skill` run. That historical inconsistency is retained verbatim and is not a three-run or repeatability claim. Historical response, metadata, grading, receipt, timing/token values and source record remain unchanged; none is relabelled as execution against today's producer revisions. No current timing, cost or model comparison is inferred.
+
+New additive record: `reviews/monid-20261004/sendmux-attachments-workflow.json`, with real published `previousSkillDigest`, unchanged current `skillDigest`, current contract digest `8085316c08a733f4bd551320b21abaef618911a4f7cc7807599919bb8ce58591`, actual app5000/sending2c324/SDK7e revisions and hash-bound historical evidence plus independent current source review/producer exports. The separately constructed compatibility record remains intact as supplementary source review.
+
+The map places this workflow entry before the matching supplementary compatibility entry because `findReview` returns the first exact skill/contract match (`scripts/skill-compatibility.mjs:309–310`). This preserves all prior records and evidence while giving the published-lane supersession its required workflow record. No old broken instruction is newly declared compatible.
+
+Owning committed-source acceptance remains unrun. Historical supplied app runtime snapshot remains qualified, not live policy verification. Parent owns normal commit/hooks, compatibility gate, package/install/version/release and independent public readback.

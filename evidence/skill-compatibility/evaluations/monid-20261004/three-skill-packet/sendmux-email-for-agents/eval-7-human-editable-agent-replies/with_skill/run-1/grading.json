@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "The output routes saved threaded reply preparation and later send to sendmux-mailbox-agent.",
+      "passed": true,
+      "evidence": "Names \"saved, threaded mailbox draft workflow\", owned by `sendmux-mailbox-agent`; then says \"Send through that saved draft\" after exact-revision approval."
+    },
+    {
+      "text": "The output says the draft can be reopened and edited before sending.",
+      "passed": true,
+      "evidence": "Says the agent \"saves a reply that a person can reopen and edit in Sendmux\"."
+    },
+    {
+      "text": "The output keeps the exact reviewed revision behind a human send-approval boundary.",
+      "passed": true,
+      "evidence": "Retains \"stable draft ID and revision\"; sends \"only after the person approves the exact saved revision\" and requires new approval after edits."
+    },
+    {
+      "text": "The output routes connected outgoing account setup or policy administration to sendmux-management.",
+      "passed": true,
+      "evidence": "States \"`sendmux-management` owns their connection and policy administration\", referring to customer-connected outgoing accounts."
+    },
+    {
+      "text": "The output does not claim that a connected provider account bypasses mailbox send permission or sender policy.",
+      "passed": true,
+      "evidence": "Explicitly states \"Customer-connected outgoing accounts remain subject to mailbox send permission and sender policy\"; additionally requires Mailbox `email.send` and explicit approval."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  },
+  "grader_provenance": {
+    "task_path": "/root/skills_pair_grading",
+    "method": "independent-native-host-subagent",
+    "assessment_source": "Grader read all six actual saved responses against exact prepared assertions, verified immutable assigned source body hashes and source-definition prompt/assertion equality; grader did not author either evaluation answer."
+  }
+}

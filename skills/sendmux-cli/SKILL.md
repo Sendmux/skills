@@ -123,12 +123,12 @@ Command requires a send-capable `smx_mbx_` key or owner-approved Sending-resourc
 
 ## Command catalogue
 
-The CLI exposes generated operation commands:
+The unpublished candidate CLI source exposes these generated operation commands. Verify its published version before relying on the new commands:
 
 | Surface    | Count | Examples                                                                                                                                                   |
 | ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Management |    54 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
-| Mailbox    |    42 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
+| Management |    57 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
+| Mailbox    |    52 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
 | Sending    |     8 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`, `sending:upload-attachment`, `sending:create-attachment-upload`, `sending:complete-attachment-upload`, `sending:get-attachment` |
 | OAuth      |     2 | `auth:login`, `auth:logout` |
 | Profiles   |     3 | `profiles:list`, `profiles:set`, `profiles:show`                                                                                                           |

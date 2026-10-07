@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "eval_id": 8,
+  "arm": "old_skill",
+  "execution": "native-host-subagent",
+  "status": "completed",
+  "task_path": "/root/mailbox_eval_old",
+  "agent_id": null,
+  "model": null,
+  "skills_revision": null,
+  "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux/.claude/artifacts/monid-readiness/release-current-prep/skills-workflow-current-20261003/old-source/skills/sendmux-mailbox-agent/SKILL.md",
+  "skill_sha256": "62c6b3a920f5480f4454260f86d4182f066f5baee05e5dfdedfdc4a168f5587a",
+  "prompt_sha256": "15ac58b59e46d76eb49dee26b776782a538aca943242c07af1d580c363b45c02",
+  "metadata_sha256": "363d7b834db59f938314a8f7f77f66400196b689dfb9382f36aafaf820d516eb",
+  "output_path": "outputs/response.md",
+  "output_sha256": "c68d135394be3f28a7b01171f74904a1f28d30f175cc9d66cc02d7338b906631",
+  "grading_path": "grading.json",
+  "grading_sha256": "7774243e675ad326f9ff2af98be63c9bc45ec20abcd4b6ce27ee9e7b03934b30",
+  "grader_task_path": "/root",
+  "execution_provenance": "Root reports reused baseline task after thread limit; its prior context contained the old skill and case7, with no current source, expectations or results. See execution.md; not asserted to be an isolated fresh baseline.",
+  "external_actions": false,
+  "external_action_provenance": "Executor/parent reports documentation-only task; no complete tool transcript exported to packet.",
+  "metrics": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "total_duration_seconds": null,
+    "availability": "unavailable; host exposed task paths but no model identity, separate agent IDs, token counts or task duration"
+  }
+}

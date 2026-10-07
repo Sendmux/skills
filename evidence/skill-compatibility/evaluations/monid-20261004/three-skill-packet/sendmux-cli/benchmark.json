@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-cli",
+    "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-cli/SKILL.md",
+    "executor_model": null,
+    "analyzer_model": null,
+    "timestamp": null,
+    "evals_run": [
+      0
+    ],
+    "runs_per_configuration": 1,
+    "scope": "One current/old native-host content-only case per skill, independently graded against unchanged existing assertions; no runtime, full-skill, compatibility, package publication or release acceptance.",
+    "schedule": "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison."
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "Computes the exact local file byte length, rather than a character count or an estimated value.",
+          "passed": true,
+          "evidence": "Computes SIZE_BYTES=\"$(wc -c < ./report.pdf | tr -d '[:space:]')\" and explains \"`wc -c` measures the local file's byte length.\"; no text-character estimate."
+        },
+        {
+          "text": "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+          "passed": true,
+          "evidence": "The standalone `sendmux sending:upload-attachment` invocation contains `--header Content-Length=\"$SIZE_BYTES\"`, binding the measured numeric byte length."
+        },
+        {
+          "text": "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+          "passed": true,
+          "evidence": "The upload invocation includes `--body-file ./report.pdf`, `--query filename=report.pdf`, `--query content_type=application/pdf` and `--json`."
+        },
+        {
+          "text": "Uses the existing work profile without printing or requesting credentials.",
+          "passed": true,
+          "evidence": "The invocation uses `--profile work`; prose states \"Credentials stay in the existing `work` profile\"; no credential requested or printed."
+        },
+        {
+          "text": "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+          "passed": true,
+          "evidence": "Only `wc`/`tr` measurement and `sending:upload-attachment` are proposed. States \"without sending an email\"; no send command or `--attach`."
+        },
+        {
+          "text": "Does not claim an attachment_id or completed upload without a real result.",
+          "passed": true,
+          "evidence": "States \"No commands have been run here, so no upload result is available.\" No attachment_id or completed-upload claim."
+        }
+      ],
+      "notes": [
+        "Actual original saved response retained byte-identically; independent grading against exact prepared assertions.",
+        "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+        "Metrics unavailable; command wall-clock values are not agent duration."
+      ]
+    },
+    {
+      "eval_id": 0,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "pass_rate": 0.8333333333333334,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "Computes the exact local file byte length, rather than a character count or an estimated value.",
+          "passed": true,
+          "evidence": "Computes `report_bytes=\"$(wc -c < ./report.pdf | tr -d '[:space:]')\"` and prints that local length; says \"`wc -c` measures the actual binary byte length.\""
+        },
+        {
+          "text": "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+          "passed": false,
+          "evidence": "Measures and prints `report_bytes`, but the complete `sending:upload-attachment` invocation omits `--header Content-Length` and never passes the measured value to upload."
+        },
+        {
+          "text": "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+          "passed": true,
+          "evidence": "The upload invocation includes `--body-file ./report.pdf`, `--query filename=report.pdf`, `--query content_type=application/pdf` and `--json`."
+        },
+        {
+          "text": "Uses the existing work profile without printing or requesting credentials.",
+          "passed": true,
+          "evidence": "Uses `--profile work` and states \"uses credentials from the existing `work` profile\"; no credential requested or printed."
+        },
+        {
+          "text": "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+          "passed": true,
+          "evidence": "Only local byte measurement/printing and `sending:upload-attachment` are proposed; states \"without sending an email.\" No send command or `--attach`."
+        },
+        {
+          "text": "Does not claim an attachment_id or completed upload without a real result.",
+          "passed": true,
+          "evidence": "States \"These commands have not been run; no upload result is available.\" No attachment_id or completed-upload claim."
+        }
+      ],
+      "notes": [
+        "Actual original saved response retained byte-identically; independent grading against exact prepared assertions.",
+        "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+        "Metrics unavailable; command wall-clock values are not agent duration."
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.8333333333333334,
+        "stddev": 0,
+        "min": 0.8333333333333334,
+        "max": 0.8333333333333334
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "delta": {
+      "pass_rate": 0.16666666666666663,
+      "time_seconds": null,
+      "tokens": null
+    }
+  },
+  "notes": [
+    "Manual exact aggregation preserves unavailable metrics as null; canonical aggregator not invoked.",
+    "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+    "One run per arm does not establish repeatability or performance.",
+    "Canonical viewer pending: this task permits only read-only/bounded canonical tooling; no viewer generation run.",
+    "Grade scope is existing assertions; router extraction routing is not directly evaluated, CLI prompt does not test catalogue reporting."
+  ]
+}

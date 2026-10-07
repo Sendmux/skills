@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
+      "passed": true,
+      "evidence": "Names MCP protocol revisions `2025-11-25` and `2026-07-28`, separately identifying package version as the software release."
+    },
+    {
+      "text": "The answer distinguishes the released sendmux-mcp package version 2.1.3 from protocol revisions and identifies 2.2.0 as the local candidate package metadata rather than a verified feature release.",
+      "passed": false,
+      "evidence": "Names package `2.1.3` and distinguishes it from dated protocol revisions, but never identifies `2.2.0` or local/unpublished candidate metadata."
+    },
+    {
+      "text": "The answer identifies the unpublished candidate contract catalogue as 64 tools (35 Mailbox, 23 Management, 6 Sending), keeps the released 2.1.3 catalogue separate as 54 tools (26 Mailbox, 22 Management, 6 Sending), and explains that OAuth grants and selected surfaces determine actual visible tools.",
+      "passed": false,
+      "evidence": "Reports only 54 tools (26 Mailbox, 22 Management, 6 Sending) and grant/surface subsets; never reports candidate 64 tools or its 35/23/6 split."
+    },
+    {
+      "text": "The answer does not treat a client listed in setup guidance as automatically certified.",
+      "passed": true,
+      "evidence": "States guide inclusion \"does not certify compatibility\" and says \"Verify the chosen client separately\"."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 2,
+    "total": 4,
+    "pass_rate": 0.5
+  },
+  "grader_provenance": {
+    "task_path": "/root/skills_pair_grading",
+    "method": "independent-native-host-subagent",
+    "assessment_source": "Grader read all six actual saved responses against exact prepared assertions, verified immutable assigned source body hashes and source-definition prompt/assertion equality; grader did not author either evaluation answer."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "producer": "sending",
+  "revision": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+  "fingerprints": {
+    "delegated-sending": {
+      "code": "57495a75dde96af60d19ebe402a47da11bcf3afc7b52fbd1f980cd7c6fa9fa8b"
+    }
+  }
+}

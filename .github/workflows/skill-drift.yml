@@ -10,6 +10,7 @@ on:
       - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - "scripts/check-skill-drift.test.mjs"
+      - "scripts/mailbox-draft-contract-drift.test.mjs"
       - "scripts/skill-compatibility.mjs"
       - "scripts/skill-compatibility.test.mjs"
       - "skill-compatibility.json"
@@ -24,6 +25,7 @@ on:
       - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - "scripts/check-skill-drift.test.mjs"
+      - "scripts/mailbox-draft-contract-drift.test.mjs"
       - "scripts/skill-compatibility.mjs"
       - "scripts/skill-compatibility.test.mjs"
       - "skill-compatibility.json"
@@ -81,7 +83,7 @@ jobs:
           SKILLS_REVISION: ${{ github.sha }}
           SDK_REVISION: ${{ steps.source.outputs.sdk_revision }}
         run: |
-          node --test scripts/check-skill-drift.test.mjs scripts/skill-compatibility.test.mjs
+          node --test scripts/check-skill-drift.test.mjs scripts/mailbox-draft-contract-drift.test.mjs scripts/skill-compatibility.test.mjs
           node scripts/check-skill-drift.mjs
           node scripts/skill-compatibility.mjs --prepare-candidate "$RUNNER_TEMP/skill-candidate.json" \
             --skills-root "$GITHUB_WORKSPACE" --revision "$SKILLS_REVISION" \

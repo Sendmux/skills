@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-email-for-agents",
+    "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-email-for-agents/SKILL.md",
+    "executor_model": null,
+    "analyzer_model": null,
+    "timestamp": null,
+    "evals_run": [
+      7
+    ],
+    "runs_per_configuration": 1,
+    "scope": "One current/old native-host content-only case per skill, independently graded against unchanged existing assertions; no runtime, full-skill, compatibility, package publication or release acceptance.",
+    "schedule": "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison."
+  },
+  "runs": [
+    {
+      "eval_id": 7,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The output routes saved threaded reply preparation and later send to sendmux-mailbox-agent.",
+          "passed": true,
+          "evidence": "Names \"saved, threaded mailbox draft workflow\", owned by `sendmux-mailbox-agent`; then says \"Send through that saved draft\" after exact-revision approval."
+        },
+        {
+          "text": "The output says the draft can be reopened and edited before sending.",
+          "passed": true,
+          "evidence": "Says the agent \"saves a reply that a person can reopen and edit in Sendmux\"."
+        },
+        {
+          "text": "The output keeps the exact reviewed revision behind a human send-approval boundary.",
+          "passed": true,
+          "evidence": "Retains \"stable draft ID and revision\"; sends \"only after the person approves the exact saved revision\" and requires new approval after edits."
+        },
+        {
+          "text": "The output routes connected outgoing account setup or policy administration to sendmux-management.",
+          "passed": true,
+          "evidence": "States \"`sendmux-management` owns their connection and policy administration\", referring to customer-connected outgoing accounts."
+        },
+        {
+          "text": "The output does not claim that a connected provider account bypasses mailbox send permission or sender policy.",
+          "passed": true,
+          "evidence": "Explicitly states \"Customer-connected outgoing accounts remain subject to mailbox send permission and sender policy\"; additionally requires Mailbox `email.send` and explicit approval."
+        }
+      ],
+      "notes": [
+        "Actual original saved response retained byte-identically; independent grading against exact prepared assertions.",
+        "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+        "Metrics unavailable; command wall-clock values are not agent duration."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 1,
+        "failed": 4,
+        "total": 5,
+        "pass_rate": 0.2,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The output routes saved threaded reply preparation and later send to sendmux-mailbox-agent.",
+          "passed": false,
+          "evidence": "Routes thread reading and reply preparation to `sendmux-mailbox-agent`, but directs delegated Sending replies to `sendmux-send-email`; explicitly says it does not establish a saved draft. No saved-draft later-send route to mailbox skill."
+        },
+        {
+          "text": "The output says the draft can be reopened and edited before sending.",
+          "passed": false,
+          "evidence": "States \"it does not establish a saved draft that a person can reopen and edit in Sendmux\"; requires supported-workflow confirmation rather than supplying the requested saved/editable route."
+        },
+        {
+          "text": "The output keeps the exact reviewed revision behind a human send-approval boundary.",
+          "passed": false,
+          "evidence": "Requires approval of \"final recipient, subject, body and attachments\" and \"final message\", but establishes no saved draft/revision, exact reviewed revision gate, or reapproval after revision edits. Generic final-message approval does not satisfy this revision-specific assertion."
+        },
+        {
+          "text": "The output routes connected outgoing account setup or policy administration to sendmux-management.",
+          "passed": false,
+          "evidence": "Says a \"customer-connected outgoing-account workflow\" needs confirmation and never names `sendmux-management` or routes outgoing-account/policy administration to it."
+        },
+        {
+          "text": "The output does not claim that a connected provider account bypasses mailbox send permission or sender policy.",
+          "passed": true,
+          "evidence": "Requires the chosen surface's `email.send` and says \"Permission alone does not authorise a send.\" Makes no claim that a connected provider bypasses mailbox send permission or sender policy. This is a negative assertion; explicit policy explanation is not required."
+        }
+      ],
+      "notes": [
+        "Actual original saved response retained byte-identically; independent grading against exact prepared assertions.",
+        "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+        "Metrics unavailable; command wall-clock values are not agent duration."
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.2,
+        "stddev": 0,
+        "min": 0.2,
+        "max": 0.2
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "delta": {
+      "pass_rate": 0.8,
+      "time_seconds": null,
+      "tokens": null
+    }
+  },
+  "notes": [
+    "Manual exact aggregation preserves unavailable metrics as null; canonical aggregator not invoked.",
+    "Three current arms dispatched in parallel, followed by three old arms in parallel; not the paired waves proposed in prep.md. Dispatch chronology is parent-reported; no timing or cost comparison.",
+    "One run per arm does not establish repeatability or performance.",
+    "Canonical viewer pending: this task permits only read-only/bounded canonical tooling; no viewer generation run.",
+    "Grade scope is existing assertions; router extraction routing is not directly evaluated, CLI prompt does not test catalogue reporting."
+  ]
+}

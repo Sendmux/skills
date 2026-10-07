@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+      "passed": false,
+      "evidence": "\"This skill allows preparing a draft but documents no operation to create, save, or update a persistent Sendmux draft\" and \"A verified draft-saving workflow is needed to fulfil that part of the request\". The response honestly identifies a missing capability but does not choose or provide the requested saved mailbox draft workflow. Correctly avoiding invention does not fulfil this assertion."
+    },
+    {
+      "text": "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+      "passed": false,
+      "evidence": "\"Read the selected customer message\" and \"Base the reply on the customer message and verified mailbox identity\" identify the message as content context only. No saved reply source input or recipient/thread-header preparation is described; the response instead states that its guidance cannot establish a persistent saved draft. The complete source/threading assertion is not met."
+    },
+    {
+      "text": "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+      "passed": true,
+      "evidence": "\"An attachment on the original message does not itself authorise attaching it to the reply.\" This distinguishes the original message's attachment from an authorised decision to include an attachment in the reply."
+    },
+    {
+      "text": "The output keeps the stable draft ID and revision for later editing.",
+      "passed": false,
+      "evidence": "\"Nothing has been sent or saved by this guidance.\" The response gives no saved draft ID or revision and no instruction to retain them. Its admitted absence of a persistent draft operation means the later-edit identity requirement remains unfulfilled."
+    },
+    {
+      "text": "The output does not send before the user approves the final recipients, content and attachments.",
+      "passed": true,
+      "evidence": "\"Do not call `mailbox_send_message`: that sends, and the user explicitly requested an unsent draft.\", and \"Nothing has been sent or saved by this guidance.\" The response withholds every send operation at this unapproved draft stage. It does not provide a later final-approval workflow, but the original assertion is a prohibition on sending before approval, which this output observes."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 3,
+    "total": 5,
+    "pass_rate": 0.4
+  }
+}

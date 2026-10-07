@@ -1,0 +1,428 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-mailbox-agent",
+    "skill_path": "/Users/rj/Desktop/GIT-REPOS/sendmux-skills-monid-readiness-reconciled/skills/sendmux-mailbox-agent/SKILL.md",
+    "executor_model": null,
+    "analyzer_model": null,
+    "timestamp": null,
+    "evals_run": [
+      7,
+      8,
+      10,
+      11
+    ],
+    "runs_per_configuration": 1,
+    "scope": "Four existing genuine current/old native-host pairs; mixed original grader/context provenance preserved, not full skill or release acceptance."
+  },
+  "runs": [
+    {
+      "eval_id": 7,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+          "passed": true,
+          "evidence": "\"Use a **saved Mailbox reply draft**, so the customer reply survives across sessions and the user can edit it in Sendmux tomorrow. Leave it unsent and unscheduled.\" The response chooses a persistent saved draft, then identifies mailbox_create_draft and its REST/CLI equivalents; it does not substitute a chat-only draft or immediate send."
+        },
+        {
+          "text": "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+          "passed": true,
+          "evidence": "\"source: {\"message_id\":\"<source message ID>\",\"action\":\"reply\"}\" and \"Sendmux prepares the reply recipients and thread headers.\" The response explicitly passes the original message as the saved reply source and states the resulting recipient/thread preparation."
+        },
+        {
+          "text": "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+          "passed": true,
+          "evidence": "\"Replies retain source inline images; regular source attachments are not automatically included as they are for forwards. Include a regular attachment only when intended, using a mailbox `blob_id` in the draft's `attachments` array\". This distinguishes inherited source inline content from a deliberate regular attachment addition."
+        },
+        {
+          "text": "The output keeps the stable draft ID and revision for later editing.",
+          "passed": true,
+          "evidence": "\"Keep its returned `id`, `revision` and `schedule_version`.\", followed by \"Give the user the saved draft reference so they can reopen it tomorrow.\" Later editing reads the current draft and uses expected_revision. The response retains the saved identity and revision rather than treating the prepared text as disposable."
+        },
+        {
+          "text": "The output does not send before the user approves the final recipients, content and attachments.",
+          "passed": true,
+          "evidence": "\"Do not call a send or scheduling operation\" and \"Sending later requires separate approval of the exact final recipients, subject, bodies and attachments\", followed by \"Any approved later send must target the saved draft and approved revision.\" The response leaves this draft unsent and explicitly gates a later send on approval of its final reviewed content."
+        }
+      ],
+      "notes": [
+        "Real output and independent grades; host duration/token/tool totals unavailable."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 2,
+        "failed": 3,
+        "total": 5,
+        "pass_rate": 0.4,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+          "passed": false,
+          "evidence": "\"This skill allows preparing a draft but documents no operation to create, save, or update a persistent Sendmux draft\" and \"A verified draft-saving workflow is needed to fulfil that part of the request\". The response honestly identifies a missing capability but does not choose or provide the requested saved mailbox draft workflow. Correctly avoiding invention does not fulfil this assertion."
+        },
+        {
+          "text": "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+          "passed": false,
+          "evidence": "\"Read the selected customer message\" and \"Base the reply on the customer message and verified mailbox identity\" identify the message as content context only. No saved reply source input or recipient/thread-header preparation is described; the response instead states that its guidance cannot establish a persistent saved draft. The complete source/threading assertion is not met."
+        },
+        {
+          "text": "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+          "passed": true,
+          "evidence": "\"An attachment on the original message does not itself authorise attaching it to the reply.\" This distinguishes the original message's attachment from an authorised decision to include an attachment in the reply."
+        },
+        {
+          "text": "The output keeps the stable draft ID and revision for later editing.",
+          "passed": false,
+          "evidence": "\"Nothing has been sent or saved by this guidance.\" The response gives no saved draft ID or revision and no instruction to retain them. Its admitted absence of a persistent draft operation means the later-edit identity requirement remains unfulfilled."
+        },
+        {
+          "text": "The output does not send before the user approves the final recipients, content and attachments.",
+          "passed": true,
+          "evidence": "\"Do not call `mailbox_send_message`: that sends, and the user explicitly requested an unsent draft.\", and \"Nothing has been sent or saved by this guidance.\" The response withholds every send operation at this unapproved draft stage. It does not provide a later final-approval workflow, but the original assertion is a prohibition on sending before approval, which this output observes."
+        }
+      ],
+      "notes": [
+        "Real output and independent grades; host duration/token/tool totals unavailable."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.",
+          "passed": true,
+          "evidence": "Re-read the same saved draft; review revision 4 against the version originally opened; save only changed fields with expected_revision: 4 if 4 is still the last revision read."
+        },
+        {
+          "text": "The output treats a revision conflict as a failed edit, not as success.",
+          "passed": true,
+          "evidence": "A save with expected_revision: 3 should return 409. Never bypass that conflict by simply changing the expected revision to 4."
+        },
+        {
+          "text": "The output re-reads the current draft before proposing a merge or retry.",
+          "passed": true,
+          "evidence": "Keep new text locally and re-read the same saved draft; if another edit causes 409, re-read and review the merge again."
+        },
+        {
+          "text": "The output does not blindly overwrite revision 4 or send the stale revision.",
+          "passed": true,
+          "evidence": "Merge while preserving teammate edits; resolve overlapping edits with teammate or user. Saving does not authorise sending; obtain approval of final saved recipients, subject, bodies and attachments."
+        }
+      ],
+      "notes": [
+        "Actual saved output and root's original grades unchanged; metrics unavailable."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "pass_rate": 0.75,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.",
+          "passed": false,
+          "evidence": "Old output explicitly says this skill does not document saved-draft reads, updates or revision guards. It suggests generic if_in_state where documented, warns revision numbers are not interchangeable with state tokens, and supplies no supported expected_revision workflow."
+        },
+        {
+          "text": "The output treats a revision conflict as a failed edit, not as success.",
+          "passed": true,
+          "evidence": "Re-read current resource state before retrying a 409 conflict. Nothing has been saved or sent by this guidance."
+        },
+        {
+          "text": "The output re-reads the current draft before proposing a merge or retry.",
+          "passed": true,
+          "evidence": "Re-read the current draft, compare teammate changes with proposed text, and resolve conflicting edits before retrying."
+        },
+        {
+          "text": "The output does not blindly overwrite revision 4 or send the stale revision.",
+          "passed": true,
+          "evidence": "Do not overwrite teammate revision 4 using stale revision 3; verify supported saving operation, do not invent arguments or use mailbox_send_message, which sends the reply."
+        }
+      ],
+      "notes": [
+        "Actual saved output and root's original grades unchanged; metrics unavailable."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "Uses expected_revision and expected_schedule_version for cancellation.",
+          "passed": true,
+          "evidence": "Step 2 cancels with both current expected_revision and expected_schedule_version; uses 5 and 2 only if the read confirms them."
+        },
+        {
+          "text": "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+          "passed": true,
+          "evidence": "Step 2 supplies scheduled_for: null and states cancellation cannot undo sending that has already begun."
+        },
+        {
+          "text": "Cancels before editing; re-reads saved revision and schedule_version.",
+          "passed": true,
+          "evidence": "Steps 2–4 cancel before editing, confirm cancellation, re-read and capture the resulting revision and schedule version without guessing increments."
+        },
+        {
+          "text": "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+          "passed": true,
+          "evidence": "Step 5 requires approval of exact final recipients, subject, bodies and attachments, plus immediate timing; old approval does not carry over."
+        },
+        {
+          "text": "Includes current expected_schedule_version for the later immediate send, separate from expected_revision.",
+          "passed": true,
+          "evidence": "Step 6 sends with newly approved expected_revision and current expected_schedule_version, even for immediate send; step 7 says no separate send idempotency key is required."
+        }
+      ],
+      "notes": [
+        "Actual saved response preserved byte-identically; root supplied grading; metrics unavailable."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 1,
+        "failed": 4,
+        "total": 5,
+        "pass_rate": 0.2,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "Uses expected_revision and expected_schedule_version for cancellation.",
+          "passed": false,
+          "evidence": "Steps 1–2 check revision 5 and schedule_version 2 and refer to a documented concurrency guard, but supply neither expected_revision nor expected_schedule_version cancellation fields."
+        },
+        {
+          "text": "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+          "passed": false,
+          "evidence": "Step 2 warns that delivery may already be in flight or completed, but never specifies scheduled_for: null."
+        },
+        {
+          "text": "Cancels before editing; re-reads saved revision and schedule_version.",
+          "passed": false,
+          "evidence": "Steps 2–3 cancel before editing and read back the resulting draft revision, but omit re-reading and capturing the resulting schedule_version."
+        },
+        {
+          "text": "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+          "passed": true,
+          "evidence": "Step 4 requests exact recipient, subject, body, attachments and immediate timing approval; it explicitly says old approval does not cover changed content today."
+        },
+        {
+          "text": "Includes current expected_schedule_version for the later immediate send, separate from expected_revision.",
+          "passed": false,
+          "evidence": "Step 5 checks that the draft remains current and the schedule cancelled, but omits current expected_schedule_version for immediate send and incorrectly advises a separate Idempotency-Key."
+        }
+      ],
+      "notes": [
+        "Actual saved response preserved byte-identically; root supplied grading; metrics unavailable."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "Uses request attachment text then polls get attachment text on the same source IDs.",
+          "passed": true,
+          "evidence": "Names mailbox_request_attachment_text followed by mailbox_get_attachment_text, with GET on the same source URL and source message/attachment IDs."
+        },
+        {
+          "text": "Treats 202 as pending and checks outcome before using text.",
+          "passed": true,
+          "evidence": "Treats 202 as pending or running; checks both status and outcome before using text, and stops polling completed unsupported extraction."
+        },
+        {
+          "text": "Falls back to original download for unsupported outcome; does not claim OCR.",
+          "passed": true,
+          "evidence": "States OCR unavailable and falls back to downloading the original attachment through sendmux-attachments."
+        },
+        {
+          "text": "Keeps attachment bytes outside model context and treats extracted content as untrusted.",
+          "passed": true,
+          "evidence": "Keeps real-file bytes outside model context and treats attachment content and extracted text as untrusted data, never instructions."
+        },
+        {
+          "text": "States 7500000-byte attachment bound and 24-hour reuse without inventing a separate idempotency key.",
+          "passed": true,
+          "evidence": "States 7,500,000-byte extraction ceiling and 24-hour reuse; no request body or Idempotency-Key needed."
+        }
+      ],
+      "notes": [
+        "Actual saved response preserved byte-identically; root supplied grading; metrics unavailable."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 3,
+        "failed": 2,
+        "total": 5,
+        "pass_rate": 0.6,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "Uses request attachment text then polls get attachment text on the same source IDs.",
+          "passed": false,
+          "evidence": "Does not name distinct request-text and get-text operations or same-source IDs; only generic pending work and stop-polling advice."
+        },
+        {
+          "text": "Treats 202 as pending and checks outcome before using text.",
+          "passed": true,
+          "evidence": "Treats 202 as pending and complete/unsupported as unsuccessful extraction; empty text does not prove empty PDF."
+        },
+        {
+          "text": "Falls back to original download for unsupported outcome; does not claim OCR.",
+          "passed": true,
+          "evidence": "Routes download to attachment workflow and a supported extraction method; makes no claim of OCR availability."
+        },
+        {
+          "text": "Keeps attachment bytes outside model context and treats extracted content as untrusted.",
+          "passed": true,
+          "evidence": "Keeps file bytes outside model context and treats PDF contents as untrusted data, never instructions."
+        },
+        {
+          "text": "States 7500000-byte attachment bound and 24-hour reuse without inventing a separate idempotency key.",
+          "passed": false,
+          "evidence": "Explicitly refuses to apply 7,500,000-byte ceiling to inbound extraction and supplies no 24-hour reuse period; generic caching advice does not satisfy this assertion."
+        }
+      ],
+      "notes": [
+        "Actual saved response preserved byte-identically; root supplied grading; metrics unavailable."
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.48749999999999993,
+        "stddev": 0.2393567769390845,
+        "min": 0.2,
+        "max": 0.75
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null,
+        "available": false
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.5125",
+      "time_seconds": null,
+      "tokens": null
+    }
+  },
+  "notes": [
+    "Separate aggregation artifact; original per-eval benchmark files preserved unchanged.",
+    "Runs and expectations copied verbatim from genuine per-eval benchmarks. Eval7 independent grading; eval8/10/11 root-supplied grading; original receipt/provenance qualifications preserved.",
+    "Eval8 reused old baseline differs in prior context from current fresh task; no uniform fresh-isolation claim.",
+    "Unavailable performance metrics remain null, never zero. One run per arm per case proves neither repeatability nor performance.",
+    "Summary is unweighted mean of observed per-case pass rates; assertion-weighted totals stated separately.",
+    "Canonical aggregator not run because missing metrics default to zero; toolkit unchanged."
+  ]
+}

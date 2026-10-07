@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-token-efficient-usage",
+  "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
+  "contractDigest": "969ac3220d07bd7eec3f6b3171b259a831e2f8efe691e6dc1cc12ba6c8f58709",
+  "sourceRevisions": {
+    "app": "5000ba2ec29cb1c399921aa9aa19f7df04fb92f5",
+    "sending": "2c324361e353bd4abcd399b6e19be1855deebe5b",
+    "sdk": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4"
+  },
+  "reviewer": "Codex independent source reviewer monid-seven-skill-contract-review; adoption and exact hash/binding inspection by /root/changed_product_gate_prep",
+  "rationale": "Cost routing, bounded search/batch reads, sync continuation, conditional-log semantics and retry helpers remain supported. Additive body metadata, draft/tool catalogues and upload permission alternative do not invalidate selected routes or single-recipient attachment mechanics. Owner gates, token/storage statements and selected JSON/log semantics remain source-supported. Independent review read the full unchanged instructions and exact changed selected contracts; zero source-contract blockers. Historical supplied app runtime-policy snapshot is retained, not current live verification. This is explicit source compatibility review, not new model evaluation, runtime/client/package certification or owning compatibility acceptance.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/monid-unchanged-contract-review-20261004.md",
+      "sha256": "5dfc94f3b53def31b2c52a26c3b50ae77b279922a3a1b3968cc8353085b5728d"
+    },
+    {
+      "path": "skills/sendmux-token-efficient-usage/SKILL.md",
+      "sha256": "dc71d5b01735a0a1c4f6d9577c719f8302f5411a66ea173e50db2c2091ed8458"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/sendmux-token-efficient-usage.json",
+      "sha256": "f442135d015c4b41bfbe0fab7b483c795c8576ad6268895ef773ef420f665b7b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json",
+      "sha256": "ba56d9c603065aa95cbffb82baed1e0b2514af96de627bc6ee466ff1087829fe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "sha256": "5778c054085df07a0d4e265f340285f57a12805fc7a0fcc5d1f6d6d701b07192"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json",
+      "sha256": "e74680a811b724411cfa7389c26bff899cc1763767c52b0973f280ec51106c4b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "sha256": "f283c265c300dc3f1a313d436a698866c1f6cd9fe15ba7eb73bd1085c172498a"
+    }
+  ]
+}
