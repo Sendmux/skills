@@ -1961,22 +1961,71 @@
       "contractDigest": "55992ed17d0aeec1b5bed7abc4dd642de049167a5c71d19461535e2083d9279b",
       "record": "evidence/skill-compatibility/reviews/row07-20261012/sendmux-send-email.json",
       "sha256": "067b985e8a5edbae34afe598a4b72f28554e443d66f36ebfb67bd4a5b9508498"
+    },
+    {
+      "skill": "sendmux-attachments",
+      "skillDigest": "1683e3417d4184809ecf349175a16271bb8a8c942b7ada148b8831a1e2872af6",
+      "contractDigest": "707e71283a21a7eabad667208ffe9374a7fd1c220c896e8c6f110778c8104e8d",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-attachments.json",
+      "sha256": "60715a46378527ba569e5d6ad4e9ff256c866811599c4478467a891bb303e7d5"
+    },
+    {
+      "skill": "sendmux-cli",
+      "skillDigest": "cfc14976eadcc9400db576073b29805de04cc8cf14af31e95399a84ddcd19b46",
+      "contractDigest": "3efbed810138df71393eb0133f3ccc672e6a58409182e0b9d7b6547e640e138b",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-cli.json",
+      "sha256": "de7606bc976200debcf05733f51de4dfd238e1b89cbd78a0a5b81e2b0113cd40"
+    },
+    {
+      "skill": "sendmux-email-for-agents",
+      "skillDigest": "e592c53c7ef318d084407714719a4e07ab0d18ef5240f502048af95071a7d2e1",
+      "contractDigest": "de63527231f6b5f68c047cf6ae62b2cf4f8b93b9ae91720db7e3e57252df90b4",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-email-for-agents.json",
+      "sha256": "110b1bb65b9ac09c935c62c88e84b89ac37bbef59093d380ccafcdc0f37f32cc"
+    },
+    {
+      "skill": "sendmux-mailbox-agent",
+      "skillDigest": "8157b5cb5434f82eb7290c2cec374cf31d3c7f4d5f5265e8231d30d2e6334b7b",
+      "contractDigest": "72f2b9ffd6906e17f8d6c1c588658de366768620812dd0f71f72d217b906b7ef",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-mailbox-agent.json",
+      "sha256": "a20744ae1d0993d2ace1c32249de610bf89f9b2cacdf902cfea4be607e659289"
+    },
+    {
+      "skill": "sendmux-management",
+      "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+      "contractDigest": "668b7c9d9a51418e085729bdc2cd28636ed43393fe1ed003a9d432554152ea60",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-management.json",
+      "sha256": "c759b2484bcb272a9e1ebc040fe07982a71453ee1c2c103ac242e04ad870aa39"
+    },
+    {
+      "skill": "sendmux-mcp-setup",
+      "skillDigest": "2864870cf48ad126fcab5153eb029cb2c5811ac03ccefddef75b32fee982ef1e",
+      "contractDigest": "711f255c6c704d0167fa194aac6244cf0ad9f5fe1eb610fb20911aa9edccd9e4",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-mcp-setup.json",
+      "sha256": "f5299fac0dcfda4f7611b0779a7a307d290e8f0673a560d2fa7135219ebc2d88"
+    },
+    {
+      "skill": "sendmux-token-efficient-usage",
+      "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
+      "contractDigest": "839ee38d0fbe793ebd72c2aca7bea1ebe7526df5deae83cc19f41338aebf07ed",
+      "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-token-efficient-usage.json",
+      "sha256": "b616c856ff6a689bc1ca90374802cfdb80dfdeed39de3d1f9d5e6c4eee0fddb9"
     }
   ],
   "releaseInputs": {
     "publishedRevision": "fc7c11647c3bb9f6ba80e0aa6679ad6895d94ce1",
-    "sdkRevision": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4",
+    "sdkRevision": "1812300f1f30102ed0e624bc92cd92224cdf867d",
     "app": {
-      "revision": "5c5378f913d20547a6e6ec3c09d9f790b0b04cb7",
-      "openapi": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/app-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/app-export.json"
+      "revision": "1485e733571f795cddb896b5b1dc8c59bc6c7f78",
+      "openapi": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-openapi.json",
+      "policy": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-export.json"
     },
     "sending": {
-      "revision": "fb6237d9ee08937cb0704b21b1497c568fc14e76",
-      "openapi": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
-      "policy": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/sending-policy.json",
-      "exportReceipt": "evidence/skill-compatibility/contracts/monid-final-producers-20261004/sending-export.json"
+      "revision": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+      "openapi": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-openapi.json",
+      "policy": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-policy.json",
+      "exportReceipt": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-export.json"
     }
   }
 }

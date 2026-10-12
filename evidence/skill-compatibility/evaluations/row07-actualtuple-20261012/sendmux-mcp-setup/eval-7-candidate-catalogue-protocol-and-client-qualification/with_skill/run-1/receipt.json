@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "arm": "with_skill",
+  "skill_sha256": "5db25a363a43fd33a9b49ed5cbdded3e65e4a9e79dfc1aacae50871034249762",
+  "prompt_sha256": "b7cc56e1f2a7d73da9ad2a0ce43d8c34dc76fe1d6096033916955cd9a11935c9",
+  "output_sha256": "7ba1a722124e62f0eae1a2f515ce3438d8bae250cbb4dd3f6a4498a31dba818e",
+  "execution_method": "fresh-isolated-native-host-task",
+  "executor_task": "/root/row07_skills_integration/skills_actual_mcp_eval",
+  "fork_turns": "none",
+  "source_revision": "e9237ac7019b334ec1104d2ae99200731eeca408",
+  "source_state": "Authorised numeric-only working body correction; exact skill_sha256 above binds evaluated instructions.",
+  "model": null,
+  "token_counts": null,
+  "duration_seconds": null,
+  "limitations": [
+    "Explanation-only; no baseline or runtime acceptance.",
+    "Complete native transcript export and independent isolation audit unavailable."
+  ]
+}

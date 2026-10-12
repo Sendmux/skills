@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-mcp-setup",
+    "runs_per_configuration": 1,
+    "scope": "One fresh explanation-only with_skill run; no baseline, performance, runtime or publication claim."
+  },
+  "runs": [
+    {
+      "eval_id": 7,
+      "run_number": 1,
+      "configuration": "with_skill",
+      "result": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "pass_rate": 1
+      },
+      "expectations": [
+        {
+          "text": "The answer names the contract-supported protocol revisions 2025-11-25 and 2026-07-28.",
+          "passed": true,
+          "evidence": "Response names 2025-11-25 and 2026-07-28 as protocol compatibility revisions."
+        },
+        {
+          "text": "The answer distinguishes the released sendmux-mcp package version 2.1.3 from protocol revisions and identifies 2.2.0 as the local candidate package metadata rather than a verified feature release.",
+          "passed": true,
+          "evidence": "Response distinguishes released2.1.3 and candidate2.2.0, and says candidate version does not prove publication."
+        },
+        {
+          "text": "The answer identifies the unpublished candidate contract catalogue as 65 tools (36 Mailbox, 23 Management, 6 Sending), keeps the released 2.1.3 catalogue separate as 54 tools (26 Mailbox, 22 Management, 6 Sending), and explains that OAuth grants and selected surfaces determine actual visible tools.",
+          "passed": true,
+          "evidence": "Response gives candidate65=36/23/6 and released54=26/22/6, with visibility restricted by selected surfaces and approved OAuth grant."
+        },
+        {
+          "text": "The answer does not treat a client listed in setup guidance as automatically certified.",
+          "passed": true,
+          "evidence": "Response says named clients are documented examples, not automatically certified, with separate verification required."
+        }
+      ]
+    }
+  ]
+}

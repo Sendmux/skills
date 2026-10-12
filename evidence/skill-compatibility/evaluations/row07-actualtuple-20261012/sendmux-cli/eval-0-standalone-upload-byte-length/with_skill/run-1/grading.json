@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Computes the exact local file byte length, rather than a character count or an estimated value.",
+      "passed": true,
+      "evidence": "REPORT_SIZE_BYTES uses wc -c on ./report.pdf, then trims whitespace."
+    },
+    {
+      "text": "Passes that numeric byte length as --header Content-Length=<value> on sending:upload-attachment.",
+      "passed": true,
+      "evidence": "Upload passes --header Content-Length=\"$REPORT_SIZE_BYTES\"."
+    },
+    {
+      "text": "Uses --body-file ./report.pdf, --query filename=report.pdf, --query content_type=application/pdf and --json.",
+      "passed": true,
+      "evidence": "Upload includes --body-file ./report.pdf, filename=report.pdf, content_type=application/pdf and --json."
+    },
+    {
+      "text": "Uses the existing work profile without printing or requesting credentials.",
+      "passed": true,
+      "evidence": "Command uses --profile work; no credential is requested or printed."
+    },
+    {
+      "text": "Uses standalone upload only, with no sending:send, MCP send or --attach send command.",
+      "passed": true,
+      "evidence": "Only sending:upload-attachment appears; response explicitly says sends no email."
+    },
+    {
+      "text": "Does not claim an attachment_id or completed upload without a real result.",
+      "passed": true,
+      "evidence": "Response states commands not run; upload result and installed command support unverified."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1
+  }
+}
