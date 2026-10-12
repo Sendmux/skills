@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "eval_id": 7,
+  "arm": "with_skill",
+  "execution": "native-host-subagent",
+  "status": "completed",
+  "task_path": "/root/row07_skills_integration/row07_eval7",
+  "fork_turns": "none",
+  "model": null,
+  "skills_revision": "450daa7e948acaa2be291373150d1842993119d6",
+  "skill_path": "skills/sendmux-mailbox-agent/SKILL.md",
+  "skill_sha256": "cb3f82ffc4f46fe606ad5de942f3cc600a6e281b628e90f7ccce432bc8cfb66a",
+  "prompt_sha256": "e7fd55a3494977b8ff4729532a51e05fa65ed61dcb5626f8fa1acd22a240f9b1",
+  "metadata_sha256": "e1e5f21ae7459a4ee2e46a1a0728c1ff16553df58f46ffff6b1762e94b021742",
+  "output_path": "outputs/response.md",
+  "output_sha256": "f393588b5bad60f56e3ace5084e9345c5d5afb8db68b733e4c30ecc2a10f930a",
+  "grading_path": "grading.json",
+  "grader_task_path": "/root/row07_skills_integration",
+  "grader_provenance": "Parent evaluation owner read actual completed child output and graded unchanged existing assertions with exact supporting quotes; child received no grader assertions or historical answers.",
+  "execution_provenance": "Fresh isolated native task with fork_turns=none. Executor read current public skill and saved this actual explanation-only response. No full transcript export retained; no live service or credential action requested.",
+  "external_actions": false,
+  "metrics": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "availability": "Host exposes canonical task path and final response, not model identity, token count or exact task duration."
+  }
+}

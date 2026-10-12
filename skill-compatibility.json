@@ -1947,6 +1947,20 @@
       "contractDigest": "969ac3220d07bd7eec3f6b3171b259a831e2f8efe691e6dc1cc12ba6c8f58709",
       "record": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-token-efficient-usage.json",
       "sha256": "e5d119662ac2261414cda202e0d77b474c8d1657953cae472817acbc8dec9da0"
+    },
+    {
+      "skill": "sendmux-mailbox-agent",
+      "skillDigest": "8157b5cb5434f82eb7290c2cec374cf31d3c7f4d5f5265e8231d30d2e6334b7b",
+      "contractDigest": "dbbb873d2752bc5587c229bf40bc8de96239e28ff880fcbaf891e8eea7ad0356",
+      "record": "evidence/skill-compatibility/reviews/row07-20261012/sendmux-mailbox-agent.json",
+      "sha256": "8f53ec9f1628a99c9592e8ef90ed00e07cfebc35e72e09f0a95e21e16c1fc6c0"
+    },
+    {
+      "skill": "sendmux-send-email",
+      "skillDigest": "dafff562ea9346dddea3eb33c6f7daabe459444dc6de5cbee98bb78da915a897",
+      "contractDigest": "55992ed17d0aeec1b5bed7abc4dd642de049167a5c71d19461535e2083d9279b",
+      "record": "evidence/skill-compatibility/reviews/row07-20261012/sendmux-send-email.json",
+      "sha256": "067b985e8a5edbae34afe598a4b72f28554e443d66f36ebfb67bd4a5b9508498"
     }
   ],
   "releaseInputs": {

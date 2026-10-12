@@ -1,0 +1,12 @@
+{
+  "eval_id": 10,
+  "eval_name": "schedule-edit-cancellation",
+  "prompt": "A human approved Sendmux saved draft revision 5 and schedule_version 2 for tomorrow. They now want to cancel it, edit the content and send immediately. Give the safe mailbox workflow and permission checks.",
+  "assertions": [
+    "Uses expected_revision and expected_schedule_version for cancellation.",
+    "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+    "Cancels before editing; re-reads saved revision and schedule_version.",
+    "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+    "Includes current expected_schedule_version for the later immediate send, separate from expected_revision."
+  ]
+}
