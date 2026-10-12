@@ -80,6 +80,8 @@ Useful optional fields:
 - `custom_headers`: custom `X-*` headers.
 - `attachments`: up to 10 items. Prefer uploaded refs `{ "attachment_id": "att_..." }`. Inline compatibility form uses `filename` plus base64 `content`, optional `type`, and `encoding: "base64"`.
 
+For mailbox sends and saved drafts, `custom_headers` excludes `X-SES-TENANT`, `X-SES-CONFIGURATION-SET` and `X-SES-MESSAGE-TAGS`, regardless of letter case. Older drafts containing these headers remain readable. Clear saved custom headers with `"custom_headers": {}` in a draft update, following `sendmux-mailbox-agent`.
+
 For real local files, do not ask the model to produce base64. Route attachment-heavy work to `sendmux-attachments`; use CLI `--attach`, SDK file helpers, or delegated `sending_create_attachment_upload`, then pass `attachment_id` refs. For a presigned Sending upload, the upload intent's returned `max_size_bytes` is the size authority; the final sent message is capped at 25 MB. Mailbox `blob_id` refs are for mailbox sends, not Sending API sends.
 
 For a direct HTTP batch call, keep authority and retry metadata outside the JSON body:

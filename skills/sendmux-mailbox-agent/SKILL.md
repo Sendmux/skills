@@ -225,6 +225,8 @@ Keep the returned `id`, `revision` and `schedule_version`. Reuse an `Idempotency
 
 To edit, `PATCH /api/v1/mailbox/drafts/{draftId}` with the last read `expected_revision` and changed fields. Omitted fields keep their values; replacing `attachments` requires the complete desired list. On `409`, read the current draft and review a merge before retrying. Do not overwrite a teammate's newer revision.
 
+Mailbox writes reject `X-SES-TENANT`, `X-SES-CONFIGURATION-SET` and `X-SES-MESSAGE-TAGS`, regardless of letter case. Older drafts containing these headers remain readable. To clear saved custom headers, include `"custom_headers": {}` in an update.
+
 After the user approves the exact saved recipients, subject, bodies, and attachments, `POST /api/v1/mailbox/drafts/{draftId}/send` with `{"expected_revision":<approved revision>}`. This needs `mailbox.read` and `email.send`, separately from draft-write permission. A stale revision returns `409`. If the response is lost, read the same draft's status and reconcile `queued` or `uncertain` state there; never create a new message to retry. The stable draft ID and approved revision identify this send, without a separate send idempotency key.
 
 A connected outgoing account supplies a possible sending route, not permission to use it. The mailbox's authorised sender, recipient rules, credential send scope, and current sending policy still govern the send. Route connected-account setup and policy administration to `sendmux-management`.
