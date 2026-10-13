@@ -1,0 +1,5 @@
+# Fresh sendmux-cli explanation-only execution
+
+Native task /root/row07_skills_integration/skills_actual_cli_eval, fork_turns=none, returned the preserved response. Executor received only the one corrected skill path and exact prompt, not assertions or historical output. It was instructed to read only that skill and perform no external action.
+
+Receipt binds prompt, corrected body and actual saved response hashes. Parent graded 6/6 assertions. CLI assertions and both prompts are unchanged; MCP additive variant changes only candidate counts64/35 to actual65/36, cited to immutable SDK181 catalogue. Historical evidence cases, outputs, receipts and assertions remain intact. The canonical MCP source case7 subsequently synchronises only those four numeric tokens in expected_output/third expectation; this does not alter either evaluated body or fresh grading. Complete transcript export, exact model identity, token counts, durations and independent isolation audit are unavailable; no new baseline, speed, cost, installed-client, upload/send or publication result is claimed.

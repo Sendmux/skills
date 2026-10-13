@@ -1,0 +1,11 @@
+{
+  "eval_id": 8,
+  "eval_name": "draft-edit-conflict",
+  "prompt": "My agent opened a saved Sendmux reply draft at revision 3. A teammate then edited it to revision 4. The agent has new text to save. What should it do?",
+  "assertions": [
+    "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.",
+    "The output treats a revision conflict as a failed edit, not as success.",
+    "The output re-reads the current draft before proposing a merge or retry.",
+    "The output does not blindly overwrite revision 4 or send the stale revision."
+  ]
+}

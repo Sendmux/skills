@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-send-email",
+  "skillDigest": "dafff562ea9346dddea3eb33c6f7daabe459444dc6de5cbee98bb78da915a897",
+  "contractDigest": "55992ed17d0aeec1b5bed7abc4dd642de049167a5c71d19461535e2083d9279b",
+  "sourceRevisions": {
+    "app": "5c5378f913d20547a6e6ec3c09d9f790b0b04cb7",
+    "sending": "fb6237d9ee08937cb0704b21b1497c568fc14e76",
+    "sdk": "7e867c5bd7b7c85add27c7c04e036997ae57dbc4"
+  },
+  "reviewer": "Codex /root independent Row07 source reviewer; exact source and canonical plugin-copy inspection by /root/row07_skills_integration",
+  "rationale": "Fresh independent root review verified the four-path frozen Row07 patch ec6bacd47d8133cf39e4962612a06731adffe8ccc3368f1a63f2fdf46da485f2 and exact canonical/plugin copies. The only send-email instruction change confines three reserved custom-header exclusions to mailbox sends and saved drafts, preserves case-insensitivity, older readable drafts and explicit custom-header clearing, and adds no generic Sending or SMTP restriction. The selected Sending contract digest and all pinned source/wire evidence remain unchanged. The producer 4f68d8f45d437eadb2f8e514f6a4a40d0cc254e2 descriptions and guarded-write source were read as the added mailbox claim's source. Historical compatible Sending review is retained as prior evidence, not relabelled as a new evaluation. This is fresh source compatibility review, not runtime, package, installation, delivery or publication acceptance.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-send-email/SKILL.md",
+      "sha256": "5ce969d5ba7a83803225b2f7e1e67ccd6d41858d352da0628d79a92f76dd9178"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-send-email.json",
+      "sha256": "a292b190ca51520547542a099c3c583d9b73e660532004d0872edc11a9595e5a"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    }
+  ]
+}

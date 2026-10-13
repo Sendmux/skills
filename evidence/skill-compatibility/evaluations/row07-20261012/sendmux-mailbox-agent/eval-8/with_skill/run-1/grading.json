@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "The output conditionally edits with the last-read expected_revision: it either attempts revision 3 and handles the conflict, or first re-reads revision 4, reviews a merge and saves with that current revision.",
+      "passed": true,
+      "evidence": "Save the reviewed merge with `PATCH /api/v1/mailbox/drafts/{draftId}`, using the revision just read as `expected_revision`"
+    },
+    {
+      "text": "The output treats a revision conflict as a failed edit, not as success.",
+      "passed": true,
+      "evidence": "A save using `expected_revision: 3` returns `409`. On any revision conflict, re-read and review the merge again before retrying"
+    },
+    {
+      "text": "The output re-reads the current draft before proposing a merge or retry.",
+      "passed": true,
+      "evidence": "Read `GET /api/v1/mailbox/drafts/{draftId}` and wait for `ready`. Review the current content against revision 3"
+    },
+    {
+      "text": "The output does not blindly overwrite revision 4 or send the stale revision.",
+      "passed": true,
+      "evidence": "never just substitute a newer revision number into the old update"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1
+  }
+}

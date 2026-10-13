@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The output chooses the saved mailbox draft workflow rather than sending immediately or keeping the draft only in chat.",
+      "passed": true,
+      "evidence": "Use a **saved Mailbox reply draft** so the customer reply survives across sessions and the user can edit it tomorrow."
+    },
+    {
+      "text": "The output identifies the original mailbox message as the reply source so Sendmux prepares recipients and thread headers.",
+      "passed": true,
+      "evidence": "including `source: {\"message_id\":\"<original message in this mailbox>\",\"action\":\"reply\"}` and the prepared reply fields. Sendmux prepares reply recipients and thread headers."
+    },
+    {
+      "text": "The output distinguishes source attachments from attachments the user chooses to add to the reply.",
+      "passed": true,
+      "evidence": "A reply retains source inline images; regular source attachments are automatically included by a **forward**, not a reply. Do not assume the original regular attachment will accompany the reply."
+    },
+    {
+      "text": "The output keeps the stable draft ID and revision for later editing.",
+      "passed": true,
+      "evidence": "Keep the returned `id`, `revision`, and `schedule_version`"
+    },
+    {
+      "text": "The output does not send before the user approves the final recipients, content and attachments.",
+      "passed": true,
+      "evidence": "Do not send or schedule this draft. A later send requires the user's approval of the exact saved recipients, subject, bodies, and attachments"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}

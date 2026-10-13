@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-management",
+  "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+  "contractDigest": "668b7c9d9a51418e085729bdc2cd28636ed43393fe1ed003a9d432554152ea60",
+  "sourceRevisions": {
+    "app": "1485e733571f795cddb896b5b1dc8c59bc6c7f78",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Codex independent actual-tuple public/mailbox-MCP source reviewers; owner preserves genuine native executor provenance",
+  "rationale": "Actual published and proposed whole-skill bytes are equal. Independent actual-tuple source review confirms selected management operations, scopes, schemas, command metadata, named declarations and package fields remain unchanged. Root/OAuth boundaries, destructive confirmations, one-time-secret handling and existing MCP exclusions remain supported; additive Mailbox sender-choice capability does not widen them. This is current source compatibility review, not fresh workflow, live policy or runtime certification. Supplied static policy snapshots are retained, not fresh live policy verification; PHP clearing and MCP limitations remain truthful.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/monid-unchanged-contract-review-20261004.md",
+      "sha256": "5dfc94f3b53def31b2c52a26c3b50ae77b279922a3a1b3968cc8353085b5728d"
+    },
+    {
+      "path": "skills/sendmux-management/SKILL.md",
+      "sha256": "04719fe232f6f06a2bea78bac953f4b3fb1738776e1928e5142065e9d430a080"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/sendmux-management.json",
+      "sha256": "09b9b055357d9f7238130899f12be84cb39b0d9511c07efa60a2c48ab2df3efe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json",
+      "sha256": "ba56d9c603065aa95cbffb82baed1e0b2514af96de627bc6ee466ff1087829fe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "sha256": "5778c054085df07a0d4e265f340285f57a12805fc7a0fcc5d1f6d6d701b07192"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json",
+      "sha256": "e74680a811b724411cfa7389c26bff899cc1763767c52b0973f280ec51106c4b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "sha256": "f283c265c300dc3f1a313d436a698866c1f6cd9fe15ba7eb73bd1085c172498a"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-management.json",
+      "sha256": "ac6d11e39044a781483d27622f933f28a667d673bf4b525f0d55a06be8410870"
+    },
+    {
+      "path": "evidence/skill-compatibility/row07-actualtuple-source-review-20261012.md",
+      "sha256": "193efa9f693dbb0d655c64dd7b6d19eac8e777d5f5edaa5248a4b28a859142de"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-export.json",
+      "sha256": "8d93c8f27345bb5d11ac211af21fa4238cf3d4486cb825ab2870ae91a36e94f4"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-openapi.json",
+      "sha256": "dd39d2329fc51098455f499e551ad3e33f14bc9243c793dfa47fc353a57f62ea"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-policy.json",
+      "sha256": "aaee326ef40c69352fd734232b79ba099c3213f2b3cedd0e43b366bd365ca39d"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-export.json",
+      "sha256": "e1e2eef9923f7154363efa55d4508f8b32a3c07229116b05c08bfba1b6674b8f"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-policy.json",
+      "sha256": "64b2ab07617f084045921f7078100372c3175712cecc117a799109a2c2546fd3"
+    }
+  ]
+}

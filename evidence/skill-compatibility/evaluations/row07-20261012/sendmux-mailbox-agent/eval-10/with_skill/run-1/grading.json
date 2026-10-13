@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "Uses expected_revision and expected_schedule_version for cancellation.",
+      "passed": true,
+      "evidence": "Use `PATCH /api/v1/mailbox/drafts/{draftId}/schedule` with the current `expected_revision`, current `expected_schedule_version` and `\"scheduled_for\": null`"
+    },
+    {
+      "text": "Sets scheduled_for to null and notes cancellation cannot undo sending already begun.",
+      "passed": true,
+      "evidence": "Cancellation cannot undo sending that has already begun"
+    },
+    {
+      "text": "Cancels before editing; re-reads saved revision and schedule_version.",
+      "passed": true,
+      "evidence": "Proceed with editing only after successful cancellation, then read the resulting revision and schedule version."
+    },
+    {
+      "text": "Requires fresh approval of edited recipients, subject, bodies and attachments.",
+      "passed": true,
+      "evidence": "Present the exact edited saved recipients, subject, bodies and attachments, and obtain approval to send them immediately."
+    },
+    {
+      "text": "Includes current expected_schedule_version for the later immediate send, separate from expected_revision.",
+      "passed": true,
+      "evidence": "with the newly approved `expected_revision` and the current `expected_schedule_version`, even though this send is immediate after cancellation."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}
