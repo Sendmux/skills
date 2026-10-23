@@ -99,6 +99,20 @@
         "The output stays at routing level and hands off detailed upload inputs, headers, and commands rather than reproducing the attachment recipe.",
         "The output does not claim that the draft, upload, or reply was performed."
       ]
+    },
+    {
+      "id": 7,
+      "name": "human-editable-agent-replies",
+      "prompt": "Our support agent should prepare threaded email replies that a person can reopen and edit in Sendmux before approving a send. It may use customer-connected outgoing accounts. Which Sendmux workflow and skill should own this? Keep the answer at routing level.",
+      "expected_output": "Route the saved reply lifecycle to sendmux-mailbox-agent, provider account administration to sendmux-management, and attachment transfer to sendmux-attachments only if needed. The reply remains a saved revision until exact send approval; no independent send request should bypass the reviewed draft.",
+      "files": [],
+      "expectations": [
+        "The output routes saved threaded reply preparation and later send to sendmux-mailbox-agent.",
+        "The output says the draft can be reopened and edited before sending.",
+        "The output keeps the exact reviewed revision behind a human send-approval boundary.",
+        "The output routes connected outgoing account setup or policy administration to sendmux-management.",
+        "The output does not claim that a connected provider account bypasses mailbox send permission or sender policy."
+      ]
     }
   ]
 }

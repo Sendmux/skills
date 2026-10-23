@@ -12,6 +12,10 @@
     "should_trigger": true
   },
   {
+    "query": "Save a threaded reply to this Sendmux mailbox message so I can edit it tomorrow, then send only the revision I approve.",
+    "should_trigger": true
+  },
+  {
     "query": "Create a new Sendmux mailbox and API key.",
     "should_trigger": false
   },

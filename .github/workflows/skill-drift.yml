@@ -21,6 +21,7 @@ on:
       - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - "scripts/check-skill-drift.test.mjs"
+      - "scripts/mailbox-draft-contract-drift.test.mjs"
       - ".github/workflows/skill-drift.yml"
   push:
     branches:
@@ -31,6 +32,7 @@ on:
       - "skills.sh.json"
       - "scripts/check-skill-drift.mjs"
       - "scripts/check-skill-drift.test.mjs"
+      - "scripts/mailbox-draft-contract-drift.test.mjs"
       - ".github/workflows/skill-drift.yml"
   workflow_dispatch:
 
@@ -72,5 +74,5 @@ jobs:
           SENDMUX_APP_OPENAPI: ${{ runner.temp }}/openapi-app.json
           SENDMUX_SENDING_OPENAPI: ${{ runner.temp }}/openapi-sending.json
         run: |
-          node --test scripts/check-skill-drift.test.mjs
+          node --test scripts/check-skill-drift.test.mjs scripts/mailbox-draft-contract-drift.test.mjs
           node scripts/check-skill-drift.mjs
