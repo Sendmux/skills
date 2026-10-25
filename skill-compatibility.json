@@ -2017,6 +2017,69 @@
       "contractDigest": "839ee38d0fbe793ebd72c2aca7bea1ebe7526df5deae83cc19f41338aebf07ed",
       "record": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-token-efficient-usage.json",
       "sha256": "b616c856ff6a689bc1ca90374802cfdb80dfdeed39de3d1f9d5e6c4eee0fddb9"
+    },
+    {
+      "skill": "sendmux-cli",
+      "skillDigest": "cfc14976eadcc9400db576073b29805de04cc8cf14af31e95399a84ddcd19b46",
+      "contractDigest": "3f784779a3d2e359fdcd6f2a18af685ba0d656124f55c146aa70135daa6e2ec4",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-cli.json",
+      "sha256": "8f145fc51c9aec13cb09e86630c9e56560b9ff5da0a5dd1d793d5998cb0ddd26"
+    },
+    {
+      "skill": "sendmux-email-for-agents",
+      "skillDigest": "e592c53c7ef318d084407714719a4e07ab0d18ef5240f502048af95071a7d2e1",
+      "contractDigest": "73eee61de6083e737262e6f1de329e1f2d1e5c2a074093194f679a1893166a61",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-email-for-agents.json",
+      "sha256": "eca942767f98af538fa3d5dc9a0f6a52eaf476eed283e938afb06c5f6a1122ed"
+    },
+    {
+      "skill": "sendmux-getting-started",
+      "skillDigest": "5029bf05c88abc8c25680cbd4a1cb7e311668752478c295f984f491a4781d556",
+      "contractDigest": "3e60e66dacaf428c69db32a36fda4d6fbb29ea9a62fcd6d2009d9df83b5427e2",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-getting-started.json",
+      "sha256": "47fcad0a9b9e21c85cdf1dcc3005a88b7fbea3cacbbe0504b1b783dece2ea44e"
+    },
+    {
+      "skill": "sendmux-mailbox-agent",
+      "skillDigest": "8157b5cb5434f82eb7290c2cec374cf31d3c7f4d5f5265e8231d30d2e6334b7b",
+      "contractDigest": "0c9649d518b982148f5a93fd582017fab4b3cca1fd5105fba4b0a77e939e67d8",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-mailbox-agent.json",
+      "sha256": "5240d5572162f2eb6a4fb1126d4426091f7f30440e632e578668d4154c153022"
+    },
+    {
+      "skill": "sendmux-management",
+      "skillDigest": "497f5468ad5a842c9d26e2580851df58e25a24a4465f08a0ddac1b4b3cc6c30f",
+      "contractDigest": "6bcc3da198fe7bb5fada8ce041dc81915a4bce4b286b410a47c98d9606a5189d",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-management.json",
+      "sha256": "715a3719a82eff5c1048864a4e92d2dd674c228436e9d83f3e772633a77bb70e"
+    },
+    {
+      "skill": "sendmux-mcp-setup",
+      "skillDigest": "2864870cf48ad126fcab5153eb029cb2c5811ac03ccefddef75b32fee982ef1e",
+      "contractDigest": "3c294fb58822821a73fbaa58c62c12a6232799adcb2c7b5ae8df5db3eda24292",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-mcp-setup.json",
+      "sha256": "c438f2969ac6de242947a37120d86a55219136009d5a111376055a28e399ee87"
+    },
+    {
+      "skill": "sendmux-send-email",
+      "skillDigest": "60fcef4c782addf56f3e67cc770e74a5e980aca007ab25b0bb3cab679776b6f7",
+      "contractDigest": "d05e0252ce4278be45a709c3cd33911979f5b442510e6acbf15c85711f5f0be2",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-send-email-published.json",
+      "sha256": "4c3bced177aa4f8512ee344756f21f12a0246ae0636a4ae55a0a137540c575e4"
+    },
+    {
+      "skill": "sendmux-send-email",
+      "skillDigest": "dafff562ea9346dddea3eb33c6f7daabe459444dc6de5cbee98bb78da915a897",
+      "contractDigest": "d05e0252ce4278be45a709c3cd33911979f5b442510e6acbf15c85711f5f0be2",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-send-email.json",
+      "sha256": "f2b4036f1444756a46a5f58124c0ee437c2990410578744a03a8e1c4e33eaeae"
+    },
+    {
+      "skill": "sendmux-token-efficient-usage",
+      "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
+      "contractDigest": "52a982d3a62e5773b3477ade9f6600c5b17a0e9036fc318ac7e76d6ea3b64fd8",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-token-efficient-usage.json",
+      "sha256": "007e1aa4cfc63a7cdef8a9868685455f6ecf3cdde23eb477b3a7c4b6c0711ad4"
     }
   ],
   "releaseInputs": {

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-getting-started",
+  "skillDigest": "5029bf05c88abc8c25680cbd4a1cb7e311668752478c295f984f491a4781d556",
+  "contractDigest": "3e60e66dacaf428c69db32a36fda4d6fbb29ea9a62fcd6d2009d9df83b5427e2",
+  "sourceRevisions": {
+    "app": "d0becf05c6cbdc16cb78ba09296884b85d014ad0",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Codex /root/review_onboarding_compat; source review and evidence integrity, adopted by /root on 2026-10-25",
+  "rationale": "Both equal-byte skill versions remain supported: credential checks, profiles, registration, owner approval, quota, lifetime and revocation. Changed policies coordinate account deletion without changing these requirements. This is explicit source review, not a new evaluation or live execution.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/monid-unchanged-contract-review-20261004.md",
+      "sha256": "5dfc94f3b53def31b2c52a26c3b50ae77b279922a3a1b3968cc8353085b5728d"
+    },
+    {
+      "path": "skills/sendmux-getting-started/SKILL.md",
+      "sha256": "d705868beeb1275d912c2cf81c879ae53457db04f65561c17c304562b443c6ac"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/sendmux-getting-started.json",
+      "sha256": "8d19ecc127e3692ca2c5407033286961f2241368c728f947851c9878f67fc73c"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-export.json",
+      "sha256": "ba56d9c603065aa95cbffb82baed1e0b2514af96de627bc6ee466ff1087829fe"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-policy.json",
+      "sha256": "5778c054085df07a0d4e265f340285f57a12805fc7a0fcc5d1f6d6d701b07192"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-export.json",
+      "sha256": "e74680a811b724411cfa7389c26bff899cc1763767c52b0973f280ec51106c4b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-policy.json",
+      "sha256": "f283c265c300dc3f1a313d436a698866c1f6cd9fe15ba7eb73bd1085c172498a"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-getting-started.json",
+      "sha256": "61f158fadb6e2a6cb0eaf84eb45ec9cfa09ad773400242c2bf8056a071abee83"
+    },
+    {
+      "path": "evidence/skill-compatibility/posthog-847-848-remaining-reviews-20261025.md",
+      "sha256": "c1cd68cd7d7565b232f7d1392628c1639ea1a7cbe8328ccc9af4b0899939439a"
+    }
+  ]
+}
