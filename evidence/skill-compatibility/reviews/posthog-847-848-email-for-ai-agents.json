@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "email-for-ai-agents",
+  "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
+  "contractDigest": "9ca326ae2fce8623b8882771d68bb3f7c39bfaa6e0b235e2e95502c1ad067171",
+  "sourceRevisions": {
+    "app": "d0becf05c6cbdc16cb78ba09296884b85d014ad0",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Codex /root; complete unchanged skill and selected authorisation-policy source review, 2026-10-25",
+  "rationale": "The only changed selected dependency is the app delegated-sending policy: credential exchange, owner approval and revocation now coordinate with concurrent account deletion. Resource, email.send, expiry/revocation, claimed ownership, separate owner approval and mailbox-readiness checks remain enforced. Sending and SDK inputs are unchanged, preserving the skill's exact-message authority, request shapes, attachment handling and retry reconciliation. This records source compatibility only; no new evaluation or live execution is claimed.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/posthog-847-848-email-review-20261025.md",
+      "sha256": "39b07c1886ca613bc6a6c101492b324761c1b67db39d749e4b9a7a3b0df6175a"
+    },
+    {
+      "path": "skills/email-for-ai-agents/SKILL.md",
+      "sha256": "00166b24a755bb9af2492e567be94ee0340b19007293cbc6cbcc02042326b46e"
+    }
+  ]
+}

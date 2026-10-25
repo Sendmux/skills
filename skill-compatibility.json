@@ -1767,6 +1767,13 @@
   },
   "reviews": [
     {
+      "skill": "email-for-ai-agents",
+      "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
+      "contractDigest": "9ca326ae2fce8623b8882771d68bb3f7c39bfaa6e0b235e2e95502c1ad067171",
+      "record": "evidence/skill-compatibility/reviews/posthog-847-848-email-for-ai-agents.json",
+      "sha256": "6af50bb80873a1fb4c6692444993ae09a3e23ec9a4409644b6c48d06294e68f4"
+    },
+    {
       "skill": "agent-email-inbox",
       "skillDigest": "74d2bc70ac8f182249bd78caec0dbd213ef7f9357541cbdacdc17167219abbf7",
       "contractDigest": "f573c17c9d0d4fd2663127724b09e35ca9ce7f7f35650bcba9852a9592f85757",
