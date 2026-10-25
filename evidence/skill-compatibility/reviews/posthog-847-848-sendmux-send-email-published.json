@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-send-email",
+  "skillDigest": "60fcef4c782addf56f3e67cc770e74a5e980aca007ab25b0bb3cab679776b6f7",
+  "contractDigest": "d05e0252ce4278be45a709c3cd33911979f5b442510e6acbf15c85711f5f0be2",
+  "sourceRevisions": {
+    "app": "d0becf05c6cbdc16cb78ba09296884b85d014ad0",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Codex /root/review_mailbox_sending_compat; source review and evidence integrity, adopted by /root on 2026-10-25",
+  "rationale": "This exact Sending skill version remains compatible: message approval, owner gates, one-hour delegation, address objects, batching, attachment references and retry reconciliation. Changed policies coordinate account deletion without widening authority. Published and proposed versions are reviewed separately, with no invented workflow supersession or fresh runtime claim.",
+  "evidence": [
+    {
+      "path": "evidence/skill-compatibility/review-notes.md",
+      "sha256": "2262e5e3a26cf040f8b8217794a6480e20795e6bc7743e629171f1da8c613754"
+    },
+    {
+      "path": "skills/sendmux-send-email/SKILL.md",
+      "sha256": "0cefbfeddcf22dd0b0cd1f5c7677edcfc88a2dfc391655cdafe4232b9965d3a3"
+    },
+    {
+      "path": "evidence/skill-compatibility/full-revocation-review-20260930.md",
+      "sha256": "0daa5b89fe29df70b04dd4e88b3592884c6eb8a276e1f6244c8349376b0606e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/sendmux-send-email.json",
+      "sha256": "07173cd83bfe303fa4e78a530b9e1287c138ef041457e96e6641bf363e012a96"
+    },
+    {
+      "path": "evidence/skill-compatibility/posthog-847-848-remaining-reviews-20261025.md",
+      "sha256": "c1cd68cd7d7565b232f7d1392628c1639ea1a7cbe8328ccc9af4b0899939439a"
+    }
+  ]
+}

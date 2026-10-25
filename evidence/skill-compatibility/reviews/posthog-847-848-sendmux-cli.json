@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-cli",
+  "skillDigest": "cfc14976eadcc9400db576073b29805de04cc8cf14af31e95399a84ddcd19b46",
+  "previousSkillDigest": "ba1e4cc36d503b7e4e0b58c30e91d08d30b420c261ec6b3f10e41e62c9420060",
+  "contractDigest": "3f784779a3d2e359fdcd6f2a18af685ba0d656124f55c146aa70135daa6e2ec4",
+  "sourceRevisions": {
+    "app": "d0becf05c6cbdc16cb78ba09296884b85d014ad0",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Codex /root/review_cli_mcp_compat; source review and evidence integrity, adopted by /root on 2026-10-25",
+  "rationale": "Registration, profiles, delegated authority, command counts and uploads remain supported. Changed app policies coordinate account deletion without altering scopes, lifetime, quota or owner gates. Preserve genuine exact-body workflow supersession and historical 6/6 evidence; the illustrative wrong-key wording caveat remains.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-cli/SKILL.md",
+      "sha256": "01126a175f2d86e52a4917d2459a2494411838c3704b4f109c1561cad333b1c9"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-cli/benchmark.json",
+      "sha256": "a34902f73bdda4d8651491a788012721d0dc3f7e909aaec4621f4a21fe7a0ae1"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-cli/execution.md",
+      "sha256": "a73e3effab413d0a1f518f79de0f26709b6f74160ec678ab026232af76de85cf"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-cli/eval-0-standalone-upload-byte-length/eval_metadata.json",
+      "sha256": "76ba34feaa235c0c2e1273be61f0a19a91e8211ac867cc91c26893974bf6e41a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-cli/eval-0-standalone-upload-byte-length/with_skill/run-1/receipt.json",
+      "sha256": "ccd5c2a7f2ade6cc60d6917ed4cc40972c739a8b3a667c6ea2558700d7870832"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-cli/eval-0-standalone-upload-byte-length/with_skill/run-1/grading.json",
+      "sha256": "ed020f568c6d88924f84544a05db5f63e040aae7d8477f4be36282e6617e3a7a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-cli/eval-0-standalone-upload-byte-length/with_skill/run-1/outputs/response.md",
+      "sha256": "fae3743ef53878b5e41856ea98bf8b026444fd063aaddec9956165de9c845793"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-cli-published-171.json",
+      "sha256": "abc80b87fbc0a545778c94b386abd51923d732a6c87428382aa15f25129d6ff6"
+    },
+    {
+      "path": "evidence/skill-compatibility/row07-actualtuple-source-review-20261012.md",
+      "sha256": "193efa9f693dbb0d655c64dd7b6d19eac8e777d5f5edaa5248a4b28a859142de"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-export.json",
+      "sha256": "8d93c8f27345bb5d11ac211af21fa4238cf3d4486cb825ab2870ae91a36e94f4"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-openapi.json",
+      "sha256": "dd39d2329fc51098455f499e551ad3e33f14bc9243c793dfa47fc353a57f62ea"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-policy.json",
+      "sha256": "aaee326ef40c69352fd734232b79ba099c3213f2b3cedd0e43b366bd365ca39d"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-export.json",
+      "sha256": "e1e2eef9923f7154363efa55d4508f8b32a3c07229116b05c08bfba1b6674b8f"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-policy.json",
+      "sha256": "64b2ab07617f084045921f7078100372c3175712cecc117a799109a2c2546fd3"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-cli.json",
+      "sha256": "de7606bc976200debcf05733f51de4dfd238e1b89cbd78a0a5b81e2b0113cd40"
+    },
+    {
+      "path": "evidence/skill-compatibility/posthog-847-848-remaining-reviews-20261025.md",
+      "sha256": "c1cd68cd7d7565b232f7d1392628c1639ea1a7cbe8328ccc9af4b0899939439a"
+    }
+  ]
+}

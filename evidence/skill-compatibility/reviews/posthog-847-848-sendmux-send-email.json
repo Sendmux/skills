@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-send-email",
+  "skillDigest": "dafff562ea9346dddea3eb33c6f7daabe459444dc6de5cbee98bb78da915a897",
+  "contractDigest": "d05e0252ce4278be45a709c3cd33911979f5b442510e6acbf15c85711f5f0be2",
+  "sourceRevisions": {
+    "app": "d0becf05c6cbdc16cb78ba09296884b85d014ad0",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Codex /root/review_mailbox_sending_compat; source review and evidence integrity, adopted by /root on 2026-10-25",
+  "rationale": "This exact Sending skill version remains compatible: message approval, owner gates, one-hour delegation, address objects, batching, attachment references and retry reconciliation. Changed policies coordinate account deletion without widening authority. Published and proposed versions are reviewed separately, with no invented workflow supersession or fresh runtime claim.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-send-email/SKILL.md",
+      "sha256": "5ce969d5ba7a83803225b2f7e1e67ccd6d41858d352da0628d79a92f76dd9178"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-send-email.json",
+      "sha256": "a292b190ca51520547542a099c3c583d9b73e660532004d0872edc11a9595e5a"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/app-openapi.json",
+      "sha256": "90143520564077283dddf9bcc7d11d73083befd7873107138cf64fa4d1a24bcf"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/monid-20261004/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/row07-20261012/sendmux-send-email.json",
+      "sha256": "067b985e8a5edbae34afe598a4b72f28554e443d66f36ebfb67bd4a5b9508498"
+    },
+    {
+      "path": "evidence/skill-compatibility/posthog-847-848-remaining-reviews-20261025.md",
+      "sha256": "c1cd68cd7d7565b232f7d1392628c1639ea1a7cbe8328ccc9af4b0899939439a"
+    }
+  ]
+}
