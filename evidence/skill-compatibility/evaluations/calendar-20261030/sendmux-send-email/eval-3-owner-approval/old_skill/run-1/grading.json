@@ -1,0 +1,67 @@
+{
+  "expectations": [
+    {
+      "text": "The output says the durable agent credential is for read and receive and does not itself grant sending.",
+      "passed": true,
+      "evidence": "'Inbox access alone does not grant sending permission' and 'the durable credential remains read/receive-only'. This satisfies the unchanged email permission expectation; the broader source-compatibility problem is recorded separately."
+    },
+    {
+      "text": "The output says sending is unavailable before owner acceptance and approval.",
+      "passed": true,
+      "evidence": "'Before owner acceptance and sending approval ... Send attempts fail closed.'"
+    },
+    {
+      "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+      "passed": true,
+      "evidence": "'The self-registered inbox is capped at 500 MiB' before approval and 'After you accept the invitation and approve sending: storage rises to at least 5 GiB.'"
+    },
+    {
+      "text": "The output says sendmux Sending CLI commands automatically exchange for a one-hour email.send token after approval.",
+      "passed": true,
+      "evidence": "'Using the existing profile, the CLI automatically exchanges for a one-hour delegated email.send token'."
+    },
+    {
+      "text": "The output says the delegated token is cached only until near expiry.",
+      "passed": true,
+      "evidence": "'caching it only until near expiry.'"
+    },
+    {
+      "text": "The output includes Idempotency-Key or --idempotency-key for the send.",
+      "passed": true,
+      "evidence": "'Supply one stable --idempotency-key per logical send, reusing it for retries.'"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1
+  },
+  "evaluation_limitations": [
+    "Response-only, source-only evaluation: only response.md was supplied for these runs; no execution transcript, metrics.json, timing.json or user_notes.md was present in the listed evaluation trees.",
+    "Command blocks are assessed as proposed instructions in answer to the prompt. No registration, credential persistence, connection, invitation, token exchange, send or delivery was executed or proven.",
+    "Historical expectations are unchanged. Current calendar scope compatibility is recorded separately and does not alter the email owner-approval assertion scores."
+  ],
+  "claims": [
+    {
+      "claim": "Before owner approval the durable credential remains read/receive-only.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Output says 'the durable credential remains read/receive-only.' /Users/rj/.superset/worktrees/sendmux/build-out-calendar-api-45c50f89/src/server/agent-auth/metadata.ts:27-42 grants CALENDAR_READ and CALENDAR_WRITE in the pre-claim scope list as well as post-claim. This concern is outside unchanged expectation scoring; it does not make the durable credential itself grant email sending."
+    },
+    {
+      "claim": "No live checks or sends were performed.",
+      "type": "process",
+      "verified": true,
+      "evidence": "Output says 'No live checks or sends performed.' No execution transcript was supplied."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No unchanged assertion checks current calendar access; an unqualified read/receive-only description can pass the historical email-only permission assertion while under-describing current credential scope. Record this separately from assertion scoring."
+      }
+    ],
+    "overall": "All six unchanged email owner-approval expectations pass. Separate source-compatibility concern: unqualified durable credential read/receive-only wording omits current calendar read/write grants."
+  }
+}

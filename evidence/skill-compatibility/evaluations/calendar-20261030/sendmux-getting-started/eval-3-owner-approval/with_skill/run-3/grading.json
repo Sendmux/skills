@@ -1,0 +1,81 @@
+{
+  "expectations": [
+    {
+      "text": "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
+      "passed": true,
+      "evidence": "response.md: \"Use the Sendmux getting-started skill and the installed CLI’s `--help` as the setup authority.\" The answer supplies local CLI commands and does not instruct fetching or executing runtime instructions."
+    },
+    {
+      "text": "The output installs @sendmux/cli when the sendmux binary is unavailable.",
+      "passed": true,
+      "evidence": "response.md gives the installation command before registration: \"npm install -g @sendmux/cli\". This is a planning answer; its final note explicitly says \"Not run: installation, registration, connection checks or invitations.\""
+    },
+    {
+      "text": "The output runs sendmux agent:register with a profile name and may include --mailbox-local-part, --client-name, --owner-email, or --default.",
+      "passed": true,
+      "evidence": "response.md includes \"sendmux agent:register my-agent\" with \"--mailbox-local-part my-agent\", \"--client-name \"My agent\"\", \"--owner-email owner@example.com\", \"--default\" and \"--json\"."
+    },
+    {
+      "text": "The output says registration does not require an existing account, API key, challenge, or proof of work step.",
+      "passed": true,
+      "evidence": "response.md: \"Your agent can register a new Sendmux inbox without an existing account or API key.\" Also: \"No challenge or proof of work is required.\""
+    },
+    {
+      "text": "The output says the CLI persists the credential securely and does not print it.",
+      "passed": true,
+      "evidence": "response.md: \"The CLI saves registration state, stores the credential in a permission-restricted local profile without printing it, and waits up to 10 minutes for mailbox readiness.\""
+    },
+    {
+      "text": "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
+      "passed": true,
+      "evidence": "response.md, Saved agent profile row: \"Read and receive email without an expiry date while registration remains active.\""
+    },
+    {
+      "text": "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
+      "passed": true,
+      "evidence": "response.md: \"If registration already happened without `--owner-email`, invite yourself separately:\" followed by \"sendmux agent:invite-owner owner@example.com --profile my-agent --json\"."
+    },
+    {
+      "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+      "passed": true,
+      "evidence": "response.md: \"The inbox starts with a 500 MiB cap; owner-approved sending raises it to at least 5 GiB.\""
+    },
+    {
+      "text": "The output says the owner must accept and approve sending before the agent can send.",
+      "passed": true,
+      "evidence": "response.md, Delegated Sending token row: \"Available only after you accept the invitation and approve sending.\" The final line also says \"Sending remains unavailable until your approval.\""
+    },
+    {
+      "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
+      "passed": true,
+      "evidence": "response.md: \"`sending:*` commands then automatically exchange the durable credential for a one-hour `email.send` token and cache it until near expiry.\" This follows \"Available only after you accept the invitation and approve sending.\""
+    },
+    {
+      "text": "The output says a full registration revoke removes read access and delegated sending access.",
+      "passed": true,
+      "evidence": "response.md: \"Revoking the full registration removes read access, the owner link, invitation/recovery handles and all derived sending tokens.\""
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "claims": [
+    {
+      "claim": "The output does not make an unqualified denial of all durable-credential writes.",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The restriction is expressly about email: \"Read and receive email without an expiry date while registration remains active. It cannot send or change messages.\" It does not say the credential cannot write calendars or perform any writes. App metadata.ts:27-32 includes \"MAILBOX_PERMISSIONS.CALENDAR_WRITE\" in AGENT_AUTH_PRE_CLAIM_SCOPES, and :34-42 also includes it in AGENT_AUTH_POST_CLAIM_SCOPES."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The unchanged assertions do not check for an overbroad denial of every durable-credential write. Such a denial would conflict with CALENDAR_WRITE in app metadata.ts:27-42. This output avoids that error by restricting its denial to sending and message changes."
+      }
+    ],
+    "overall": "All 11 unchanged expectations pass for the requested planning answer. No unqualified denial of all durable-credential writes was found. Only response.md was present; no transcript, user notes, metrics or timing files were available in the run directory."
+  }
+}

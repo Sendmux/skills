@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-mcp-setup",
+  "skillDigest": "2864870cf48ad126fcab5153eb029cb2c5811ac03ccefddef75b32fee982ef1e",
+  "previousSkillDigest": "330558950dc6569b802ab1c642b61927ca369d9fe3c151025a7643c0cfc9bf06",
+  "contractDigest": "5e9b31c3f6dafee755c72880c3c00487cf56dee8178652880366d639fd992e9d",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "Pinned SDK tool catalogue, transport, hosted versus REST authorisation, profiles and upload modes remain supported. Additive calendar scopes and webhook enums do not change taught tools. Preserve the exact-body historical workflow and published catalogue supersession, without qualifying Calendar tools.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-mcp-setup/SKILL.md",
+      "sha256": "5db25a363a43fd33a9b49ed5cbdded3e65e4a9e79dfc1aacae50871034249762"
+    },
+    {
+      "path": "skills/sendmux-mcp-setup/evals/evals.json",
+      "sha256": "5fc98c9f20e008271185e391cab9f866d203b9916fc0c59203751b030e2bd07e"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-mcp-setup/benchmark.json",
+      "sha256": "bc57acf6dc280ffd8af6cbc7223a2635b7f545b96b2714f6a0ea45de7a1e6695"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-mcp-setup/execution.md",
+      "sha256": "8a757343ab2029c6f953ab9527399544717d60310d6ab7eec47a81d52b4ffb70"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/eval_metadata.json",
+      "sha256": "e4ccb5f72444d738cf60ab4885e36ace4375ef06f22e24e4cafc72540c238a4f"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/receipt.json",
+      "sha256": "03e84b26c3352dd44b6c46c575890f75134824634d2532d8998aeea32db22b15"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/grading.json",
+      "sha256": "1b2ed96528ba71aab4f9bee5c0efc35eb91c1dfc1130b1d006530e1738efa684"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/row07-actualtuple-20261012/sendmux-mcp-setup/eval-7-candidate-catalogue-protocol-and-client-qualification/with_skill/run-1/outputs/response.md",
+      "sha256": "7ba1a722124e62f0eae1a2f515ce3438d8bae250cbb4dd3f6a4498a31dba818e"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/sendmux-mcp-setup.json",
+      "sha256": "be8964122e4b7ff211b40a601a1e571e2ead0d76b22e9d8f88dd899d97363a29"
+    },
+    {
+      "path": "evidence/skill-compatibility/row07-actualtuple-source-review-20261012.md",
+      "sha256": "193efa9f693dbb0d655c64dd7b6d19eac8e777d5f5edaa5248a4b28a859142de"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-export.json",
+      "sha256": "8d93c8f27345bb5d11ac211af21fa4238cf3d4486cb825ab2870ae91a36e94f4"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-openapi.json",
+      "sha256": "dd39d2329fc51098455f499e551ad3e33f14bc9243c793dfa47fc353a57f62ea"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/app-policy.json",
+      "sha256": "aaee326ef40c69352fd734232b79ba099c3213f2b3cedd0e43b366bd365ca39d"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-export.json",
+      "sha256": "e1e2eef9923f7154363efa55d4508f8b32a3c07229116b05c08bfba1b6674b8f"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-openapi.json",
+      "sha256": "eb69dc0ca27e5f42cd9da70e90e2b1a386dfe588b743e47a8d91f3b7928a75e5"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/row07-actualtuple-20261012/sending-policy.json",
+      "sha256": "64b2ab07617f084045921f7078100372c3175712cecc117a799109a2c2546fd3"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-mcp-setup.json",
+      "sha256": "f5299fac0dcfda4f7611b0779a7a307d290e8f0673a560d2fa7135219ebc2d88"
+    },
+    {
+      "path": "evidence/skill-compatibility/posthog-847-848-remaining-reviews-20261025.md",
+      "sha256": "c1cd68cd7d7565b232f7d1392628c1639ea1a7cbe8328ccc9af4b0899939439a"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-mcp-setup.json",
+      "sha256": "c438f2969ac6de242947a37120d86a55219136009d5a111376055a28e399ee87"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    }
+  ]
+}

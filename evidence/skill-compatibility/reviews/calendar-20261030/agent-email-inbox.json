@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "agent-email-inbox",
+  "skillDigest": "74d2bc70ac8f182249bd78caec0dbd213ef7f9357541cbdacdc17167219abbf7",
+  "contractDigest": "bf44522e0386e93673e83e3d688ac2924357905a0a7c49cac6493347117079de",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "The seven selected reads and their schemas are unchanged. The common OAuth schema adds calendar scopes without changing this read-only triage workflow. Full-body review retains untrusted-content handling, bounded reads and the prohibition on mutations or sends within this workflow.",
+  "evidence": [
+    {
+      "path": "skills/agent-email-inbox/SKILL.md",
+      "sha256": "2a5be98e2eaeb92707b3d20e2a6a9bb81d4e20e212a7b22856f73dedb0d31b1a"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/monid-20261004/agent-email-inbox.json",
+      "sha256": "5a71dd72e390bdac472881234e31594a51a7088849cb2c5f6e617e21aec921e0"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    }
+  ]
+}

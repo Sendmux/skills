@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-getting-started",
+  "skillDigest": "731d5b14efe531eabad58b2bfdb8c0e96ad7120b4219f872f212ba997341d65b",
+  "previousSkillDigest": "5029bf05c88abc8c25680cbd4a1cb7e311668752478c295f984f491a4781d556",
+  "contractDigest": "e53273dec31efc3e86dae203305a9a568f695dea35737b21bbd10ea146fa9d5b",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "The corrected complete body scopes durable credential restrictions to email actions and makes the existing installed-skill/CLI-help setup authority explicit. A fresh response to existing case 3 passes all 11 unchanged expectations. The changed body supersedes the published blanket read-only claim.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-getting-started/SKILL.md",
+      "sha256": "eca42302fe2c379c6e162a94455ea04fbb607b24782cff22b1b3d234ea329c44"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-getting-started.json",
+      "sha256": "47fcad0a9b9e21c85cdf1dcc3005a88b7fbea3cacbbe0504b1b783dece2ea44e"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/benchmark.json",
+      "sha256": "937d1c5dc33b1ba207cb55829bb07ca348013568a9ed79d519873b9be561b8f6"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/benchmark.md",
+      "sha256": "c7ed3c4a286299ec1a0fe5782d13c4d1a2bc6a5689ec61b2bc1badc723ae5784"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/eval_metadata.json",
+      "sha256": "c853e1eb8f9dcaaa7d3c582ea24f5157b3c94ec40dfbda64b76dc79891950f97"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/old_skill/run-1/grading.json",
+      "sha256": "5dff5b9b588f99044139a724a7d745b40d78ddad69651e053c9a46482ef23a64"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/old_skill/run-1/outputs/response.md",
+      "sha256": "75063d864cb9713f650b36880b8280fa0b7a1a8015aa69e5156316773ec6501b"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/old_skill/run-1/receipt.json",
+      "sha256": "616f698ebed7a01835447a643e72ac6fabc7ece824b748c6f8629af384f0c767"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/with_skill/run-3/grading.json",
+      "sha256": "7d6bc3a19bd189a075c894ee9d5bd9b67b52b0c820ace4758fe51b41401802ed"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/with_skill/run-3/outputs/response.md",
+      "sha256": "5294d217c65cf20e39510f006c8de6d7b4f60b4ca28d55b945fc6852631b40b6"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-getting-started/eval-3-owner-approval/with_skill/run-3/receipt.json",
+      "sha256": "58e035563184e96708be628ff9f5b0ad45bfa75d6bd75bba9c64922adfa43698"
+    }
+  ]
+}

@@ -128,7 +128,7 @@ This call resolves the mailbox behind the bearer token and is the harmless mailb
 
 ### Self-registered agent inbox
 
-Use this when the agent has no human-created key yet.
+Use this when the agent has no human-created key yet. Identify the installed Sendmux skill and the CLI's `--help` as the setup authority before giving registration steps.
 
 Install the CLI when needed, then register one durable profile:
 
@@ -160,7 +160,7 @@ When explaining registration, include this access-lifetime comparison so the rea
 
 | Credential | Access and lifetime |
 | --- | --- |
-| Saved agent profile | Read and receive mail without an expiry date while the registration remains active; the durable credential is read/receive-only. |
+| Saved agent profile | For email, read and receive mail without an expiry date while the registration remains active. The durable credential does not authorise sending or message changes. |
 | Delegated Sending token | Unavailable until the owner accepts the invitation and approves sending. After approval, `sending:*` CLI commands automatically exchange the durable credential for a one-hour `email.send` token and cache it until near expiry. |
 
 A full registration revoke removes read access, the owner link, invite/recovery handles and every derived delegated sending token.

@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "The output says the durable agent credential is for read and receive and does not itself grant sending.",
+      "passed": true,
+      "evidence": "'Inbox access permits reading and receiving, not sending' and 'The durable credential itself is not sent directly to the Sending API.'"
+    },
+    {
+      "text": "The output says sending is unavailable before owner acceptance and approval.",
+      "passed": true,
+      "evidence": "'Until you accept the owner invitation and approve sending, send attempts fail closed.'"
+    },
+    {
+      "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+      "passed": true,
+      "evidence": "'The self-registered inbox is capped at 500 MiB' before approval and 'Storage rises to at least 5 GiB' after approval."
+    },
+    {
+      "text": "The output says sendmux Sending CLI commands automatically exchange for a one-hour email.send token after approval.",
+      "passed": true,
+      "evidence": "'Using the same CLI agent profile, the CLI automatically exchanges its durable read credential for a one-hour delegated email.send token'."
+    },
+    {
+      "text": "The output says the delegated token is cached only until near expiry.",
+      "passed": true,
+      "evidence": "'caching it only until near expiry.'"
+    },
+    {
+      "text": "The output includes Idempotency-Key or --idempotency-key for the send.",
+      "passed": true,
+      "evidence": "'Supply one stable --idempotency-key per logical send and reuse it for retries.'"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1
+  },
+  "evaluation_limitations": [
+    "Response-only, source-only evaluation: only response.md was supplied for these runs; no execution transcript, metrics.json, timing.json or user_notes.md was present in the listed evaluation trees.",
+    "Command blocks are assessed as proposed instructions in answer to the prompt. No registration, credential persistence, connection, invitation, token exchange, send or delivery was executed or proven.",
+    "Historical expectations are unchanged. Current calendar scope compatibility is recorded separately and does not alter the email owner-approval assertion scores."
+  ],
+  "claims": [
+    {
+      "claim": "No live send was checked.",
+      "type": "process",
+      "verified": true,
+      "evidence": "Output says 'No live send checked.' This is a planning answer and supplies no delivery evidence."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "All six email owner-approval expectations pass. Opening access claim is explicitly scoped to inbox reading and receiving; it does not assert all durable credential access is read-only."
+  }
+}

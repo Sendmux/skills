@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-email-for-agents",
+    "skill_path": "skills/sendmux-email-for-agents",
+    "executor_model": null,
+    "analyzer_model": null,
+    "timestamp": "2026-10-30T06:55:59Z",
+    "evals_run": [
+      3
+    ],
+    "runs_per_configuration": 1,
+    "metrics_note": "Model identity, timing, token and tool-call counts were unavailable. Default metric values are unmeasured placeholders; assertion results and input/output hashes are evidence."
+  },
+  "runs": [
+    {
+      "eval_id": 3,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1,
+        "passed": 9,
+        "failed": 0,
+        "total": 9,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output installs @sendmux/cli when needed.",
+          "passed": true,
+          "evidence": "Setup step 1: 'Install `@sendmux/cli` if the `sendmux` binary is unavailable.' This is a planning answer; no actual installation is claimed."
+        },
+        {
+          "text": "The output runs sendmux agent:register with a profile name and optionally --owner-email.",
+          "passed": true,
+          "evidence": "Setup step 2 says 'Choose a local profile name and register' and gives `sendmux agent:register <profile> --default --owner-email <owner-email> --json`. Commands are proposed, not executed."
+        },
+        {
+          "text": "The output says no existing account, API key, challenge, or proof of work step is required.",
+          "passed": true,
+          "evidence": "Setup step 1: 'No existing Sendmux account, API key, challenge or proof of work is required.'"
+        },
+        {
+          "text": "The output says the CLI saves registration idempotency before the registration request, securely stores the returned durable credential in the local profile, and never prints the credential.",
+          "passed": true,
+          "evidence": "Setup step 2: 'Before the request, the CLI saves registration idempotency locally so retries resume the same registration. After the response, it securely stores the durable credential in the local profile without printing it.'"
+        },
+        {
+          "text": "The output says the profile can read and receive mail without an expiry date while the registration remains active.",
+          "passed": true,
+          "evidence": "Setup step 3: 'Read/receive access has no expiry while the registration remains active.'"
+        },
+        {
+          "text": "The output runs sendmux agent:invite-owner when an owner was not invited during registration.",
+          "passed": true,
+          "evidence": "Setup step 4 explains that `--owner-email` already sends the invitation, then gives `sendmux agent:invite-owner <owner-email> --profile <profile> --json` if the address was omitted during registration. This is the conditional planning sequence, not a claimed live invitation."
+        },
+        {
+          "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+          "passed": true,
+          "evidence": "Setup step 3: 'Storage is capped at 500 MiB before sending approval.' Step 6: 'Separately approve sending. This enables sending and raises storage to at least 5 GiB.'"
+        },
+        {
+          "text": "The output waits for owner acceptance and sending approval.",
+          "passed": true,
+          "evidence": "Setup steps 5-6 require accepting the invitation and separately approving sending. Final sentence: 'Sending remains blocked until owner acceptance and separate sending approval.' This is the prescribed planning gate, not proof of live approvals."
+        },
+        {
+          "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated token after approval.",
+          "passed": true,
+          "evidence": "Setup step 7: 'After approval, `sending:*` CLI commands automatically exchange and cache a one-hour delegated Sending token.'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 1,
+        "passed": 9,
+        "failed": 0,
+        "total": 9,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output installs @sendmux/cli when needed.",
+          "passed": true,
+          "evidence": "response.md: \"Install `@sendmux/cli` if the `sendmux` binary is unavailable.\""
+        },
+        {
+          "text": "The output runs sendmux agent:register with a profile name and optionally --owner-email.",
+          "passed": true,
+          "evidence": "response.md supplies \"sendmux agent:register <profile> --default --owner-email <owner-email> --json\"."
+        },
+        {
+          "text": "The output says no existing account, API key, challenge, or proof of work step is required.",
+          "passed": true,
+          "evidence": "response.md: \"No existing Sendmux account or human-created API key is required. No challenge or proof-of-work step is required.\""
+        },
+        {
+          "text": "The output says the CLI saves registration idempotency before the registration request, securely stores the returned durable credential in the local profile, and never prints the credential.",
+          "passed": true,
+          "evidence": "response.md: \"Before the request, the CLI saves registration idempotency locally so retries resume the same registration. After the response, it securely stores the durable credential in the local profile without printing it.\""
+        },
+        {
+          "text": "The output says the profile can read and receive mail without an expiry date while the registration remains active.",
+          "passed": true,
+          "evidence": "response.md: \"Read/receive access has no expiry while registration remains active.\" The Credential scope section also says \"the durable profile permits read/receive without expiry while registration remains active.\""
+        },
+        {
+          "text": "The output runs sendmux agent:invite-owner when an owner was not invited during registration.",
+          "passed": true,
+          "evidence": "response.md: \"Registration with `--owner-email` already sends your owner invitation. If registration omitted it, run this once instead:\" followed by \"sendmux agent:invite-owner <owner-email> --profile <profile> --json\"."
+        },
+        {
+          "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+          "passed": true,
+          "evidence": "response.md: \"Storage is capped at 500 MiB before sending approval.\" Step 6 says \"You separately approve sending. This enables sending and raises storage to at least 5 GiB.\""
+        },
+        {
+          "text": "The output waits for owner acceptance and sending approval.",
+          "passed": true,
+          "evidence": "response.md step 5: \"You accept the invitation, linking you as owner. Sending remains blocked.\" Step 6: \"You separately approve sending. This enables sending and raises storage to at least 5 GiB.\""
+        },
+        {
+          "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated token after approval.",
+          "passed": true,
+          "evidence": "response.md: \"After approval, `sending:*` CLI commands automatically exchange and cache a one-hour delegated Sending token.\""
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "old_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.00",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

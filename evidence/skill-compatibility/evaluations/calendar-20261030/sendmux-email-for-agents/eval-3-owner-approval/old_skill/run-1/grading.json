@@ -1,0 +1,64 @@
+{
+  "expectations": [
+    {
+      "text": "The output installs @sendmux/cli when needed.",
+      "passed": true,
+      "evidence": "Setup step 1: 'Install `@sendmux/cli` if the `sendmux` binary is unavailable.' This is a planning answer; no actual installation is claimed."
+    },
+    {
+      "text": "The output runs sendmux agent:register with a profile name and optionally --owner-email.",
+      "passed": true,
+      "evidence": "Setup step 2 says 'Choose a local profile name and register' and gives `sendmux agent:register <profile> --default --owner-email <owner-email> --json`. Commands are proposed, not executed."
+    },
+    {
+      "text": "The output says no existing account, API key, challenge, or proof of work step is required.",
+      "passed": true,
+      "evidence": "Setup step 1: 'No existing Sendmux account, API key, challenge or proof of work is required.'"
+    },
+    {
+      "text": "The output says the CLI saves registration idempotency before the registration request, securely stores the returned durable credential in the local profile, and never prints the credential.",
+      "passed": true,
+      "evidence": "Setup step 2: 'Before the request, the CLI saves registration idempotency locally so retries resume the same registration. After the response, it securely stores the durable credential in the local profile without printing it.'"
+    },
+    {
+      "text": "The output says the profile can read and receive mail without an expiry date while the registration remains active.",
+      "passed": true,
+      "evidence": "Setup step 3: 'Read/receive access has no expiry while the registration remains active.'"
+    },
+    {
+      "text": "The output runs sendmux agent:invite-owner when an owner was not invited during registration.",
+      "passed": true,
+      "evidence": "Setup step 4 explains that `--owner-email` already sends the invitation, then gives `sendmux agent:invite-owner <owner-email> --profile <profile> --json` if the address was omitted during registration. This is the conditional planning sequence, not a claimed live invitation."
+    },
+    {
+      "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+      "passed": true,
+      "evidence": "Setup step 3: 'Storage is capped at 500 MiB before sending approval.' Step 6: 'Separately approve sending. This enables sending and raises storage to at least 5 GiB.'"
+    },
+    {
+      "text": "The output waits for owner acceptance and sending approval.",
+      "passed": true,
+      "evidence": "Setup steps 5-6 require accepting the invitation and separately approving sending. Final sentence: 'Sending remains blocked until owner acceptance and separate sending approval.' This is the prescribed planning gate, not proof of live approvals."
+    },
+    {
+      "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated token after approval.",
+      "passed": true,
+      "evidence": "Setup step 7: 'After approval, `sending:*` CLI commands automatically exchange and cache a one-hour delegated Sending token.'"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  },
+  "evaluation_scope": "Source-only assessment of response.md as a planning answer. No transcript, metrics, timing or user_notes file was present in the supplied run files. No command execution, mailbox readiness, invitation delivery or owner approval is established by this score.",
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Outside the nine unchanged expectations: the answer says the durable profile has no 'Mailbox send or mutation rights', 'The durable read credential never becomes a Mailbox write credential', and calls it a 'durable read-only profile'. These are unqualified global claims, incompatible with the new metadata's calendar-write capability stated in the grading assignment. Email-specific restrictions must stay scoped to email operations. No extra assertion was added and no score was changed for this compatibility concern."
+      }
+    ],
+    "overall": "All nine unchanged expectations pass for the requested planning answer; broad credential-write wording remains a separate source compatibility concern."
+  }
+}

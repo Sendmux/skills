@@ -23,7 +23,7 @@ For an agent-profile before/after approval answer, cover the complete lifecycle:
 
 | State | Required explanation |
 | --- | --- |
-| Before owner acceptance and sending approval | The durable credential is read/receive-only, sends fail closed, and the self-registered inbox is capped at 500 MiB. |
+| Before owner acceptance and sending approval | The durable credential permits reading and receiving email but does not itself authorise sending. Sends fail closed, and the self-registered inbox is capped at 500 MiB. |
 | After sending approval | Storage rises to at least 5 GiB. The CLI automatically exchanges for a one-hour delegated `email.send` token and caches it only until near expiry; the sender supplies one stable `--idempotency-key` per logical send. |
 | After sending revocation | Sending becomes unavailable again, but revocation does not itself change the current inbox storage allocation. |
 

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "arm": "with_skill",
+  "skill_sha256": "bfc85dfa482a4587d8b9439eb1cc575227a99e6cb05a82af3b13d36222fb3609",
+  "prompt_sha256": "0718875130edc322682623edfe9ff3f234b9518b6930338c702a25e8499d3cfb",
+  "output_sha256": "1ff6d456e74ae0120ff00bcc43aafca7f217cb7bc32df842649f82346cb3deef",
+  "executor": "native task",
+  "model": null,
+  "execution_mode": "source-only simulated planning response",
+  "live_actions": false,
+  "complete_transcript_available": false
+}

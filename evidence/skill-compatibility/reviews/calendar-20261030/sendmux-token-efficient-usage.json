@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-token-efficient-usage",
+  "skillDigest": "e074ad0de774f6c45c5ee9248ebc3443291b137224cf5f0a34a0133b860e32c3",
+  "contractDigest": "8d3a9b0c1e10bbdc8855bc879ba7ac1f229ef2ed166e25f5f01cd319743eab7c",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "Selected bounded reads, profile reuse, connection checks, batching, cursor continuation, upload identifiers and retry boundaries remain supported. The shared OAuth calendar scopes do not change the existing email workflow. No new model, runtime or client result is claimed.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-token-efficient-usage/SKILL.md",
+      "sha256": "dc71d5b01735a0a1c4f6d9577c719f8302f5411a66ea173e50db2c2091ed8458"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-token-efficient-usage.json",
+      "sha256": "007e1aa4cfc63a7cdef8a9868685455f6ecf3cdde23eb477b3a7c4b6c0711ad4"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    }
+  ]
+}
