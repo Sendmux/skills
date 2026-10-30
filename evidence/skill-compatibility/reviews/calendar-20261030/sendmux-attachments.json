@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "sendmux-attachments",
+  "skillDigest": "1683e3417d4184809ecf349175a16271bb8a8c942b7ada148b8831a1e2872af6",
+  "contractDigest": "4c4861a5571d27478b76d822beb755eba3f15d48b6ea0ebbda5685016eaff83b",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "Selected attachment preparation, transfer, completion and extraction arguments remain supported. The only selected App schema change is additive calendar scopes in the common OAuth definition. Byte handling and separate send approval remain unchanged.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-attachments/SKILL.md",
+      "sha256": "bf4b381efd3e89afef46464c0b68b948bfd3bc8eb69a6d3993fad8ae3dca77e2"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/row07-actualtuple-20261012/sendmux-attachments.json",
+      "sha256": "60715a46378527ba569e5d6ad4e9ff256c866811599c4478467a891bb303e7d5"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    }
+  ]
+}

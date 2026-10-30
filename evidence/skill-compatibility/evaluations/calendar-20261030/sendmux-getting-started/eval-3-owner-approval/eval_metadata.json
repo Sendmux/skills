@@ -1,0 +1,18 @@
+{
+  "eval_id": 3,
+  "eval_name": "owner-approval",
+  "prompt": "My coding agent has no Sendmux key. How does it register itself and invite me as the owner?",
+  "assertions": [
+    "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
+    "The output installs @sendmux/cli when the sendmux binary is unavailable.",
+    "The output runs sendmux agent:register with a profile name and may include --mailbox-local-part, --client-name, --owner-email, or --default.",
+    "The output says registration does not require an existing account, API key, challenge, or proof of work step.",
+    "The output says the CLI persists the credential securely and does not print it.",
+    "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
+    "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
+    "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+    "The output says the owner must accept and approve sending before the agent can send.",
+    "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
+    "The output says a full registration revoke removes read access and delegated sending access."
+  ]
+}

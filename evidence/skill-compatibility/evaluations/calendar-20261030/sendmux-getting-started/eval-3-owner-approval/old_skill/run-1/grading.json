@@ -1,0 +1,92 @@
+{
+  "expectations": [
+    {
+      "text": "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
+      "passed": false,
+      "evidence": "FAIL: 'If its agent supports Skills and the Sendmux pack is missing, install it first' and 'npx skills add Sendmux/skills' mention installing Skills, but do not establish the installed skill and CLI help as workflow authority. No CLI-help direction appears. Absence of runtime fetching does not satisfy the missing authority clause."
+    },
+    {
+      "text": "The output installs @sendmux/cli when the sendmux binary is unavailable.",
+      "passed": true,
+      "evidence": "'npm install -g @sendmux/cli' appears before registration, providing the installation step in the proposed workflow."
+    },
+    {
+      "text": "The output runs sendmux agent:register with a profile name and may include --mailbox-local-part, --client-name, --owner-email, or --default.",
+      "passed": true,
+      "evidence": "'sendmux agent:register my-agent' includes '--mailbox-local-part my-agent', '--client-name \"My agent\"', '--owner-email owner@example.com' and '--default'."
+    },
+    {
+      "text": "The output says registration does not require an existing account, API key, challenge, or proof of work step.",
+      "passed": true,
+      "evidence": "'No existing account or API key needed' and 'no challenge or proof of work is required.'"
+    },
+    {
+      "text": "The output says the CLI persists the credential securely and does not print it.",
+      "passed": true,
+      "evidence": "'The CLI saves the credential in a permission-restricted profile without printing it'."
+    },
+    {
+      "text": "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
+      "passed": true,
+      "evidence": "'Read and receive mail without an expiry date while registration remains active'."
+    },
+    {
+      "text": "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
+      "passed": true,
+      "evidence": "'If registration already happened without your email, invite you separately:' followed by 'sendmux agent:invite-owner owner@example.com --profile my-agent --json'."
+    },
+    {
+      "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+      "passed": true,
+      "evidence": "'The inbox starts capped at 500 MiB. Owner-approved sending raises it to at least 5 GiB'."
+    },
+    {
+      "text": "The output says the owner must accept and approve sending before the agent can send.",
+      "passed": true,
+      "evidence": "'Available after you accept the invitation and approve sending.'"
+    },
+    {
+      "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
+      "passed": true,
+      "evidence": "'sending:* commands automatically exchange the saved credential for a one-hour email.send token and cache it until near expiry.'"
+    },
+    {
+      "text": "The output says a full registration revoke removes read access and delegated sending access.",
+      "passed": true,
+      "evidence": "'A full registration revoke removes read access, the owner link, invitation/recovery handles and all derived sending tokens.'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1,
+    "total": 11,
+    "pass_rate": 0.9090909090909091
+  },
+  "evaluation_limitations": [
+    "Response-only, source-only evaluation: only response.md was supplied for these runs; no execution transcript, metrics.json, timing.json or user_notes.md was present in the listed evaluation trees.",
+    "Command blocks are assessed as proposed instructions in answer to the prompt. No registration, credential persistence, connection, invitation, token exchange, send or delivery was executed or proven.",
+    "Historical expectations are unchanged. Current calendar scope compatibility is recorded separately and does not alter the email owner-approval assertion scores."
+  ],
+  "claims": [
+    {
+      "claim": "The saved agent profile is read/receive-only.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Output says 'Saved agent profile ... read/receive-only.' This is unqualified across credential access. /Users/rj/.superset/worktrees/sendmux/build-out-calendar-api-45c50f89/src/server/agent-auth/metadata.ts:27-42 includes CALENDAR_READ and CALENDAR_WRITE in both pre-claim and post-claim lists. Email sending remains separately gated; the unchanged email owner-approval scores are unaffected."
+    },
+    {
+      "claim": "Registration and invitation have not been run.",
+      "type": "process",
+      "verified": true,
+      "evidence": "Output says 'Commands shown only; registration and invitation have not been run.' No execution transcript was supplied."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No unchanged assertion checks whether an unqualified read/receive-only credential description excludes current calendar access; source compatibility requires a separate finding rather than silently changing the assertions."
+      }
+    ],
+    "overall": "Ten expectations pass; workflow-authority expectation fails. Separate source-compatibility concern: saved profile described as 'read/receive-only' although current pre-claim and post-claim scope lists include CALENDAR_READ and CALENDAR_WRITE."
+  }
+}

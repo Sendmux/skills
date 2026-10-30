@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "kind": "workflow",
+  "skill": "sendmux-email-for-agents",
+  "skillDigest": "ccf58181a42099d536bf3f07b8693ec6eec98b0942fdf3218ca93200d9b969bc",
+  "previousSkillDigest": "b954dac79d49b818d65b2dc4e6218427777292fc48328453fe5101fb8f3895b6",
+  "contractDigest": "c578a623bbfdf7f66657ffeda80222b7593cdc360b2dfa5b8ab40735da1ba261",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "The corrected complete body names email sends and message changes rather than denying all Mailbox writes. Registration ordering, credential storage, owner approval and separate sending remain intact. A fresh response to existing case 3 passes all 9 unchanged expectations and supersedes the published instructions.",
+  "evidence": [
+    {
+      "path": "skills/sendmux-email-for-agents/SKILL.md",
+      "sha256": "cacaac26bc0073f68b7ade778447864a9ad92294edbf624d2130128ee15aee2a"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/posthog-847-848-sendmux-email-for-agents.json",
+      "sha256": "eca942767f98af538fa3d5dc9a0f6a52eaf476eed283e938afb06c5f6a1122ed"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/benchmark.json",
+      "sha256": "5c423c975ded4453dc85958a48a31fc2a4e52baac41b2f9c2cb6add1fdd9e80f"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/benchmark.md",
+      "sha256": "0a5fd4ce4e717c466aec8e2dac2cbfa76a22a2f57c07947ddc8b15c2130575e6"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/eval_metadata.json",
+      "sha256": "7718aa1eb65e796077fd20aaab77ff5790cf91f77dbc785117f4adc61dc5b95a"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/old_skill/run-1/grading.json",
+      "sha256": "96fa74c7087003763dd9c0199011c5a312e89e96c494151642507613dac85805"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/old_skill/run-1/outputs/response.md",
+      "sha256": "31f20f6b0b0458502ac29601c38974cf3e93bc5ce7d3e5ffc2449dfdf142ec77"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/old_skill/run-1/receipt.json",
+      "sha256": "e9fb63f0b74907f3bd63b84289d03fe3babffc61e8a9ee4c16c6466818acb696"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/with_skill/run-2/grading.json",
+      "sha256": "8d5aa883ebc43347962f7adf52c29a236da25efab7a897a271d128582e1ed174"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/with_skill/run-2/outputs/response.md",
+      "sha256": "af715183229fa3549714f2405847d23e2c818219756ecc8451a158ffadf80498"
+    },
+    {
+      "path": "evidence/skill-compatibility/evaluations/calendar-20261030/sendmux-email-for-agents/eval-3-owner-approval/with_skill/run-2/receipt.json",
+      "sha256": "0174e861428ad37077163d0be2315f63e7f10ba5aa85bd9c691456302beec842"
+    }
+  ]
+}

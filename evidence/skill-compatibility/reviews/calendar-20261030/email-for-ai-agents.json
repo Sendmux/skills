@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "compatibility",
+  "skill": "email-for-ai-agents",
+  "skillDigest": "eb668c43d4c594ea0e70a59e0c6fb8dc75bed7c3244d0ad706afd2ec770f3060",
+  "contractDigest": "99a84abf9306fbb07c2d4440597cfbc9d6595bb6c8390903fc0ed038540babd8",
+  "sourceRevisions": {
+    "app": "87ce115810ebcfa91655295603c27af52fcff96f",
+    "sending": "2f4226655efc05f109b5feda50ed2ca1570aea91",
+    "sdk": "1812300f1f30102ed0e624bc92cd92224cdf867d"
+  },
+  "reviewer": "Independent AI source reviewers; coordinating AI reviewer for evidence adoption",
+  "rationale": "Separate exact-message and owner approval, Sending-resource authority, idempotency and queued-versus-delivered limits remain supported. Calendar scopes do not grant email sending. The whole skill is unchanged; this is source compatibility review, not new model or live evidence.",
+  "evidence": [
+    {
+      "path": "skills/email-for-ai-agents/SKILL.md",
+      "sha256": "00166b24a755bb9af2492e567be94ee0340b19007293cbc6cbcc02042326b46e"
+    },
+    {
+      "path": "evidence/skill-compatibility/reviews/posthog-847-848-email-for-ai-agents.json",
+      "sha256": "6af50bb80873a1fb4c6692444993ae09a3e23ec9a4409644b6c48d06294e68f4"
+    },
+    {
+      "path": "evidence/skill-compatibility/calendar-source-review-20261030.md",
+      "sha256": "9da8b579dbe6e1db065dfac97e71c3cfda096678071e254030bbd20a2c978df3"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-export.json",
+      "sha256": "29cde33eda5fb6777c9544e722a3165edeb2c689da8ac2c9f3953f85c3872d0b"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-openapi.json",
+      "sha256": "4e4fbc8024eaad195169a18cc096856d1653a3c01fb4f66d0313e67cb0b2e705"
+    },
+    {
+      "path": "evidence/skill-compatibility/contracts/calendar-20261030/app-policy.json",
+      "sha256": "d4159fc4ad2a7b1927c294303fbc11533f8dab9f5a9b3cc73b2139c7354e71bf"
+    }
+  ]
+}

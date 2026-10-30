@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "skill_name": "sendmux-getting-started",
+    "skill_path": "skills/sendmux-getting-started",
+    "executor_model": null,
+    "analyzer_model": null,
+    "timestamp": "2026-10-30T06:55:59Z",
+    "evals_run": [
+      3
+    ],
+    "runs_per_configuration": 1,
+    "metrics_note": "Model identity, timing, token and tool-call counts were unavailable. Default metric values are unmeasured placeholders; assertion results and input/output hashes are evidence."
+  },
+  "runs": [
+    {
+      "eval_id": 3,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9090909090909091,
+        "passed": 10,
+        "failed": 1,
+        "total": 11,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
+          "passed": false,
+          "evidence": "FAIL: 'If its agent supports Skills and the Sendmux pack is missing, install it first' and 'npx skills add Sendmux/skills' mention installing Skills, but do not establish the installed skill and CLI help as workflow authority. No CLI-help direction appears. Absence of runtime fetching does not satisfy the missing authority clause."
+        },
+        {
+          "text": "The output installs @sendmux/cli when the sendmux binary is unavailable.",
+          "passed": true,
+          "evidence": "'npm install -g @sendmux/cli' appears before registration, providing the installation step in the proposed workflow."
+        },
+        {
+          "text": "The output runs sendmux agent:register with a profile name and may include --mailbox-local-part, --client-name, --owner-email, or --default.",
+          "passed": true,
+          "evidence": "'sendmux agent:register my-agent' includes '--mailbox-local-part my-agent', '--client-name \"My agent\"', '--owner-email owner@example.com' and '--default'."
+        },
+        {
+          "text": "The output says registration does not require an existing account, API key, challenge, or proof of work step.",
+          "passed": true,
+          "evidence": "'No existing account or API key needed' and 'no challenge or proof of work is required.'"
+        },
+        {
+          "text": "The output says the CLI persists the credential securely and does not print it.",
+          "passed": true,
+          "evidence": "'The CLI saves the credential in a permission-restricted profile without printing it'."
+        },
+        {
+          "text": "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
+          "passed": true,
+          "evidence": "'Read and receive mail without an expiry date while registration remains active'."
+        },
+        {
+          "text": "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
+          "passed": true,
+          "evidence": "'If registration already happened without your email, invite you separately:' followed by 'sendmux agent:invite-owner owner@example.com --profile my-agent --json'."
+        },
+        {
+          "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+          "passed": true,
+          "evidence": "'The inbox starts capped at 500 MiB. Owner-approved sending raises it to at least 5 GiB'."
+        },
+        {
+          "text": "The output says the owner must accept and approve sending before the agent can send.",
+          "passed": true,
+          "evidence": "'Available after you accept the invitation and approve sending.'"
+        },
+        {
+          "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
+          "passed": true,
+          "evidence": "'sending:* commands automatically exchange the saved credential for a one-hour email.send token and cache it until near expiry.'"
+        },
+        {
+          "text": "The output says a full registration revoke removes read access and delegated sending access.",
+          "passed": true,
+          "evidence": "'A full registration revoke removes read access, the owner link, invitation/recovery handles and all derived sending tokens.'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 3,
+      "result": {
+        "pass_rate": 1,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The output treats the installed Sendmux skill and CLI help as the workflow authority instead of fetching and executing runtime instructions.",
+          "passed": true,
+          "evidence": "response.md: \"Use the Sendmux getting-started skill and the installed CLI’s `--help` as the setup authority.\" The answer supplies local CLI commands and does not instruct fetching or executing runtime instructions."
+        },
+        {
+          "text": "The output installs @sendmux/cli when the sendmux binary is unavailable.",
+          "passed": true,
+          "evidence": "response.md gives the installation command before registration: \"npm install -g @sendmux/cli\". This is a planning answer; its final note explicitly says \"Not run: installation, registration, connection checks or invitations.\""
+        },
+        {
+          "text": "The output runs sendmux agent:register with a profile name and may include --mailbox-local-part, --client-name, --owner-email, or --default.",
+          "passed": true,
+          "evidence": "response.md includes \"sendmux agent:register my-agent\" with \"--mailbox-local-part my-agent\", \"--client-name \"My agent\"\", \"--owner-email owner@example.com\", \"--default\" and \"--json\"."
+        },
+        {
+          "text": "The output says registration does not require an existing account, API key, challenge, or proof of work step.",
+          "passed": true,
+          "evidence": "response.md: \"Your agent can register a new Sendmux inbox without an existing account or API key.\" Also: \"No challenge or proof of work is required.\""
+        },
+        {
+          "text": "The output says the CLI persists the credential securely and does not print it.",
+          "passed": true,
+          "evidence": "response.md: \"The CLI saves registration state, stores the credential in a permission-restricted local profile without printing it, and waits up to 10 minutes for mailbox readiness.\""
+        },
+        {
+          "text": "The output says the saved profile can read and receive mail without an expiry date while the registration remains active.",
+          "passed": true,
+          "evidence": "response.md, Saved agent profile row: \"Read and receive email without an expiry date while registration remains active.\""
+        },
+        {
+          "text": "The output uses sendmux agent:invite-owner when no owner was invited during registration.",
+          "passed": true,
+          "evidence": "response.md: \"If registration already happened without `--owner-email`, invite yourself separately:\" followed by \"sendmux agent:invite-owner owner@example.com --profile my-agent --json\"."
+        },
+        {
+          "text": "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+          "passed": true,
+          "evidence": "response.md: \"The inbox starts with a 500 MiB cap; owner-approved sending raises it to at least 5 GiB.\""
+        },
+        {
+          "text": "The output says the owner must accept and approve sending before the agent can send.",
+          "passed": true,
+          "evidence": "response.md, Delegated Sending token row: \"Available only after you accept the invitation and approve sending.\" The final line also says \"Sending remains unavailable until your approval.\""
+        },
+        {
+          "text": "The output says Sending CLI commands automatically exchange and cache a one-hour delegated email.send token after approval.",
+          "passed": true,
+          "evidence": "response.md: \"`sending:*` commands then automatically exchange the durable credential for a one-hour `email.send` token and cache it until near expiry.\" This follows \"Available only after you accept the invitation and approve sending.\""
+        },
+        {
+          "text": "The output says a full registration revoke removes read access and delegated sending access.",
+          "passed": true,
+          "evidence": "response.md: \"Revoking the full registration removes read access, the owner link, invitation/recovery handles and all derived sending tokens.\""
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.9091,
+        "stddev": 0,
+        "min": 0.9091,
+        "max": 0.9091
+      },
+      "time_seconds": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1,
+        "stddev": 0,
+        "min": 1,
+        "max": 1
+      },
+      "time_seconds": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "-0.09",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

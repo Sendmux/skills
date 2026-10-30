@@ -1,0 +1,13 @@
+{
+  "eval_id": 3,
+  "eval_name": "owner-approval",
+  "prompt": "My Sendmux CLI agent profile can already read its inbox. What happens if it tries sending before and after I approve sending as the owner?",
+  "assertions": [
+    "The output says the durable agent credential is for read and receive and does not itself grant sending.",
+    "The output says sending is unavailable before owner acceptance and approval.",
+    "The output states that storage is capped at 500 MiB before owner approval and raised to at least 5 GiB with sending approval.",
+    "The output says sendmux Sending CLI commands automatically exchange for a one-hour email.send token after approval.",
+    "The output says the delegated token is cached only until near expiry.",
+    "The output includes Idempotency-Key or --idempotency-key for the send."
+  ]
+}
